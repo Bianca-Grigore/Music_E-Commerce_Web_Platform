@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}Pagina mea{% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'Magazin_de_muzica/css/stil.css' %}" type="text/css">
+
+    </head>
+    <body>
+        <header>
+            <h1>All kind of Music Store</h1>
+        </header>       
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+        <footer>
+            <p>© 2025 Grigore Bianca Elena</p>
+        </footer>
+    </body>
+</html>
