@@ -4,6 +4,8 @@ from datetime import datetime
 from urllib.parse import urlparse
 from collections import Counter
 
+from .models import Produs
+
 
 accesari = []
 
@@ -277,3 +279,15 @@ def log(request):
             de_afisat += "</ul>"
 
     return HttpResponse(de_afisat)
+
+
+#afisarea produselor pentru utilizatori
+
+def afis_produse(request):
+    produse=Produs.objects.all()
+    return render(request, "Magazin_de_muzica/produse.html",
+        {          
+            "produse": produse[0], 
+        }
+    )
+    

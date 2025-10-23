@@ -6,4 +6,5 @@ urlpatterns = [
     path('test_accesare/', views.test_accesare),
     path("exemplu", views.afis_template, name="exemplu"),
     path("log/", views.log, name="log"),
+    path("produse", views.afis_produse, name="produse"),
 ]

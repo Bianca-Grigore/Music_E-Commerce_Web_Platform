@@ -5,12 +5,11 @@ django.setup()
 from Magazin_de_muzica.models import Categorie, Campanie_Promo, Artist, Produs, Produs_Artist
 from django.utils import timezone
 
-Categorie.objects.all().delete()
-Campanie_Promo.objects.all().delete()
-Produs.objects.all().delete()
-Artist.objects.all().delete()
-Produs_Artist.objects.all().delete()
-
+# Categorie.objects.all().delete()
+# Campanie_Promo.objects.all().delete()
+# Produs.objects.all().delete()
+# Artist.objects.all().delete()
+# Produs_Artist.objects.all().delete()
 
 #Tabela Categorie
 
