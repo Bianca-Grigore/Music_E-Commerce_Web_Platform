@@ -6,7 +6,7 @@ admin.site.register(Categorie)
 admin.site.register(Campanie_Promo)
 #admin.site.register(Produs)
 admin.site.register(Produs_Artist)
-admin.site.register(Artist)
+#admin.site.register(Artist)
 
 class ProdusAdmin(admin.ModelAdmin):
     #list_display = ('titlu', 'autor', 'data_publicarii') 
@@ -25,4 +25,14 @@ class ProdusAdmin(admin.ModelAdmin):
 admin.site.register(Produs, ProdusAdmin)
 
 #relatii intre produse de admin
-    
+
+class ArtistAdmin(admin.ModelAdmin):
+    list_display = ('nume', 'gen_muzical') 
+    search_fields = ('nume', 'gen_muzical')  
+    fieldsets = (
+        ('Informații Generale', {
+            'fields': ('ani_activitate', 'tip_activitate')
+        }),
+    )
+
+admin.site.register(Artist, ArtistAdmin)

@@ -1,9 +1,33 @@
-{% extends "./baza.html" %}
+{% extends './baza.html' %}
 {% load static %}
-{% block title %}Pagina articolului{% endblock %}
+
+{% block title %}Acasă{% endblock %}
 
 {% block content %}
-<h1>Titlu</h1>
-<p> Taylor Swift newest album ~ {{'The Life of a Showgirl'}}</p>
-<img src="{% static "Magazin_de_muzica/imagini/TSimagine.jpg" %}" alt="imagine" />
-{% endblock %} 
+    <section id="introducere">
+        <h2>Sunet de Excepție! Noutăți și Precomenzi</h2>
+        <p>Descoperă cele mai proaspete lansări pe vinil și CD. De la rock clasic la jazz modern, găsești tot ce ai nevoie pentru colecția ta.</p>
+        <p>Suntem destinația ta principală pentru cele mai tari discuri. Răsfoiește catalogul nostru bogat!</p>
+    </section>
+
+    <hr>
+
+    <section id="produse-recomandate">
+        <h2>Explorează Cele Mai Căutate Categorii</h2>
+        <ul>
+            <li>**Viniluri** - Redescoperă sunetul analog.</li>
+            <li>**Casete** - Pentru cei care vor sa retraiasca muzica aniilor 70, 80, 90.</li>
+            <li>**Merch** - Accesorii si imbracaminte pe gustul oricarui fan, indiferent de varsta.</li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section id="testimoniale">
+        <h2>Recomandarea Săptămânii</h2>
+        <blockquote>
+            "Albumul 'The Life Of A Showgirl' - Taylor Swift feat. Sabrina Carpenter exclusiv pe site."
+        </blockquote>
+        <img src="{% static "Magazin_de_muzica/imagini/TSimagine.jpg" %}" alt="imagine" />
+    </section>
+{% endblock %}

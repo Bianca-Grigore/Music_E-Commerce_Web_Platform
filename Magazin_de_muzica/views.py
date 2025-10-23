@@ -122,6 +122,8 @@ def info(request):
 
 # FUNCTIE PENTRU TESTAREA CLASEI ACCESARE LABORATOR 1
 
+
+
 def test_accesare(request):
     a1= Accesare(
         ip_client="127.0.0.1",
@@ -291,3 +293,36 @@ def afis_produse(request):
         }
     )
     
+
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+def despre(request):
+    context = {'user_ip': get_client_ip(request)}
+    return render(request, 'Magazin_de_muzica/despre.html', context)
+
+def produse(request):
+    context = {'user_ip': get_client_ip(request)}
+    return render(request, "Magazin_de_muzica/produse.html", context)
+    
+def contact(request):
+    context = {'user_ip': get_client_ip(request)}
+    return render(request, "Magazin_de_muzica/contact.html", context)
+
+def cos_virtual(request):
+    context = {'user_ip': get_client_ip(request)}
+    return render(request, "Magazin_de_muzica/cos_virtual.html", context)
+
+def in_lucru(request):
+    context = {'user_ip': get_client_ip(request)}
+    return render(request, "Magazin_de_muzica/in_lucru.html", context) 
+
+def baza(request):
+    return render(request, "Magazin_de_muzica/baza.html")
