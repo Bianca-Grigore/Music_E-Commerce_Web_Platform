@@ -1,34 +1,30 @@
 from django.contrib import admin
 from .models import Categorie, Campanie_Promo, Produs, Produs_Artist, Artist
 
-# Register your models here.
-admin.site.register(Categorie)
-admin.site.register(Campanie_Promo)
-#admin.site.register(Produs)
-admin.site.register(Produs_Artist)
-#admin.site.register(Artist)
+admin.site.site_header = "Magazin Muzical Admin"
+admin.site.site_title = "Magazin Muzical"
+admin.site.index_title = "Bine ați venit în Panoul de Administrare!"
 
 class ProdusAdmin(admin.ModelAdmin):
-    #list_display = ('titlu', 'autor', 'data_publicarii') 
-    list_filter = ('categorie', 'denumire')
-    #search_fields = ('titlu', 'autor')  
+    ordering = ['pret']
+    list_per_page = 5
+    list_filter = ('categorie', 'denumire') #filtre laterale
+    search_fields = ('denumire', 'categorie') 
     fieldsets = (
         ('Informații Generale', {
             'fields': ('categorie', 'pret', 'stoc')
         }),
-        ('Campanii', {
+        ('Campanii Promotionale', {
             'fields': ('campanii',),
-            'classes': ('collapse',),  # secțiune pliabilă
+            'classes': ('collapse',),  
         }),
     )
 
 admin.site.register(Produs, ProdusAdmin)
 
-#relatii intre produse de admin
-
 class ArtistAdmin(admin.ModelAdmin):
-    list_display = ('nume', 'gen_muzical') 
-    search_fields = ('nume', 'gen_muzical')  
+    list_display = ('nume', 'gen_muzical') #ce campuri sa fie afisate in lista din admin
+    search_fields = ('nume', 'gen_muzical')  #camp de cautare dupa anumire campuri
     fieldsets = (
         ('Informații Generale', {
             'fields': ('ani_activitate', 'tip_activitate')
@@ -36,3 +32,19 @@ class ArtistAdmin(admin.ModelAdmin):
     )
 
 admin.site.register(Artist, ArtistAdmin)
+
+class CategorieAdmin(admin.ModelAdmin):
+    search_fields = ('nume_categorie', 'tip_categorie')  
+    
+admin.site.register(Categorie, CategorieAdmin)
+
+class Campanie_PromoAdmin(admin.ModelAdmin):
+    search_fields = ('nume_campanie', 'data_inceput')  
+    
+admin.site.register(Campanie_Promo, Campanie_PromoAdmin)
+
+class Produs_ArtistAdmin(admin.ModelAdmin):
+    search_fields = ('descriere', 'colaborare_speciala')  
+    
+admin.site.register(Produs_Artist, Produs_ArtistAdmin)
+

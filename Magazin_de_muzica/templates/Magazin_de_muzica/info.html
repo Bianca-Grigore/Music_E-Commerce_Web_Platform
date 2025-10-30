@@ -1,0 +1,10 @@
+{% extends "./baza.html" %}
+
+{% block title %}Informații{% endblock %}
+
+{% block content %}
+<h1>Info</h1>
+<div>{{ continut|safe }}</div>
+<div>{{ sectiune_parametri|safe }}</div>
+
+{% endblock %}

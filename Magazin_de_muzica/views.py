@@ -1,11 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from datetime import datetime
 from urllib.parse import urlparse
 from collections import Counter
-
 from .models import Produs
-
+from .forms import ContactForm
+from django.core.paginator import Paginator
 
 accesari = []
 
@@ -39,18 +39,7 @@ class Accesare:
             return None
 
 
-#functie ajutatoare pentru laborator 2
-
-def salvare_accesari(request,nume_pagina):
-    a = Accesare(
-        ip_client =request.META.get("REMOTE_ADDR"), #pentru a lua ip-ul din dictionar
-        url= request.build_absolute_uri(), #se construieste adresa completa a paginii accesate_
-        data= datetime.now(),
-        pagina_nume=nume_pagina
-    )
-    accesari.append(a)
-
-###########################laborator 1 tema 
+#laborator 1 tema 
 
 def afis_data(parametru):
     luni=['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie']
@@ -88,41 +77,7 @@ def index(request):
         </html>
     """)
 
-def info(request):
-    salvare_accesari(request, "pagina info")
-    parametru = request.GET.get("data") 
-    afisat = ""
-    
-    if parametru:
-        afisat = afis_data(parametru)
-        
-    # sectiunea parametri
-    
-    parametri = request.GET 
-    numar_param = len(parametri.keys())
-    nume_param = ",".join(parametri.keys())
-    sectiune_parametri = f"""
-        <section>
-            <h2>Parametri</h2>
-            <p>Numar parametri: {numar_param}</p>
-            <p>Nume parametri: {nume_param}</p>
-        </section>
-    """
-        
-    return HttpResponse(f"""
-        <html>
-        <head><title>Informatii despre server</title></head>
-        <body>
-        <h1>Informatii despre server</h1>  
-        {afisat}
-        {sectiune_parametri}
-        </body>
-        </html>
-    """)
-
-# FUNCTIE PENTRU TESTAREA CLASEI ACCESARE LABORATOR 1
-
-
+# FUNCTIE PENTRU TESTAREA CLASEI ACCESARE 
 
 def test_accesare(request):
     a1= Accesare(
@@ -159,35 +114,66 @@ def test_accesare(request):
 
 
 
-##########LABORATOR 2 EXERCITI
+def info(request):
+    salvare_accesari(request, "Pagina info")
+    parametru = request.GET.get("data") 
+    afisat = ""
+    
+    if parametru:
+        afisat = afis_data(parametru)
+        
+    parametri = request.GET 
+    numar_param = len(parametri.keys())
+    nume_param = ",".join(parametri.keys())
+    sectiune_parametri = f"""
+        <section>
+            <h2>Parametri</h2>
+            <p>Numar parametri: {numar_param}</p>
+            <p>Nume parametri: {nume_param}</p>
+        </section>
+    """
 
-def afis_template(request):
-    return render(request, "Magazin_de_muzica/exemplu.html", {"nume": "Nume Paragraf"})
+    return render(request, "Magazin_de_muzica/info.html", {"continut": afisat, "sectiune_parametri": sectiune_parametri })
 
-################################LABORATOR 2 TEMA
 
-# Functia log 
+
+
+
+def salvare_accesari(request,nume_pagina):
+    a = Accesare(
+        ip_client =request.META.get("REMOTE_ADDR"), 
+        url= request.build_absolute_uri(), 
+        data= datetime.now(),
+        pagina_nume=nume_pagina
+    )
+    accesari.append(a)
+
+
+
+#LABORATOR 2 TEMA
+
 
 def log(request):
+    
     salvare_accesari(request, "log")
+    
+    continut = ""
 
     # accesari=nr sau detalii
     
     nr_accesari = request.GET.get("accesari")
-    
     if nr_accesari:
         if nr_accesari.lower() == "nr":
             total = len(accesari)
-            return HttpResponse(f"<h2>Numarul total de accesari curente este {total}.</h2>")
+            continut += f"<h2>Numarul total de accesari curente este {total}.</h2>"
+            
         elif nr_accesari.lower() == "detalii":
-            de_afisat = "<h1>Detalii accesari:</h1><ul>"
+            continut += "<h1>Detalii accesari:</h1><ul>"
             for a in accesari:
-                de_afisat += f"<li>ID {a.id} — Pagina: {a.pagina()} — Data: {a.data_formatata()}</li>"
-            de_afisat += "</ul>"
-            return HttpResponse(de_afisat)
+                continut += f"<li>ID {a.id} — Pagina: {a.pagina()} — Data: {a.data_formatata()}</li>"
+            continut += "</ul>"
 
-    # iduri si dubluri
-    
+    # iduri si dubluri 
     iduri = request.GET.getlist("iduri")
     dubluri = request.GET.get("dubluri", "false").lower() == "true"
     lista_id = []
@@ -205,87 +191,103 @@ def log(request):
         else:
             lista_id_finala = lista_id
 
-        de_afisat = "<h1>Accesari dupa id-uri:</h1><ul>"
+        continut += "<h1>Accesari dupa id-uri:</h1><ul>"
         for id_ in lista_id_finala:
             try:
                 idx = int(id_) - 1
-                de_afisat += f"<li>{accesari[idx].pagina()}</li>"
+                continut += f"<li>{accesari[idx].pagina()}</li>"
             except (ValueError, IndexError):
-                de_afisat += f"<li>ID invalid: {id_}</li>"
-        de_afisat += "</ul>"
-        return HttpResponse(de_afisat)
+                continut += f"<li>ID invalid: {id_}</li>"
+        continut += "</ul>"
 
-    # tabelul 
-    
+
+
+    #  tabel 
     parametru_tabel = request.GET.get("tabel")
     if parametru_tabel:
         proprietati = [p.strip() for p in parametru_tabel.split(',')]
         if "tot" in proprietati:
             proprietati = ["id", "ip_client", "url", "data"]
 
-        de_afisat = "<h1>Accesari in tabel:</h1><table border='1'><tr>"
+        continut += "<h1>Accesari in tabel:</h1><table border='1'><tr>"
         for prop in proprietati:
-            de_afisat += f"<th>{prop}</th>"
-        de_afisat += "</tr>"
+            continut += f"<th>{prop}</th>"
+        continut += "</tr>"
 
         for a in accesari:
-            de_afisat += "<tr>"
+            continut += "<tr>"
             for prop in proprietati:
                 valoare = getattr(a, prop, "N/A")
                 if prop == "data" and valoare:
                     valoare = a.data_formatata()
                 elif callable(valoare):
                     valoare = valoare()
-                de_afisat += f"<td>{valoare}</td>"
-            de_afisat += "</tr>"
-        de_afisat += "</table>"
+                continut += f"<td>{valoare}</td>"
+            continut += "</tr>"
+        continut += "</table>"
 
-        # Frecventa 
-        
+        # Frecventa pagini
         frecventa = Counter([a.pagina() for a in accesari])
         if frecventa:
-            pagina_max= max(frecventa, key=frecventa.get)
-            pagina_min= min(frecventa, key=frecventa.get)
-            de_afisat += f"<p>Cea mai accesata pagina: <b>{pagina_max}</b></p>"
-            de_afisat += f"<p>Cea mai putin accesata pagina: <b>{pagina_min}</b></p>"
+            pagina_max = max(frecventa, key=frecventa.get)
+            pagina_min = min(frecventa, key=frecventa.get)
+            continut += f"<p>Cea mai accesata pagina: <b>{pagina_max}</b></p>"
+            continut += f"<p>Cea mai putin accesata pagina: <b>{pagina_min}</b></p>"
 
-        return HttpResponse(de_afisat)
-
-    #ultimele
-    
+    # ultimele
     ultimele_accesari = request.GET.get("ultimele")
-    if ultimele_accesari is None:
-        
-        de_afisat = "<h1>Toate accesarile:</h1><ul>"
-        for a in accesari:
-            de_afisat += f"<li>{a.pagina()}</li>"
-        de_afisat += "</ul>"
-    else:
+    
+    if ultimele_accesari is not None:
         try:
             n = int(ultimele_accesari)
             if n < 0:
                 raise ValueError
         except ValueError:
-            return HttpResponse("<h2 style='color:purple'>Mesaj de eroare: parametrul nu este un numar intreg pozitiv</h2>")
-
-        total_accesari = len(accesari)
-        if n > total_accesari:
-            de_afisat = "<h1>Toate accesarile:</h1><ul>"
-            for a in accesari:
-                de_afisat += f"<li>{a.pagina()}</li>"
-            de_afisat += f"</ul><p style='color:red'>Exista doar {total_accesari} fata de {n} accesari cerute.</p>"
+            continut += "<h2 style='color:purple'>Mesaj de eroare: parametrul nu este un numar intreg pozitiv</h2>"
         else:
-            de_afisat = f"<h1>Ultimele {n} accesari sunt:</h1><ul>"
-            for a in accesari[-n:]:
-                de_afisat += f"<li>{a.pagina()}</li>"
-            de_afisat += "</ul>"
+            total_accesari = len(accesari)
+            if n > total_accesari:
+                continut += "<h1>Toate accesarile:</h1><ul>"
+                for a in accesari:
+                    continut += f"<li>{a.pagina()}</li>"
+                continut += f"</ul><p style='color:purple'>Exista doar {total_accesari} fata de {n} accesari cerute.</p>"
+            else:
+                continut += f"<h1>Ultimele {n} accesari sunt:</h1><ul>"
+                for a in accesari[-n:]:
+                    continut += f"<li>{a.pagina()}</li>"
+                continut += "</ul>"
 
-    return HttpResponse(de_afisat)
+
+    if not request.GET:
+        continut += "<h2>Cererile catre paginile din site:</h2><ul>"
+        for a in accesari:
+            continut += f"<p>ID {a.id} — Pagina: {a.pagina()} — Data: {a.data_formatata()}</p>"
+        continut+= "</ul>"
+    return render(request, "Magazin_de_muzica/log.html", {"continut": continut})
+
+
+
+
+
+
+
+
+
+
+
+
+def afis_template(request):
+    context = {
+        "nume": "Nume Paragraf",
+        "user_ip": get_client_ip(request)
+    }
+    return render(request, "Magazin_de_muzica/exemplu.html", context)
 
 
 #afisarea produselor pentru utilizatori
 
 def afis_produse(request):
+    salvare_accesari(request, "Pagina produselor")
     produse=Produs.objects.all()
     return render(request, "Magazin_de_muzica/produse.html",
         {          
@@ -294,7 +296,7 @@ def afis_produse(request):
     )
     
 
-
+#TASK 2 LAB 2
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -305,24 +307,59 @@ def get_client_ip(request):
     return ip
 
 def despre(request):
+    salvare_accesari(request, "Pagina despre")
     context = {'user_ip': get_client_ip(request)}
     return render(request, 'Magazin_de_muzica/despre.html', context)
-
-def produse(request):
-    context = {'user_ip': get_client_ip(request)}
-    return render(request, "Magazin_de_muzica/produse.html", context)
     
 def contact(request):
+    salvare_accesari(request, "Pagina de contact")
     context = {'user_ip': get_client_ip(request)}
-    return render(request, "Magazin_de_muzica/contact.html", context)
+    return render(request, "Magazin_de_muzica/in_lucru.html", context)
 
 def cos_virtual(request):
+    salvare_accesari(request, "Pagina cosului virtual")
     context = {'user_ip': get_client_ip(request)}
-    return render(request, "Magazin_de_muzica/cos_virtual.html", context)
+    return render(request, "Magazin_de_muzica/in_lucru.html", context)
 
 def in_lucru(request):
+    salvare_accesari(request, "Pagina in lucru")
     context = {'user_ip': get_client_ip(request)}
     return render(request, "Magazin_de_muzica/in_lucru.html", context) 
 
 def baza(request):
+    salvare_accesari(request, "Pagina de baza")
     return render(request, "Magazin_de_muzica/baza.html")
+
+def comenzi(request):
+    salvare_accesari(request, "Pagina comenzilor")
+    context = {'user_ip': get_client_ip(request)}
+    return render(request, "Magazin_de_muzica/in_lucru.html", context)
+
+def social(request):
+    salvare_accesari(request, "Pagina de social media")
+    context = {'user_ip': get_client_ip(request)}
+    return render(request, "Magazin_de_muzica/in_lucru.html", context)
+
+
+#Curs 5 pentru laborator 5
+
+# def contact_view(request):
+#     if request.method == 'POST':
+#         form = ContactForm(request.POST)
+#         if form.is_valid():  
+#             nume = form.cleaned_data['nume']
+#             email = form.cleaned_data['email']
+#             mesaj = form.cleaned_data['mesaj']
+#             return redirect('mesaj_trimis')
+#     else:
+#         form = ContactForm()
+#     return render(request, 'aplicatie_exemplu/contact.html', {'form': form})
+
+
+def lista_produse(request):
+    produse = Produs.objects.all().order_by('denumire')  
+    paginator = Paginator(produse, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'Magazin_de_muzica/produse.html', {'page_obj': page_obj})

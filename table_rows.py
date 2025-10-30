@@ -1,15 +1,9 @@
-import os
+import os #variabile de mediu
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "magazin_muzica.settings")
-django.setup()
+django.setup() 
 from Magazin_de_muzica.models import Categorie, Campanie_Promo, Artist, Produs, Produs_Artist
 from django.utils import timezone
-
-# Categorie.objects.all().delete()
-# Campanie_Promo.objects.all().delete()
-# Produs.objects.all().delete()
-# Artist.objects.all().delete()
-# Produs_Artist.objects.all().delete()
 
 #Tabela Categorie
 
@@ -76,6 +70,7 @@ produs1 = Produs.objects.create(
     pret=100,
     stoc=100,
     data_adaugare=timezone.now()
+    #slug="the-life-of-a-showgirl"
 )
 produs1.campanii.add(c2)
 
@@ -85,6 +80,7 @@ produs2 = Produs.objects.create(
     pret=50,
     stoc=87,
     data_adaugare=timezone.now()
+    #slug="speak-now-taylors-version"
 )
 produs2.campanii.add(c1)
 
@@ -94,6 +90,7 @@ produs3 = Produs.objects.create(
     pret=75,
     stoc=120,
     data_adaugare=timezone.now()
+    #slug="death-or-glory"
 )
 produs3.campanii.add(c2)
 
@@ -103,6 +100,7 @@ produs4 = Produs.objects.create(
     pret=280,
     stoc=190,
     data_adaugare=timezone.now()
+    #slug="the-tortured-poets-department"
 )
 produs4.campanii.add(c3)
 
@@ -112,6 +110,7 @@ produs5 = Produs.objects.create(
     pret=64,
     stoc=87,
     data_adaugare=timezone.now()
+    #slug="taylor-swift-debut"
 )
 produs5.campanii.add(c3)
 
@@ -121,6 +120,7 @@ produs6 = Produs.objects.create(
     pret=200,
     stoc=162,
     data_adaugare=timezone.now()
+    #slug="the-bastards"
 )
 produs6.campanii.add(c1)
 
@@ -130,6 +130,7 @@ produs7 = Produs.objects.create(
     pret=123,
     stoc=54,
     data_adaugare=timezone.now()
+    #slug="in-search-of-the-antidote"
 )
 produs7.campanii.add(c5)
 
@@ -139,6 +140,7 @@ produs8 = Produs.objects.create(
     pret=150,
     stoc=300,
     data_adaugare=timezone.now()
+    #slug="lotus-t-shirt"
 )
 produs8.campanii.add(c3)
 
@@ -148,6 +150,7 @@ produs9 = Produs.objects.create(
     pret=290,
     stoc=267,
     data_adaugare=timezone.now()
+    #slug="father-figure-t-shirt"
 )
 produs9.campanii.add(c1)
 
@@ -157,6 +160,7 @@ produs10 = Produs.objects.create(
     pret=30,
     stoc=124,
     data_adaugare=timezone.now()
+    
 )
 produs10.campanii.add(c4)
 
