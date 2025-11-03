@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404 
 from django.http import HttpResponse
 from datetime import datetime
 from urllib.parse import urlparse
@@ -6,6 +6,10 @@ from collections import Counter
 from .models import Produs
 from .forms import ContactForm
 from django.core.paginator import Paginator
+from .models import Produs_Artist
+from .models import Campanie_Promo
+from .models import Categorie
+
 
 accesari = []
 
@@ -356,10 +360,53 @@ def social(request):
 #     return render(request, 'aplicatie_exemplu/contact.html', {'form': form})
 
 
+
 def lista_produse(request):
-    produse = Produs.objects.all().order_by('denumire')  
+    sort = request.GET.get('sort', 'a')
+    
+    if sort == 'd':
+        produse = Produs.objects.all().order_by('-denumire')  
+    else:
+        produse = Produs.objects.all().order_by('denumire')  
+
     paginator = Paginator(produse, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    
+    categorie=Categorie.objects.all()
+    
+    
+    return render(request, 'Magazin_de_muzica/produse.html', {
+        'page_obj': page_obj, 'sort': sort,
+        'categorie': categorie,
+        'categorie_selectata': None
+        })
 
-    return render(request, 'Magazin_de_muzica/produse.html', {'page_obj': page_obj})
+def detalii_produs(request, produs_id):
+    produs = get_object_or_404(Produs, id=produs_id)
+    produs_artist = get_object_or_404(Produs_Artist, produs=produs)
+    campanii = Campanie_Promo.objects.filter(produs=produs)
+    return render(request, 'Magazin_de_muzica/Detalii_produs.html', {
+        'produs': produs,
+        'produs_artist': produs_artist,
+        'campanii': campanii
+    })
+    
+def produse_dupa_categorie(request, nume_categorie):
+    cat=get_object_or_404(Categorie, nume_categorie=nume_categorie)
+    sort =request.GET.get('sort', 'a')
+    if sort =='a':
+        produse=Produs.objects.filter(categorie=cat).order_by('denumire')
+    else:
+        produse=Produs.objects.filter(categorie=cat).order_by('-denumire')  
+    paginator=Paginator(produse, 5)
+    page_number=request.GET.get('page')
+    page_obj=paginator.get_page(page_number)
+    categorie=Categorie.objects.all()
+    return render(request, 'Magazin_de_muzica/produse.html', {
+        'page_obj': page_obj,
+        'sort': sort,
+        'categorie': categorie,
+        'categorie_selectata': cat
+    })
+

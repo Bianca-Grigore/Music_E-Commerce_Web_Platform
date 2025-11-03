@@ -1,4 +1,6 @@
 import os #variabile de mediu
+
+from django.core.files import File
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "magazin_muzica.settings")
 django.setup() 
@@ -64,105 +66,114 @@ c5=Campanie_Promo.objects.create(
 
 #Tabela Produs 
 
+# Produs 1
 produs1 = Produs.objects.create(
     denumire="The Life of A Showgirl",
     categorie=categorie1,
     pret=100,
     stoc=100,
     data_adaugare=timezone.now()
-    #slug="the-life-of-a-showgirl"
 )
 produs1.campanii.add(c2)
 
+# Produs 2
 produs2 = Produs.objects.create(
     denumire="Speak Now (Taylor's Version)",
     categorie=categorie1,
     pret=50,
     stoc=87,
     data_adaugare=timezone.now()
-    #slug="speak-now-taylors-version"
 )
+
 produs2.campanii.add(c1)
 
+# Produs 3
 produs3 = Produs.objects.create(
     denumire="Death or Glory",
     categorie=categorie2,
     pret=75,
     stoc=120,
     data_adaugare=timezone.now()
-    #slug="death-or-glory"
 )
+
 produs3.campanii.add(c2)
 
+# Produs 4
 produs4 = Produs.objects.create(
     denumire="The Tortured Poets Department",
     categorie=categorie4,
     pret=280,
     stoc=190,
     data_adaugare=timezone.now()
-    #slug="the-tortured-poets-department"
 )
+
 produs4.campanii.add(c3)
 
+# Produs 5
 produs5 = Produs.objects.create(
     denumire="Taylor Swift-Debut",
     categorie=categorie3,
     pret=64,
     stoc=87,
     data_adaugare=timezone.now()
-    #slug="taylor-swift-debut"
 )
+
 produs5.campanii.add(c3)
 
+# Produs 6
 produs6 = Produs.objects.create(
     denumire="The Bastards",
     categorie=categorie5,
     pret=200,
     stoc=162,
     data_adaugare=timezone.now()
-    #slug="the-bastards"
 )
+
 produs6.campanii.add(c1)
 
+# Produs 7
 produs7 = Produs.objects.create(
     denumire="In Search Of The Antidote",
     categorie=categorie7,
     pret=123,
     stoc=54,
     data_adaugare=timezone.now()
-    #slug="in-search-of-the-antidote"
 )
+
 produs7.campanii.add(c5)
 
+# Produs 8
 produs8 = Produs.objects.create(
     denumire="Lotus T-Shirt",
     categorie=categorie14,
     pret=150,
     stoc=300,
     data_adaugare=timezone.now()
-    #slug="lotus-t-shirt"
 )
+
 produs8.campanii.add(c3)
 
+# Produs 9
 produs9 = Produs.objects.create(
     denumire="Father Figure T-Shirt",
     categorie=categorie12,
     pret=290,
     stoc=267,
     data_adaugare=timezone.now()
-    #slug="father-figure-t-shirt"
-)
+
 produs9.campanii.add(c1)
 
+# Produs 10
 produs10 = Produs.objects.create(
     denumire="Eat Your Young - Breloc",
     categorie=categorie15,
     pret=30,
     stoc=124,
     data_adaugare=timezone.now()
-    
 )
+
 produs10.campanii.add(c4)
+
 
 #Tabela Artist 
 

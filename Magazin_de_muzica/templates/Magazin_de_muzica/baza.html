@@ -34,6 +34,19 @@
                     </ul>
                 </li>
                 <li><a href="{% url 'lista_produse' %}">Produse</a></li>
+                <nav>
+        <li>Categorii
+            <ul>
+                {% for cat in categorie %}
+                    <li>
+                        <a href="{% url 'produse_dupa_categorie' cat.nume_categorie %}">
+                            {{ cat.nume_categorie }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+</nav>
                 <li><a href="{% url 'cos_virtual' %}">Coș Virtual</a></li>
                 <li><a href="{% url 'comenzi' %}">Comenzi, Livrare, Retur</a></li>
                 <li><a href="{% url 'contact' %}">Contact</a></li>

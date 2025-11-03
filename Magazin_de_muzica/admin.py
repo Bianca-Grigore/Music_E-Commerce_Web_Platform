@@ -12,7 +12,7 @@ class ProdusAdmin(admin.ModelAdmin):
     search_fields = ('denumire', 'categorie') 
     fieldsets = (
         ('Informații Generale', {
-            'fields': ('categorie', 'pret', 'stoc')
+            'fields': ('categorie', 'pret', 'stoc', 'imagine')
         }),
         ('Campanii Promotionale', {
             'fields': ('campanii',),
@@ -34,7 +34,8 @@ class ArtistAdmin(admin.ModelAdmin):
 admin.site.register(Artist, ArtistAdmin)
 
 class CategorieAdmin(admin.ModelAdmin):
-    search_fields = ('nume_categorie', 'tip_categorie')  
+    search_fields = ('nume_categorie', 'tip_categorie') 
+    list_display=('nume_categorie', 'culoare') 
     
 admin.site.register(Categorie, CategorieAdmin)
 

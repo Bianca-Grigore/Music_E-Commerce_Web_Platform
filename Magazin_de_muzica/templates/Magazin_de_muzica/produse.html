@@ -2,34 +2,78 @@
 {% load static %}
 
 {% block content %}
-<h1>Produse</h1>
+<h1>
+    {% if categorie_selectata %}
+        Produse din categoria: {{ categorie_selectata.nume_categorie }}
+    {% else %}
+        Toate produsele
+    {% endif %}
+</h1>
+
+{% if categorie_selectata %}
+    <p><em>Tip categorie: {{ categorie_selectata.get_tip_categorie_display }}</em></p>
+    <p><em>Creată la: {{ categorie_selectata.data_creare|date:"d.m.Y H:i" }}</em></p>
+{% endif %}
+
+
+
+
+
+
+<div class="sortare">
+    <strong>Sortare:</strong>
+    <a href="?sort=a">Crescător</a> | 
+    <a href="?sort=d">Descrescător</a>
+</div>
+
 
 <div class="cards-container">
+
     {% for produs in page_obj %}
+    
     <div class="card">
+
         <div class="card-image">
-            
+            {% if produs.imagine %}
+    <img src= '{{ produs.imagine.url }}' alt='{{ produs.denumire }}' style="width:100%; height:auto;">
+    
+{% else %}
+    <img src="{% static 'imagini/default.jpg' %}" alt="Imagine lipsă">
+{% endif %}
+
         </div>
         <div class="card-content">
-            <h3>{{ produs.denumire }}</h3>
+            <h3>
+                <a href="{% url 'Detalii_produs' produs.id %}">
+                {{ produs.denumire }}
+                </a>
+            </h3>
             <p><strong>Preț:</strong> {{ produs.pret }} RON</p>
-            <p><strong>Categorie:</strong> {{ produs.categorie }}</p>
+            <p>
+        <strong>Categorie:</strong>
+        <a href="{% url 'produse_dupa_categorie' produs.categorie.nume_categorie %}"
+        style="color: {{ produs.categorie.culoare }}; font-weight: bold;">
+            {{ produs.categorie.nume_categorie }}
+        </a>
+    </p>
         </div>
     </div>
     {% endfor %}
 </div>
 
+
 <div class="pagination">
     {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}">« Previous</a>
+        <a href="?page={{ page_obj.previous_page_number }}&sort={{ sort }}">« Previous</a>
     {% endif %}
 
     <span>Pagina {{ page_obj.number }} din {{ page_obj.paginator.num_pages }}</span>
 
     {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">Next »</a>
+        <a href="?page={{ page_obj.next_page_number }}&sort={{ sort }}">Next »</a>
     {% endif %}
 </div>
+
 
 <style>
 .cards-container {
@@ -42,8 +86,8 @@
 
 .card {
     border: 3px solid purple;
-    border-radius: 10px;
-    width: 220px;
+    border-radius: 0px;
+    width: 250px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     overflow: hidden;
     transition: transform 0.2s;
@@ -55,7 +99,7 @@
 
 .card-image img {
     width: 100%;
-    height: 150px;
+    height: 250px;
     object-fit: cover;
 }
 

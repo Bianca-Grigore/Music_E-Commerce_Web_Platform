@@ -15,7 +15,7 @@ class Categorie(models.Model):
         ('M', 'Merch')
     ]
     tip_categorie = models.CharField(max_length=1, choices=TIP_CATEGORIE, default='C') 
-
+    culoare =models.CharField(max_length=20, default='#6A5ACD')
     def __str__(self):
         return self.nume_categorie
 
@@ -43,6 +43,8 @@ class Produs(models.Model):
     stoc = models.FloatField(default=0.0)              
     campanii = models.ManyToManyField(Campanie_Promo, blank=True)
     data_adaugare = models.DateTimeField(default=timezone.now)  
+    imagine = models.ImageField(upload_to='produse/', blank=True, null=True) 
+    
     def __str__(self):
         return self.denumire
 
