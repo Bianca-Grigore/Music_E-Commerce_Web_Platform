@@ -6,8 +6,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "magazin_muzica.settings")
 django.setup() 
 from Magazin_de_muzica.models import Categorie, Campanie_Promo, Artist, Produs, Produs_Artist
 from django.utils import timezone
-
-#Tabela Categorie
+from datetime import date
 
 categorie1=Categorie.objects.create(nume_categorie='CD Pop', tip_categorie='C')
 categorie2=Categorie.objects.create(nume_categorie='CD Rock', tip_categorie='C')
@@ -24,10 +23,6 @@ categorie12=Categorie.objects.create(nume_categorie='Tricouri', tip_categorie='M
 categorie13=Categorie.objects.create(nume_categorie='Postere', tip_categorie='M')
 categorie14=Categorie.objects.create(nume_categorie='Figurine', tip_categorie='M')
 categorie15=Categorie.objects.create(nume_categorie='Breloc', tip_categorie='M')
-
-#Tabela Campanie_Promo
-
-from datetime import date
 
 c1=Campanie_Promo.objects.create(
     nume_campanie="Reducere Craciun",
@@ -64,9 +59,6 @@ c5=Campanie_Promo.objects.create(
     data_sfarsit=date(2025, 10, 28)
 )
 
-#Tabela Produs 
-
-# Produs 1
 produs1 = Produs.objects.create(
     denumire="The Life of A Showgirl",
     categorie=categorie1,
@@ -76,7 +68,6 @@ produs1 = Produs.objects.create(
 )
 produs1.campanii.add(c2)
 
-# Produs 2
 produs2 = Produs.objects.create(
     denumire="Speak Now (Taylor's Version)",
     categorie=categorie1,
@@ -84,10 +75,8 @@ produs2 = Produs.objects.create(
     stoc=87,
     data_adaugare=timezone.now()
 )
-
 produs2.campanii.add(c1)
 
-# Produs 3
 produs3 = Produs.objects.create(
     denumire="Death or Glory",
     categorie=categorie2,
@@ -95,10 +84,8 @@ produs3 = Produs.objects.create(
     stoc=120,
     data_adaugare=timezone.now()
 )
-
 produs3.campanii.add(c2)
 
-# Produs 4
 produs4 = Produs.objects.create(
     denumire="The Tortured Poets Department",
     categorie=categorie4,
@@ -106,10 +93,8 @@ produs4 = Produs.objects.create(
     stoc=190,
     data_adaugare=timezone.now()
 )
-
 produs4.campanii.add(c3)
 
-# Produs 5
 produs5 = Produs.objects.create(
     denumire="Taylor Swift-Debut",
     categorie=categorie3,
@@ -117,10 +102,8 @@ produs5 = Produs.objects.create(
     stoc=87,
     data_adaugare=timezone.now()
 )
-
 produs5.campanii.add(c3)
 
-# Produs 6
 produs6 = Produs.objects.create(
     denumire="The Bastards",
     categorie=categorie5,
@@ -128,10 +111,8 @@ produs6 = Produs.objects.create(
     stoc=162,
     data_adaugare=timezone.now()
 )
-
 produs6.campanii.add(c1)
 
-# Produs 7
 produs7 = Produs.objects.create(
     denumire="In Search Of The Antidote",
     categorie=categorie7,
@@ -139,31 +120,26 @@ produs7 = Produs.objects.create(
     stoc=54,
     data_adaugare=timezone.now()
 )
-
 produs7.campanii.add(c5)
 
-# Produs 8
 produs8 = Produs.objects.create(
     denumire="Lotus T-Shirt",
-    categorie=categorie14,
+    categorie=categorie12,
     pret=150,
     stoc=300,
     data_adaugare=timezone.now()
 )
-
 produs8.campanii.add(c3)
 
-# Produs 9
 produs9 = Produs.objects.create(
     denumire="Father Figure T-Shirt",
     categorie=categorie12,
     pret=290,
     stoc=267,
     data_adaugare=timezone.now()
-
+)
 produs9.campanii.add(c1)
 
-# Produs 10
 produs10 = Produs.objects.create(
     denumire="Eat Your Young - Breloc",
     categorie=categorie15,
@@ -171,11 +147,7 @@ produs10 = Produs.objects.create(
     stoc=124,
     data_adaugare=timezone.now()
 )
-
 produs10.campanii.add(c4)
-
-
-#Tabela Artist 
 
 a1=Artist.objects.create(
     nume= "Taylor Swift",
@@ -211,14 +183,12 @@ a5=Artist.objects.create(
     tip_activitate='B',
 )
 
-#Tabela Produs-Artist
-
 pa1 = Produs_Artist.objects.create(
     produs=produs1,
     artist=a1,
     rol_artist="Vocal, scriitor principal.",
     tip_rol='S', 
-    colaborare_speciala="feat. Sabrina Carpenter",  # dacă există
+    colaborare_speciala="feat. Sabrina Carpenter",  
     descriere="The Life of a Showgirl este al doisprezecelea album al cântăreței și compozitoarei americane Taylor Swift. A fost lansat pe 3 octombrie 2025 prin Republic Records. Swift a creat albumul în timpul turneului The Eras Tour, acesta conținând 12 piese.",
     data_adaugare=timezone.now()
 )

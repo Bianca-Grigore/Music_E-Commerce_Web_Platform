@@ -16,10 +16,6 @@
 {% endif %}
 
 
-
-
-
-
 <div class="sortare">
     <strong>Sortare:</strong>
     <a href="?sort=a">Crescător</a> | 
@@ -34,11 +30,12 @@
     <div class="card">
 
         <div class="card-image">
+
             {% if produs.imagine %}
     <img src= '{{ produs.imagine.url }}' alt='{{ produs.denumire }}' style="width:100%; height:auto;">
     
 {% else %}
-    <img src="{% static 'imagini/default.jpg' %}" alt="Imagine lipsă">
+    <img src="{% static 'media/default.jpg' %}" alt="Imagine lipsă">
 {% endif %}
 
         </div>
@@ -62,6 +59,8 @@
 </div>
 
 
+
+
 <div class="pagination">
     {% if page_obj.has_previous %}
         <a href="?page={{ page_obj.previous_page_number }}&sort={{ sort }}">« Previous</a>
@@ -73,6 +72,9 @@
         <a href="?page={{ page_obj.next_page_number }}&sort={{ sort }}">Next »</a>
     {% endif %}
 </div>
+
+
+
 
 
 <style>

@@ -8,11 +8,11 @@ admin.site.index_title = "Bine ați venit în Panoul de Administrare!"
 class ProdusAdmin(admin.ModelAdmin):
     ordering = ['pret']
     list_per_page = 5
-    list_filter = ('categorie', 'denumire') #filtre laterale
+    list_filter = ('categorie', 'denumire') 
     search_fields = ('denumire', 'categorie') 
     fieldsets = (
         ('Informații Generale', {
-            'fields': ('categorie', 'pret', 'stoc', 'imagine')
+            'fields': ('denumire', 'categorie', 'pret', 'stoc', 'imagine')
         }),
         ('Campanii Promotionale', {
             'fields': ('campanii',),
@@ -23,8 +23,8 @@ class ProdusAdmin(admin.ModelAdmin):
 admin.site.register(Produs, ProdusAdmin)
 
 class ArtistAdmin(admin.ModelAdmin):
-    list_display = ('nume', 'gen_muzical') #ce campuri sa fie afisate in lista din admin
-    search_fields = ('nume', 'gen_muzical')  #camp de cautare dupa anumire campuri
+    list_display = ('nume', 'gen_muzical')
+    search_fields = ('nume', 'gen_muzical')  
     fieldsets = (
         ('Informații Generale', {
             'fields': ('ani_activitate', 'tip_activitate')

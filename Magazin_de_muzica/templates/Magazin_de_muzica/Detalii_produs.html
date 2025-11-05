@@ -9,9 +9,8 @@
     
     <img src="{{ produs.imagine.url }}" alt="{{ produs.denumire }}" style="width:400px; height:auto;">
 {% else %}
-    <img src="{% static 'imagini/default.jpg' %}" alt="Imagine lipsă">
+    <img src="{% static 'media/default.jpg' %}" alt="Imagine lipsă">
 {% endif %}
-
 
     <p><strong>Preț:</strong> {{ produs.pret }} RON</p>
     <p><strong>Stoc disponibil:</strong> {{ produs.stoc }}</p>

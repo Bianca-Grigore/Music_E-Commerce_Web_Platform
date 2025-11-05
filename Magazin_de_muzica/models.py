@@ -1,8 +1,6 @@
 from django.db import models
 from django.utils import timezone
 
-
-
 class Categorie(models.Model):
     nume_categorie = models.CharField(max_length=100, unique=True)  
     data_creare = models.DateTimeField(default=timezone.now)        
@@ -35,7 +33,6 @@ class Campanie_Promo(models.Model):
     def __str__(self):
         return self.nume_campanie
 
-
 class Produs(models.Model):
     categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
     denumire = models.TextField()
@@ -47,7 +44,6 @@ class Produs(models.Model):
     
     def __str__(self):
         return self.denumire
-
 
 class Produs_Artist(models.Model):
     produs = models.ForeignKey('Produs', on_delete=models.CASCADE, null=True)
@@ -73,8 +69,6 @@ class Produs_Artist(models.Model):
     def __str__(self):
         return f"{self.rol_artist} ({self.tip_rol}) - {self.artist} / {self.produs}"
     
-
-
 class Artist(models.Model):
     nume = models.CharField(max_length=100, unique=True)  
     gen_muzical = models.CharField(max_length=100)

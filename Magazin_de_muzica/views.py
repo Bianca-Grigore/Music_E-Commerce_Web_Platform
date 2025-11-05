@@ -10,7 +10,6 @@ from .models import Produs_Artist
 from .models import Campanie_Promo
 from .models import Categorie
 
-
 accesari = []
 
 class Accesare:
@@ -81,8 +80,6 @@ def index(request):
         </html>
     """)
 
-# FUNCTIE PENTRU TESTAREA CLASEI ACCESARE 
-
 def test_accesare(request):
     a1= Accesare(
         ip_client="127.0.0.1",
@@ -139,10 +136,6 @@ def info(request):
 
     return render(request, "Magazin_de_muzica/info.html", {"continut": afisat, "sectiune_parametri": sectiune_parametri })
 
-
-
-
-
 def salvare_accesari(request,nume_pagina):
     a = Accesare(
         ip_client =request.META.get("REMOTE_ADDR"), 
@@ -155,7 +148,6 @@ def salvare_accesari(request,nume_pagina):
 
 
 #LABORATOR 2 TEMA
-
 
 def log(request):
     
@@ -261,7 +253,6 @@ def log(request):
                     continut += f"<li>{a.pagina()}</li>"
                 continut += "</ul>"
 
-
     if not request.GET:
         continut += "<h2>Cererile catre paginile din site:</h2><ul>"
         for a in accesari:
@@ -287,7 +278,6 @@ def afis_template(request):
     }
     return render(request, "Magazin_de_muzica/exemplu.html", context)
 
-
 #afisarea produselor pentru utilizatori
 
 def afis_produse(request):
@@ -298,7 +288,7 @@ def afis_produse(request):
             "produse": produse[0], 
         }
     )
-    
+
 
 #TASK 2 LAB 2
 
@@ -361,6 +351,8 @@ def social(request):
 
 
 
+#Task admin laborator 4
+
 def lista_produse(request):
     sort = request.GET.get('sort', 'a')
     
@@ -368,6 +360,7 @@ def lista_produse(request):
         produse = Produs.objects.all().order_by('-denumire')  
     else:
         produse = Produs.objects.all().order_by('denumire')  
+
 
     paginator = Paginator(produse, 5)
     page_number = request.GET.get('page')
@@ -384,14 +377,18 @@ def lista_produse(request):
 
 def detalii_produs(request, produs_id):
     produs = get_object_or_404(Produs, id=produs_id)
+    
     produs_artist = get_object_or_404(Produs_Artist, produs=produs)
     campanii = Campanie_Promo.objects.filter(produs=produs)
+    
     return render(request, 'Magazin_de_muzica/Detalii_produs.html', {
         'produs': produs,
         'produs_artist': produs_artist,
         'campanii': campanii
     })
-    
+
+#Task QuerySets laborator 4 
+
 def produse_dupa_categorie(request, nume_categorie):
     cat=get_object_or_404(Categorie, nume_categorie=nume_categorie)
     sort =request.GET.get('sort', 'a')
@@ -399,10 +396,13 @@ def produse_dupa_categorie(request, nume_categorie):
         produse=Produs.objects.filter(categorie=cat).order_by('denumire')
     else:
         produse=Produs.objects.filter(categorie=cat).order_by('-denumire')  
+        
     paginator=Paginator(produse, 5)
     page_number=request.GET.get('page')
     page_obj=paginator.get_page(page_number)
+    
     categorie=Categorie.objects.all()
+    
     return render(request, 'Magazin_de_muzica/produse.html', {
         'page_obj': page_obj,
         'sort': sort,
