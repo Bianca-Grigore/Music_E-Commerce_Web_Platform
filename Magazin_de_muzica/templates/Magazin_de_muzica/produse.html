@@ -2,6 +2,16 @@
 {% load static %}
 
 {% block content %}
+<div class = "filtrare-container" style =z"margin-bottom: 30px; padding: 15px; border: 1px solid #ccc; border-radius: 5px;">
+    <h2>Filtreaza Produsele</h2>
+    <form method="get" action=""> 
+            {{ filter_form.as_p }}
+            
+            <button type="submit" style="margin-right: 10px;">Aplică Filtre</button>
+            <a href="{% url 'filtre_produse' %}" class="button-reset">Resetare Filtre</a>
+        </form>
+    </div>
+
 <h1>
     {% if categorie_selectata %}
         Produse din categoria: {{ categorie_selectata.nume_categorie }}
@@ -15,30 +25,34 @@
     <p><em>Creată la: {{ categorie_selectata.data_creare|date:"d.m.Y H:i" }}</em></p>
 {% endif %}
 
-
 <div class="sortare">
-    <strong>Sortare:</strong>
-    <a href="?sort=a">Crescător</a> | 
-    <a href="?sort=d">Descrescător</a>
+    <strong>Sortare Preț:</strong>
+    <a href="?{{ request.GET.urlencode | urlencode }}&sort=a">Crescător</a> | 
+    <a href="?{{ request.GET.urlencode | urlencode }}&sort=d">Descrescător</a>
 </div>
 
 
-<div class="cards-container">
-
-    {% for produs in page_obj %}
-    
-    <div class="card">
-
-        <div class="card-image">
-
-            {% if produs.imagine %}
-    <img src= '{{ produs.imagine.url }}' alt='{{ produs.denumire }}' style="width:100%; height:auto;">
-    
-{% else %}
-    <img src="{% static 'media/default.jpg' %}" alt="Imagine lipsă">
-{% endif %}
-
+{% if repaginare_warning %}
+        <div class="alert alert-info" style="padding: 15px; border: 1px solid #007bff; background-color: #e9ecef; color: #004085; margin-bottom: 20px;">
+            <strong>ℹ️ Paginare schimbată!</strong>
+            <p style="margin: 0;">Ați modificat numărul de elemente afișate pe pagină. Vă rugăm rețineți că acest lucru ar putea duce la afișarea unor produse deja văzute sau la omiterea unora, dacă vă aflați pe o pagină avansată.</p>
         </div>
+    {% endif %}
+
+
+    
+{% if page_obj.paginator.count > 0 %}
+
+    <div class="cards-container">
+        {% for produs in page_obj %}
+        <div class="card">
+        <div class="card-image">
+            {% if produs.imagine %}
+                <img src= '{{ produs.imagine.url }}' alt='{{ produs.denumire }}' style="width:100%; height:auto;">
+            
+            {% else %}
+                <img src="{% static 'media/default.jpg' %}" alt="Imagine lipsă">
+            {% endif %} </div>
         <div class="card-content">
             <h3>
                 <a href="{% url 'Detalii_produs' produs.id %}">
@@ -46,33 +60,39 @@
                 </a>
             </h3>
             <p><strong>Preț:</strong> {{ produs.pret }} RON</p>
-            <p>
-        <strong>Categorie:</strong>
-        <a href="{% url 'produse_dupa_categorie' produs.categorie.nume_categorie %}"
-        style="color: {{ produs.categorie.culoare }}; font-weight: bold;">
+            <p><strong>Categorie:</strong>
+            <a href="{% url 'produse_dupa_categorie' produs.categorie.nume_categorie %}"
+            style="color: {{ produs.categorie.culoare }}; font-weight: bold;">
             {{ produs.categorie.nume_categorie }}
-        </a>
-    </p>
+            </a></p></div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 
 
 
 
 <div class="pagination">
     {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}&sort={{ sort }}">« Previous</a>
+        <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">« Previous</a>
     {% endif %}
 
     <span>Pagina {{ page_obj.number }} din {{ page_obj.paginator.num_pages }}</span>
 
     {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}&sort={{ sort }}">Next »</a>
+        <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Next »</a>
     {% endif %}
 </div>
 
+
+{% else %}
+        <div class="alert alert-warning" style="padding: 20px; border: 1px solid #ffcc00; background-color: #fffacd; text-align: center; margin-top: 30px;">
+            <p style="font-size: 1.2em; color: #856404;">
+                Ne pare rău, niciun produs nu se potrivește criteriilor de filtrare introduse.
+            </p>
+            <p>Încercați să modificați filtrele sau să apăsați pe **"Resetare Filtre"**.</p>
+        </div>
+    {% endif %}
 
 
 

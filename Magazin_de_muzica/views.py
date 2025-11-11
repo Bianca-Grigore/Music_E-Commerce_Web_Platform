@@ -4,7 +4,7 @@ from datetime import datetime
 from urllib.parse import urlparse
 from collections import Counter
 from .models import Produs
-from .forms import ContactForm
+from .forms import ProductFilterForm
 from django.core.paginator import Paginator
 from .models import Produs_Artist
 from .models import Campanie_Promo
@@ -391,6 +391,8 @@ def detalii_produs(request, produs_id):
 
 def produse_dupa_categorie(request, nume_categorie):
     cat=get_object_or_404(Categorie, nume_categorie=nume_categorie)
+    
+    
     sort =request.GET.get('sort', 'a')
     if sort =='a':
         produse=Produs.objects.filter(categorie=cat).order_by('denumire')
@@ -401,6 +403,7 @@ def produse_dupa_categorie(request, nume_categorie):
     page_number=request.GET.get('page')
     page_obj=paginator.get_page(page_number)
     
+    
     categorie=Categorie.objects.all()
     
     return render(request, 'Magazin_de_muzica/produse.html', {
@@ -410,3 +413,102 @@ def produse_dupa_categorie(request, nume_categorie):
         'categorie_selectata': cat
     })
 
+
+
+
+
+
+#Task 1 Laborator 5 
+
+def filtre_produse(request):
+
+    produse = Produs.objects.all()
+    categorie_selectata = None
+    sort_param = request.GET.get('sort', 'denumire') 
+    #preluarea datelor pentru formular
+    filter_form = ProductFilterForm(request.GET)
+    items_per_page=5
+    repaginare_warning=False 
+
+    
+    if filter_form.is_valid():
+        data = filter_form.cleaned_data
+        selected_items_per_page = data.get('produse_per_pagina')
+        if selected_items_per_page:
+            new_items_per_page = int(selected_items_per_page)
+            if new_items_per_page != items_per_page:
+                repaginare_warning = True
+                
+            items_per_page = new_items_per_page
+
+
+        categorie = data.get('categorie')
+        if categorie:
+            produse = produse.filter(categorie=categorie)
+            categorie_selectata = categorie # Păstrează obiectul pentru a fi afișat în titlu
+
+        denumire = data.get('denumire')
+        if denumire:
+            produse = produse.filter(denumire__icontains=denumire)
+
+
+        pret_min = data.get('pret_min')
+        if pret_min is not None:
+            produse = produse.filter(pret__gte=pret_min)
+        pret_max = data.get('pret_max')
+        if pret_max is not None:
+            produse = produse.filter(pret__lte=pret_max)
+            
+
+        stoc_min = data.get('stoc_min')
+        if stoc_min is not None:
+            produse = produse.filter(stoc__gte=stoc_min)
+        stoc_max = data.get('stoc_max')
+        if stoc_max is not None:
+            produse = produse.filter(stoc__lte=stoc_max)
+            
+        campanii = data.get('campanii')
+        if campanii:
+            # .distinct() este necesar pentru a evita dublarea produselor
+            produse = produse.filter(campanii__in=campanii).distinct() 
+            
+        
+        data_adaugare_min = data.get('data_adaugare_min')
+        if data_adaugare_min:
+            produse = produse.filter(data_adaugare__gte=data_adaugare_min)
+        data_adaugare_max = data.get('data_adaugare_max')
+        if data_adaugare_max:
+            produse = produse.filter(data_adaugare__lte=data_adaugare_max)
+            
+        
+        are_imagine = data.get('are_imagine')
+        if are_imagine:
+            produse = produse.filter(imagine__isnull=False).exclude(imagine='')
+
+
+    
+    if sort_param == 'a': 
+        produse = produse.order_by('pret')
+    elif sort_param == 'd': 
+        produse = produse.order_by('-pret')
+
+
+
+
+    paginator = Paginator(produse, items_per_page)
+    page_number=request.GET.get('page')
+    
+    try: 
+        page_obj = paginator.get_page(page_number)
+    except Exception:
+        page_obj = paginator.get_page(1)
+
+    context = {
+        'filter_form': filter_form,
+        'page_obj': page_obj, # Setul de produse pentru pagina curentă
+        repaginare_warning: repaginare_warning,
+        'sort': sort_param, # Parametrul de sortare curent
+        'categorie_selectata': categorie_selectata, # Obiectul Categorie, dacă există
+    }
+    
+    return render(request, 'Magazin_de_muzica/produse.html', context)

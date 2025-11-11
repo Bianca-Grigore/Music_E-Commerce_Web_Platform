@@ -16,4 +16,5 @@ urlpatterns = [
     path("social/", views.in_lucru, name="social"),
     path("produse/<int:produs_id>/", views.detalii_produs, name="Detalii_produs"),
     path('categorii/<str:nume_categorie>/', views.produse_dupa_categorie, name='produse_dupa_categorie'),
+    path("filtre_produse/", views.filtre_produse, name="filtre_produse"),
 ]

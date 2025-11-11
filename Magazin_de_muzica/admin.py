@@ -9,6 +9,7 @@ class ProdusAdmin(admin.ModelAdmin):
     ordering = ['pret']
     list_per_page = 5
     list_filter = ('categorie', 'denumire') 
+    
     search_fields = ('denumire', 'categorie') 
     fieldsets = (
         ('Informații Generale', {
@@ -24,6 +25,7 @@ admin.site.register(Produs, ProdusAdmin)
 
 class ArtistAdmin(admin.ModelAdmin):
     list_display = ('nume', 'gen_muzical')
+    
     search_fields = ('nume', 'gen_muzical')  
     fieldsets = (
         ('Informații Generale', {
