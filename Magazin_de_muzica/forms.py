@@ -1,8 +1,10 @@
 from django import forms
-from .models import Categorie, Campanie_Promo
+from .models import Categorie, Campanie_Promo, Produs
 from django.core.exceptions import ValidationError
 from datetime import date, timedelta
 import re
+from django.core.validators import MinValueValidator
+from decimal import Decimal
 
 
 
@@ -332,3 +334,114 @@ def clean(self):
                 self.add_error('CNP', "Eroare la extragerea datei din CNP. Vă rugăm verificați ambele câmpuri.", code='cnp_extract_fail_internal')
 
         return cleaned_data
+    
+    
+    
+    
+    
+#lab 5 task 3 
+
+def validator_fara_cifre(value):
+    if value.isdigit():
+        raise ValidationError('Denumirea produsului nu poate conține doar cifre.', code='doar_cifre')
+    
+
+def validator_lungime_minima(value):
+    if isinstance(value, str):
+        if len(value) < 5:
+            raise ValidationError('Acest câmp (text) necesită minim 5 caractere.', code='lungime_mica')
+            
+    elif isinstance(value, Decimal):
+        if value < Decimal('1'):
+            raise ValidationError('Prețul de cumpărare trebuie să fie minim 1.00.', code='valoare_minima_pret')
+
+
+def validator_multiplu_zece(value):
+    if value % 10 != 0:
+        raise ValidationError('Stocul inițial trebuie să fie un multiplu de 10.', code='nu_multiplu_zece')
+
+class ProdusForm(forms.ModelForm):
+    pret_cumparare = forms.DecimalField(
+        max_digits= 10,
+        decimal_places=2,
+        required= True,
+        validators=[validator_lungime_minima],
+        error_messages={'required': "Vă rugăm introduceți prețul de achiziție al produsului."},
+        help_text="Introduceți prețul inițial de achiziție (de la furnizor)."
+    )
+    
+    procent_adaos = forms.IntegerField(
+        required= True, 
+        validators=[MinValueValidator(10, message="Adaosul minim este 10%")],
+        error_messages={'required': "Vă rugăm introduceți procentul de adaos comercial."},
+    )
+    class Meta:
+        model = Produs 
+        fields = ['categorie', 'denumire', 'stoc', 'campanii', 'imagine']
+        labels ={
+            'denumire' : 'Denumirea Produsului',
+            'stoc': 'Cantitatea valabila care poate fi achizitionată',
+            'campanii': 'Produsul poate sau nu poate fi eligibil pentru o campanie'
+        }
+        help_text ={
+            'denumire': 'Introduceti un nume unic și descriptiv pentru produs.',
+            'categorie': 'Fiecare produs are cel putin o categorie din care face parte.'
+        }
+        errors_messages={
+            'stoc': {
+                'required': 'Stocul initial este obligatoriu',
+                'min_value': 'Valoarea minima trebuie sa fie un numar pozitiv'
+            },
+
+        }
+        
+    def clean_denumire(self):
+        denumire=self.cleaned_data.get('denumire')
+        validator_lungime_minima(denumire)
+        validator_fara_cifre(denumire)
+        if len(denumire.split()) <2:
+            raise forms.ValidationError("Denumirea trebuie sa contina minim 2 cuvinte.", code = 'cuvinte_putine')
+        return denumire 
+
+    def clean_stoc(self):
+        stoc=self.cleaned_data.get('stoc')
+        validator_multiplu_zece(stoc)
+        return stoc
+
+    def clean(self):
+            cleaned_data = super().clean()
+            pret_cumparare = cleaned_data.get('pret_cumparare')
+            procent_adaos = cleaned_data.get('procent_adaos')
+
+            
+            if pret_cumparare and procent_adaos:
+                
+                if pret_cumparare > Decimal('1000') and procent_adaos < 20:
+                    
+                    raise forms.ValidationError(
+                        "Pentru produsele scumpe (peste 1000 RON), adaosul comercial minim este 20%.",
+                        code='adaos_prea_mic'
+                    )
+
+            return cleaned_data
+    def save(self, commit=True):
+            
+            produs = super().save(commit=False)
+            
+            pret_cumparare = self.cleaned_data.get('pret_cumparare')
+            procent_adaos = self.cleaned_data.get('procent_adaos')
+            
+            
+            if pret_cumparare is not None and procent_adaos is not None:
+                adaos = pret_cumparare * (Decimal(procent_adaos) / Decimal('100'))
+                produs.pret = int(pret_cumparare + adaos)
+            
+            produs.pret_baza = int(pret_cumparare)
+            
+            produs.descriere = f"Produs adăugat în categoria {produs.categorie} cu un preț final de {produs.pret} RON."
+
+            if commit:
+                produs.save()
+                self.save_m2m() 
+                
+            return produs

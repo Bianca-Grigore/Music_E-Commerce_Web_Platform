@@ -8,7 +8,6 @@ urlpatterns = [
     path("log/", views.log, name="log"),
     path('produse/', views.lista_produse, name='lista_produse'),
     path("despre/", views.despre, name="despre"),
-    #path("contact/", views.in_lucru, name="contact"),
     path("cos_virtual/", views.in_lucru, name="cos_virtual"),
     path("in_lucru/", views.in_lucru, name="in_lucru"),
     path("baza/", views.baza, name="baza"),
@@ -19,4 +18,6 @@ urlpatterns = [
     #path("filtre_produse/", views.filtre_produse, name="filtre_produse"),
     path("product_list_view/", views.product_list_view, name="product_list_view"),
     path("contact/", views.contact_view, name="contact_page"),
+    #path('adaugare/', views.introducere_produs, name='adaugare_produs'),
+    path('adaugare_produs/', views.introducere_produs, name='adaugare'),
 ]

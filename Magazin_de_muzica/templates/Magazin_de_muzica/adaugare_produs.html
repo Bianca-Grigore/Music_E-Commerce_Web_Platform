@@ -1,0 +1,69 @@
+{% extends "./baza.html" %}  
+
+{% block content %}
+
+    <style>
+        .errorlist { color: red; list-style: none; padding-left: 0; }
+        .field-error { color: red; font-size: 0.9em; margin-top: 5px; }
+        .helptext { color: gray; font-size: 0.8em; margin-top: 5px; display: block; }
+    </style>
+
+    <h1>{{ titlu }}</h1>
+    
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            <p>Erori la nivel de formular:</p>
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        
+        {% csrf_token %}
+
+        <fieldset>
+            <legend>Detalii de Bază Produs (din model)</legend>
+            
+            {% for field in form %}
+                {% if field.name in 'categorie,denumire,stoc,campanii,imagine' %} 
+                    <p>
+                        {{ field.label_tag }} 
+                        {{ field }}
+                        
+                        {% if field.help_text %}
+                            <span class="helptext">{{ field.help_text }}</span>
+                        {% endif %}
+                        
+                        {% for error in field.errors %}
+                            <span class="field-error">{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            {% endfor %}
+        </fieldset>
+
+        <fieldset>
+            <legend>Detalii Comericale (Câmpuri Adiționale)</legend>
+            
+            <p>
+                {{ form.pret_cumparare.label_tag }}
+                {{ form.pret_cumparare }}
+                <span class="helptext">{{ form.pret_cumparare.help_text }}</span>
+                {% for error in form.pret_cumparare.errors %}
+                    <span class="field-error">{{ error }}</span>
+                {% endfor %}
+            </p>
+
+            <p>
+                {{ form.procent_adaos.label_tag }}
+                {{ form.procent_adaos }}
+                {% for error in form.procent_adaos.errors %}
+                    <span class="field-error">{{ error }}</span>
+                {% endfor %}
+            </p>
+        </fieldset>
+
+        <button type="submit">Adaugă Produsul</button>
+    </form>
+
+{% endblock %}

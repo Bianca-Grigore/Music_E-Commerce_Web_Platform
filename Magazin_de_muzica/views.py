@@ -1,3 +1,4 @@
+from time import time
 from django.shortcuts import render, redirect, get_object_or_404 
 from django.http import HttpResponse
 from datetime import datetime
@@ -16,8 +17,9 @@ from django.contrib import messages
 from django.conf import settings
 from datetime import date
 import re
-
-
+import json
+import time
+from django.urls import reverse 
 
 accesari = []
 
@@ -671,51 +673,102 @@ def contact_view(request):
         form = ContactForm(request.POST)
         
         if form.is_valid():
-            
-            # --- PREPROCESAREA DATELOR VALIDATE ---
             data = form.cleaned_data
             
-            # Extragem câmpurile necesare pentru preprocesare
             data_nastere = data.pop('data_nastere')
             
-            # 1. Calcul Vârstă (înlocuiește data_nastere)
             data['varsta_ani_luni'] = calculate_age_months(data_nastere)
             
-            # 2. Preprocesare Mesaj
             data['mesaj'] = preprocess_message_text(data['mesaj'])
             
-            # 3. Verificare Urgență (pentru flag și nume fișier)
+            
             tip_mesaj = data['tip_mesaj']
             zile_asteptare_utilizator = data['min_zile_asteptare']
             
             min_cerut = get_min_zile_asteptare_cerut(tip_mesaj)
             
-            # Setează campul "urgent" la true dacă timpul de așteptare este exact minimul cerut
+
             is_urgent = (zile_asteptare_utilizator == min_cerut)
             data['urgent'] = is_urgent 
-            
+
+            data.pop('confirmare_email', None) 
+
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                ip_utilizator = x_forwarded_for.split(',')[0]
+            else:
+                ip_utilizator = request.META.get('REMOTE_ADDR')
+    
+            data_ora_sosire = datetime.now()
+
+            data['ip_utilizator'] = ip_utilizator
+            data['data_ora_sosire'] = data_ora_sosire.strftime("%Y-%m-%d %H:%M:%S")
+
+
 
             save_dir = os.path.join(settings.BASE_DIR, 'Mesaje')
-            os.makedirs(save_dir, exist_ok=True)
-            
-            urgent_tag = "_URGENT" if is_urgent else ""
-            nume_fisier = f"mesaj_{tip_mesaj}_{data['nume']}{urgent_tag}_{date.today().strftime('%Y%m%d_%H%M%S')}.txt"
+            os.makedirs(save_dir, exist_ok=True) 
+
+
+            timestamp = int(time.time()) 
+
+
+            urgent_tag = "_urgent" if is_urgent else ""
+            nume_fisier = f"mesaj_{timestamp}{urgent_tag}.json"
             file_path = os.path.join(save_dir, nume_fisier) 
 
-            
+
             try:
                 with open(file_path, 'w', encoding='utf-8') as f:
-                    for key, value in data.items():
-                        f.write(f"{key}: {value}\n")
-                
-                messages.success(request, f"Mesajul a fost trimis cu succes! Fișier salvat ca: {nume_fisier}")
-                
+                    json.dump(data, f, ensure_ascii=False, indent=4)
+    
+                messages.success(request, f"Mesajul a fost trimis cu succes! Fișier JSON salvat ca: {nume_fisier}")
+    
             except Exception as e:
-                messages.error(request, f"A apărut o eroare la salvarea fișierului: {e}")
-
-            return redirect('contact_page') 
+                messages.error(request, f"A apărut o eroare la salvarea fișierului JSON: {e}")
     else:
-        
-        form = ContactForm()
-        
+        form =ContactForm()
     return render(request, 'Magazin_de_muzica/contact.html', {'form': form})
+
+
+
+#lab 5 tesk 3 
+
+from .forms import ProdusForm 
+
+def introducere_produs(request):
+    # 1. GESTIONAREA DATELOR TRIMISE (POST)
+    if request.method == 'POST':
+        # Instanțierea formularului cu datele trimise de utilizator
+        form = ProdusForm(request.POST, request.FILES) 
+        
+        # 2. RULAREA VALIDĂRILOR
+        if form.is_valid():
+            try:
+                # 3. SALVAREA OBIECTULUI
+                # Apelarea metodei save() din formular, care include logica cu commit=False,
+                # calcularea prețului final, setarea descrierii, și salvarea finală în baza de date.
+                produs = form.save(commit=True) 
+                
+                # 4. REDIRECȚIONARE DUPĂ SUCCES
+                # Exemplu: Redirecționare către o pagină de succes sau o listă de produse.
+                return redirect(reverse('lista_produse')) 
+
+            except Exception as e:
+                # Gestiune de erori la salvarea efectivă în baza de date (dacă există)
+                print(f"Eroare la salvarea produsului: {e}")
+                # Poți adăuga un mesaj de eroare formularului
+                form.add_error(None, "A apărut o eroare la salvarea în baza de date.")
+    
+    # 5. GESTIONAREA CERERILOR NOI (GET)
+    else:
+        # Instanțierea unui formular gol pentru afișare
+        form = ProdusForm() 
+
+    # 6. AFIȘAREA FORMULARULUI
+    context = {
+        'form': form,
+        'titlu': 'Adaugă un Produs Nou'
+    }
+    return render(request, 'Magazin_de_muzica/adaugare_produs.html', context)
+

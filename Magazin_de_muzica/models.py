@@ -36,7 +36,7 @@ class Campanie_Promo(models.Model):
 class Produs(models.Model):
     categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
     denumire = models.TextField()
-    pret = models.PositiveIntegerField(default=0)       
+    pret = models.PositiveIntegerField()       
     stoc = models.FloatField(default=0.0)              
     campanii = models.ManyToManyField(Campanie_Promo, blank=True)
     data_adaugare = models.DateTimeField(default=timezone.now)  
