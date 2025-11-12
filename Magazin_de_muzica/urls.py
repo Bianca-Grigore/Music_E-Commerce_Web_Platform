@@ -8,7 +8,7 @@ urlpatterns = [
     path("log/", views.log, name="log"),
     path('produse/', views.lista_produse, name='lista_produse'),
     path("despre/", views.despre, name="despre"),
-    path("contact/", views.in_lucru, name="contact"),
+    #path("contact/", views.in_lucru, name="contact"),
     path("cos_virtual/", views.in_lucru, name="cos_virtual"),
     path("in_lucru/", views.in_lucru, name="in_lucru"),
     path("baza/", views.baza, name="baza"),
@@ -16,5 +16,7 @@ urlpatterns = [
     path("social/", views.in_lucru, name="social"),
     path("produse/<int:produs_id>/", views.detalii_produs, name="Detalii_produs"),
     path('categorii/<str:nume_categorie>/', views.produse_dupa_categorie, name='produse_dupa_categorie'),
-    path("filtre_produse/", views.filtre_produse, name="filtre_produse"),
+    #path("filtre_produse/", views.filtre_produse, name="filtre_produse"),
+    path("product_list_view/", views.product_list_view, name="product_list_view"),
+    path("contact/", views.contact_view, name="contact_page"),
 ]

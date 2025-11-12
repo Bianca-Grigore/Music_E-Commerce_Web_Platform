@@ -2,15 +2,48 @@
 {% load static %}
 
 {% block content %}
-<div class = "filtrare-container" style =z"margin-bottom: 30px; padding: 15px; border: 1px solid #ccc; border-radius: 5px;">
-    <h2>Filtreaza Produsele</h2>
-    <form method="get" action=""> 
+
+
+    <div class="filtrare-container">
+        <form method="get" action=""> 
             {{ filter_form.as_p }}
             
-            <button type="submit" style="margin-right: 10px;">Aplică Filtre</button>
-            <a href="{% url 'filtre_produse' %}" class="button-reset">Resetare Filtre</a>
+            <button type="submit">Aplică Filtre</button>
+            
+            {% if categorie_selectata %}
+                <a href="{% url 'produse_dupa_categorie' categorie_selectata.nume_categorie %}" class="reset-button">Resetare Filtre</a>
+            {% else %}
+                <a href="{% url 'product_list_view' %}" class="reset-button">Resetare Filtre</a>
+            {% endif %}
         </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Selectează toate butoanele/linkurile de resetare
+            const resetLinks = document.querySelectorAll('.reset-button');
+
+            resetLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Preia URL-ul de resetare din atributul href
+                    const resetUrl = link.getAttribute('href');
+                    
+                    // Afișează fereastra de confirmare
+                    const userConfirmed = confirm(
+                        "Sunteți sigur că doriți să resetați filtrele? Toate filtrele aplicate și criteriile de căutare vor fi șterse."
+                    );
+
+                    if (userConfirmed) {
+                        // Dacă utilizatorul confirmă, navighează la URL
+                        window.location.href = resetUrl;
+                    } else {
+                        // Dacă utilizatorul anulează, oprește acțiunea implicită a linkului
+                        e.preventDefault();
+                    }
+                });
+            });
+        });
+    </script>
 
 <h1>
     {% if categorie_selectata %}
@@ -32,9 +65,11 @@
 </div>
 
 
+{% comment %} lab 5 task 1 ex 7 {% endcomment %}
+
 {% if repaginare_warning %}
         <div class="alert alert-info" style="padding: 15px; border: 1px solid #007bff; background-color: #e9ecef; color: #004085; margin-bottom: 20px;">
-            <strong>ℹ️ Paginare schimbată!</strong>
+            <strong>Paginare schimbată!</strong>
             <p style="margin: 0;">Ați modificat numărul de elemente afișate pe pagină. Vă rugăm rețineți că acest lucru ar putea duce la afișarea unor produse deja văzute sau la omiterea unora, dacă vă aflați pe o pagină avansată.</p>
         </div>
     {% endif %}
@@ -90,7 +125,7 @@
             <p style="font-size: 1.2em; color: #856404;">
                 Ne pare rău, niciun produs nu se potrivește criteriilor de filtrare introduse.
             </p>
-            <p>Încercați să modificați filtrele sau să apăsați pe **"Resetare Filtre"**.</p>
+            <p>Încercați să modificați filtrele sau să apăsați pe "Resetare Filtre".</p>
         </div>
     {% endif %}
 

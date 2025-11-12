@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Magazin_de_muzica.apps.MagazinDeMuzicaConfig', 
+    'Magazin_de_muzica.apps.MagazinDeMuzicaConfig',
 ]
 
 MIDDLEWARE = [
@@ -144,3 +144,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+ADMIN_EMAIL = 'emailul-tau-admin@exemplu.com'
+DEFAULT_FROM_EMAIL = 'contact@magazin-muzica.com'

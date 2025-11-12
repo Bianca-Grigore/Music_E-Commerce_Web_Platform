@@ -1,0 +1,11 @@
+nume: Andrei
+prenume: 
+CNP: 
+email: biancagrigore208@gmail.com
+confirmare_email: biancagrigore208@gmail.com
+tip_mesaj: intrebare
+subiect: Comanda
+min_zile_asteptare: 2
+mesaj: ADKASDXCBKSD SDNCKSDC adsda wsadwaccdwesc Andrei
+varsta_ani_luni: 20 ani și 5 luni
+urgent: True

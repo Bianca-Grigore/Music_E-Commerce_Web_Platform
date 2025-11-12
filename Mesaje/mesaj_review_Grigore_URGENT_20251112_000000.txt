@@ -1,0 +1,11 @@
+nume: Grigore
+prenume: Bianca
+CNP: 2690608037913
+email: biancagrigore842@gmail.com
+confirmare_email: biancagrigore842@gmail.com
+tip_mesaj: review
+subiect: Comanda
+min_zile_asteptare: 4
+mesaj: fdigew idgewf ydgfewf fuyewr ydwefru ywfgeu vyufwyeg fygwersf Grigore
+varsta_ani_luni: 56 ani și 5 luni
+urgent: True

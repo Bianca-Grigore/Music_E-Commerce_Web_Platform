@@ -1,5 +1,11 @@
 from django import forms
 from .models import Categorie, Campanie_Promo
+from django.core.exceptions import ValidationError
+from datetime import date, timedelta
+import re
+
+
+
 PAGINATION_CHOICES = [
     (5, '5 pe pagină (Implicit)'), 
     (10, '10 pe pagină'),
@@ -8,6 +14,14 @@ PAGINATION_CHOICES = [
 ]
 class ProductFilterForm(forms.Form):
     #lab 5 ex 6
+    
+    #lab 5 task 1 ex 8 folosit pt cand e ascuns pentry a fi transmis la filtrare
+    categorie_id =forms.IntegerField(
+        label = "Id categorie",
+        required=False,
+        widget=forms.HiddenInput()
+    )
+    
     categorie = forms.ModelChoiceField(
         queryset=Categorie.objects.all(), 
         label='Categorie', 
@@ -95,5 +109,226 @@ class ProductFilterForm(forms.Form):
         data_adaugare_max = cleaned_data.get('data_adaugare_max')
         if data_adaugare_min and data_adaugare_max and data_adaugare_min > data_adaugare_max:
             raise forms.ValidationError('Data adăugării minime nu poate fi după data maximă.')
+
+        return cleaned_data
+    
+    
+
+
+#lab 5 task 2 ex 1
+
+TIP_MESAJ_CHOICES = [
+    ('neselectat', '--- Neselectat ---'),
+    ('reclamatie', 'Reclamație'),
+    ('intrebare', 'Întrebare'),
+    ('review', 'Review'),
+    ('cerere', 'Cerere'),
+    ('programare', 'Programare'),
+]
+    
+#2.i)
+def validare_format_text(value):
+    #se permite ca prenumele sa fie gol
+    if not value:
+        return 
+    if not value[0].isupper():
+        raise ValidationError('Textul trebuie să înceapă cu literă mare.', code = 'incepe_litera_mare')
+    if not re.fullmatch(r'^[A-Za-z\s-]+$', value):
+        raise ValidationError('Textul poate conține doar litere, spații și cratime.', code='caractere_invalide')
+    
+#2.j)
+def validare_caps_after_separator(value):
+    #verifica daca dupa spatiu sau cratima urmeaza litera mare, pt nume si prenume
+    if not value:
+        return
+    if re.search(r'[ -][a-z]', value):
+        raise ValidationError('După spațiu sau cratimă trebuie să urmeze literă mare.', code='litera_mica_dupa_separator')
+    
+#2.d)
+def validare_no_links(value):
+    if re.search(r'https?://\S+', value, re.IGNORECASE):
+        raise ValidationError('Mesajul nu trebuie să conțină link-uri.', code='contine_link')
+    
+#2.f) g)
+def validare_cnp_format(value):
+    if not value:
+        return
+    if len(value) != 13 or not value.isdigit():
+        raise ValidationError('CNP-ul trebuie să conțină exact 13 cifre.', code='cnp_format_invalid')
+    
+    
+    year = int(value[1:3])
+    month = int(value[3:5])
+    day = int(value[5:7])
+    
+    if value[0] not in ('1', '2'):
+        raise ValidationError('CNP-ul trebuie să înceapă cu 1 sau 2.', code='cnp_start_invalid')
+    else:
+        full_year=year + 1900
+
+
+    if month < 1 or month > 12:
+        raise ValidationError('Luna din CNP este invalidă.', code='cnp_luna_invalida')
+    if day < 1 or day > 31:
+        raise ValidationError('Ziua din CNP este invalidă.', code='cnp_zi_invalida')
+    
+    if full_year > date.today().year:
+        raise ValidationError('Anul din CNP este în viitor.', code='cnp_an_viitor')
+    
+    try:
+        date(full_year, month, day) 
+    except ValueError:
+        raise ValidationError('Data din CNP este invalidă.', code='cnp_data_invalida')  
+
+#2.h)
+def validare_no_temp_email(value):
+    temp_domains=['guerillamail.com', 'yopmail.com']
+    try:
+        domain=value.split('@')[1].lower()
+    except IndexError:
+        return
+    if domain in temp_domains:
+        raise ValidationError('Adresa de email nu trebuie să fie de tip temporar.', code='email_temporar')
+
+#2. b)
+def validate_word_count(value):
+    words = re.findall(r'[A-Za-z0-9]+', value)
+    count = len(words)
+    
+    if count < 5 or count > 100:
+        raise ValidationError(f'Mesajul trebuie să conțină între 5 și 100 de cuvinte (curente: {count}).', code='numar_cuvinte_invalid')
+
+#2.c)
+def validate_word_length(value):
+    words = re.findall(r'[A-Za-z0-9]+', value)
+    
+    for word in words:
+        if len(word) > 15:
+            raise ValidationError(f'Cuvântul "{word[:10]}..." depășește limita de 15 caractere.', code='lungime_cuvant_depasita')
+
+#2.a)
+def validate_age_over_18(value):
+    today = date.today()
+    age = today.year - value.year - ((today.month, today.day) < (value.month, value.day))
+    if age < 18:
+        raise ValidationError('Expeditorul trebuie să aibă minim 18 ani (să fie major).', code='nu_este_major')
+    
+
+class ContactForm(forms.Form):
+    nume= forms.CharField(max_length=10, label='Nume', required=True,
+    validators=[validare_format_text, validare_caps_after_separator]
+    )
+    prenume= forms.CharField(max_length=10, label='Prenume', required=False, 
+        validators=[validare_format_text, validare_caps_after_separator]
+        )
+    CNP= forms.CharField(max_length=13, label='CNP', required=False,
+        validators=[validare_cnp_format]                 
+        )
+    data_nastere= forms.DateField(label='Data Nasterii', required=True, 
+        validators=[validate_age_over_18]
+        )
+    email= forms.EmailField(label='Email', required=True, 
+        validators=[validare_no_temp_email]
+        )
+    confirmare_email= forms.EmailField(label='Confirmare Email', required=True, 
+        validators=[validare_no_temp_email]
+        )
+    tip_mesaj= forms.ChoiceField(
+        choices=TIP_MESAJ_CHOICES,
+        label='Tip Mesaj',
+        initial='neselectat',
+        required=True,
+    )
+    subiect= forms.CharField(max_length=100, label='Subiect', required=True, 
+        validators=[validare_format_text, validare_no_links]
+        )
+    min_zile_asteptare= forms.IntegerField(
+        label='Număr minim de zile de așteptare pentru răspuns',
+        required=False,
+        min_value=1,
+        max_value=30,
+        help_text="Pentru review-uri/cereri minimul de zile de așteptare trebuie setat de la 4 încolo, iar pentru cereri/întrebări de la 2 încolo. Maximul e 30."
+    )
+    mesaj= forms.CharField(
+        label= "Mesajul tău (te rugăm să te și semnezi)",
+        required=True,
+        widget=forms.Textarea(attrs={'rows': 5}),
+        validators=[validare_no_links, validate_word_count, validate_word_length]
+    )
+def clean_tip_mesaj(self):
+        tip_mesaj = self.cleaned_data.get('tip_mesaj')
+        if tip_mesaj == 'neselectat':
+            raise ValidationError("Te rugăm să selectezi un tip de mesaj valid și diferit de 'neselectat'.", code='tip_neselectat')
+        return tip_mesaj
+    
+def clean(self):
+        cleaned_data = super().clean()
+        nume = cleaned_data.get('nume')
+        cnp = cleaned_data.get('CNP')
+        data_nastere = cleaned_data.get('data_nastere')
+        email = cleaned_data.get('email')
+        confirmare_email = cleaned_data.get('confirmare_email')
+        tip_mesaj = cleaned_data.get('tip_mesaj')
+        zile_asteptare = cleaned_data.get('min_zile_asteptare')
+        mesaj = cleaned_data.get('mesaj')
+
+        if email and confirmare_email and email != confirmare_email:
+            self.add_error('confirmare_email', "Adresele de e-mail nu se potrivesc.", code='email_mismatch')
+        
+        if tip_mesaj and zile_asteptare:
+            
+            if tip_mesaj in ['review', 'cerere'] and zile_asteptare < 4:
+                self.add_error(
+                    'min_zile_asteptare', 
+                    f"Pentru tipul '{tip_mesaj}', minimul de zile de așteptare trebuie să fie de la 4 încolo."
+                )
+            
+            elif tip_mesaj == 'intrebare' and zile_asteptare < 2:
+                self.add_error(
+                    'min_zile_asteptare', 
+                    "Pentru 'întrebare', minimul de zile de așteptare trebuie să fie de la 2 încolo."
+                )
+
+        if nume and mesaj:
+            import re
+            
+            # Găsește ultimul cuvânt alfanumeric din mesaj, ignorând spațiile/punctuația
+            match = re.search(r'([A-Za-z]+)\W*$', mesaj)
+            
+            if match:
+                ultimul_cuvant = match.group(1)
+                
+                # Asigurăm că se compară doar numele (dacă are un singur cuvânt)
+                # și facem comparația insensibilă la majuscule/minuscule
+                if ultimul_cuvant.lower() != nume.lower():
+                    self.add_error('mesaj', 
+                "Mesajul trebuie să se încheie cu numele dumneavoastră (semnătura).", code='semnatura_invalida')
+            else:
+                self.add_error('mesaj', "Mesajul trebuie să conțină o semnătură la final.", code='lipsa_semnatura')
+                
+        # --- 4. CNP vs. Data Nașterii ---
+        # Verifică dacă data extrasă din CNP se potrivește cu data nasterii introdusă
+        # Condiție: Ambele câmpuri trebuie să fie completate și să fi trecut de validările de format
+        if cnp and data_nastere:
+            try:
+                # Extragem componentele datate din CNP (presupunem secolul 19 sau 20)
+                cnp_start_digit = int(cnp[0])
+                cnp_an = int(cnp[1:3])
+                cnp_luna = int(cnp[3:5])
+                cnp_zi = int(cnp[5:7])
+
+                # Deducem secolul: 1 sau 2 = 19xx sau 20xx
+                an_complet = cnp_an + (1900 if cnp_start_digit in (1, 2) else 0) 
+                
+                # Creăm un obiect date din CNP
+                data_nastere_cnp = date(an_complet, cnp_luna, cnp_zi)
+                
+                if data_nastere_cnp != data_nastere:
+                    self.add_error('data_nastere', 
+                        f"Data nașterii ({data_nastere.strftime('%d.%m.%Y')}) nu corespunde cu data extrasă din CNP ({data_nastere_cnp.strftime('%d.%m.%Y')}).", code='cnp_data_mismatch')
+            except ValueError:
+                # Erorile de format (luna sau ziua invalida) sunt preluate de 'validare_cnp_format', 
+                # dar includem asta pentru orice eroare de conversie neprevăzută
+                self.add_error('CNP', "Eroare la extragerea datei din CNP. Vă rugăm verificați ambele câmpuri.", code='cnp_extract_fail_internal')
 
         return cleaned_data

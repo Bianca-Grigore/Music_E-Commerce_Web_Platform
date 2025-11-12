@@ -9,6 +9,15 @@ from django.core.paginator import Paginator
 from .models import Produs_Artist
 from .models import Campanie_Promo
 from .models import Categorie
+import django.forms as forms
+import os 
+from .forms import ContactForm
+from django.contrib import messages
+from django.conf import settings
+from datetime import date
+import re
+
+
 
 accesari = []
 
@@ -305,10 +314,10 @@ def despre(request):
     context = {'user_ip': get_client_ip(request)}
     return render(request, 'Magazin_de_muzica/despre.html', context)
     
-def contact(request):
-    salvare_accesari(request, "Pagina de contact")
-    context = {'user_ip': get_client_ip(request)}
-    return render(request, "Magazin_de_muzica/in_lucru.html", context)
+# def contact(request):
+#     salvare_accesari(request, "Pagina de contact")
+#     context = {'user_ip': get_client_ip(request)}
+#     return render(request, "Magazin_de_muzica/in_lucru.html", context)
 
 def cos_virtual(request):
     salvare_accesari(request, "Pagina cosului virtual")
@@ -420,95 +429,293 @@ def produse_dupa_categorie(request, nume_categorie):
 
 #Task 1 Laborator 5 
 
-def filtre_produse(request):
+# def filtre_produse(request):
 
-    produse = Produs.objects.all()
-    categorie_selectata = None
-    sort_param = request.GET.get('sort', 'denumire') 
-    #preluarea datelor pentru formular
-    filter_form = ProductFilterForm(request.GET)
-    items_per_page=5
-    repaginare_warning=False 
+#     produse = Produs.objects.all()
+#     categorie_selectata = None
+#     sort_param = request.GET.get('sort', 'denumire') 
+#     #preluarea datelor pentru formular
+#     filter_form = ProductFilterForm(request.GET)
+#     items_per_page=5
+#     repaginare_warning=False 
 
     
-    if filter_form.is_valid():
-        data = filter_form.cleaned_data
-        selected_items_per_page = data.get('produse_per_pagina')
-        if selected_items_per_page:
-            new_items_per_page = int(selected_items_per_page)
-            if new_items_per_page != items_per_page:
-                repaginare_warning = True
+#     if filter_form.is_valid():
+#         data = filter_form.cleaned_data
+#         selected_items_per_page = data.get('produse_per_pagina')
+#         if selected_items_per_page:
+#             new_items_per_page = int(selected_items_per_page)
+#             if new_items_per_page != items_per_page:
+#                 repaginare_warning = True
                 
-            items_per_page = new_items_per_page
+#             items_per_page = new_items_per_page
 
 
-        categorie = data.get('categorie')
-        if categorie:
-            produse = produse.filter(categorie=categorie)
-            categorie_selectata = categorie # Păstrează obiectul pentru a fi afișat în titlu
+#         categorie = data.get('categorie')
+#         if categorie:
+#             produse = produse.filter(categorie=categorie)
+#             categorie_selectata = categorie # Păstrează obiectul pentru a fi afișat în titlu
 
-        denumire = data.get('denumire')
+#         denumire = data.get('denumire')
+#         if denumire:
+#             produse = produse.filter(denumire__icontains=denumire)
+
+
+#         pret_min = data.get('pret_min')
+#         if pret_min is not None:
+#             produse = produse.filter(pret__gte=pret_min)
+#         pret_max = data.get('pret_max')
+#         if pret_max is not None:
+#             produse = produse.filter(pret__lte=pret_max)
+            
+
+#         stoc_min = data.get('stoc_min')
+#         if stoc_min is not None:
+#             produse = produse.filter(stoc__gte=stoc_min)
+#         stoc_max = data.get('stoc_max')
+#         if stoc_max is not None:
+#             produse = produse.filter(stoc__lte=stoc_max)
+            
+#         campanii = data.get('campanii')
+#         if campanii:
+            
+#             produse = produse.filter(campanii__in=campanii).distinct() 
+            
+        
+#         data_adaugare_min = data.get('data_adaugare_min')
+#         if data_adaugare_min:
+#             produse = produse.filter(data_adaugare__gte=data_adaugare_min)
+#         data_adaugare_max = data.get('data_adaugare_max')
+#         if data_adaugare_max:
+#             produse = produse.filter(data_adaugare__lte=data_adaugare_max)
+            
+        
+#         are_imagine = data.get('are_imagine')
+#         if are_imagine:
+#             produse = produse.filter(imagine__isnull=False).exclude(imagine='')
+
+
+    
+#     if sort_param == 'a': 
+#         produse = produse.order_by('pret')
+#     elif sort_param == 'd': 
+#         produse = produse.order_by('-pret')
+
+
+
+#     paginator = Paginator(produse, items_per_page)
+#     page_number=request.GET.get('page')
+    
+#     try: 
+#         page_obj = paginator.get_page(page_number)
+#     except Exception:
+#         page_obj = paginator.get_page(1)
+
+#     context = {
+#         'filter_form': filter_form,
+#         'page_obj': page_obj, 
+#         'repaginare_warning': repaginare_warning,
+#         'sort': sort_param, 
+#         'categorie_selectata': categorie_selectata, 
+#     }
+    
+#     return render(request, 'Magazin_de_muzica/produse.html', context)
+
+
+
+
+
+def product_list_view(request, categorie_slug=None):
+    produse = Produs.objects.all()
+    categorie_selectata =None 
+    items_per_page =5
+    repaginare_warning =False
+    
+    if categorie_slug :
+        categorie_selectata=get_object_or_404(Categorie, nume_categorie=categorie_slug)
+        produse =produse.filter(categorie=categorie_selectata)
+        
+        initial_data =request.GET.copy()
+        initial_data['categorie'] =categorie_selectata.pk 
+        filter_form =ProductFilterForm(initial_data)
+        
+        if request.GET.get('categorie') and str(categorie_selectata.pk) != request.GET.get('categorie'):
+            filter_form.add_error('categorie', "Valoarea categoriei nu poate fi modificata pe aceasta pagina.")
+            produse =Produs.objects.none()
+        
+        filter_form.fields['categorie'].widget =forms.HiddenInput()
+        
+    else:
+        filter_form =ProductFilterForm(request.GET)
+        
+    if filter_form.is_valid():
+        data=filter_form.cleaned_data 
+        
+        selected_items_per_page =data.get('produse_per_pagina')
+        if selected_items_per_page:
+            new_items_per_page =int(selected_items_per_page)
+            if new_items_per_page != 5:
+                repaginare_warning =True
+            items_per_page =new_items_per_page
+            
+        denumire =data.get('denumire')
         if denumire:
-            produse = produse.filter(denumire__icontains=denumire)
-
-
-        pret_min = data.get('pret_min')
+            produse =produse.filter(denumire__icontains=denumire)
+        
+        pret_min =data.get('pret_min')
         if pret_min is not None:
-            produse = produse.filter(pret__gte=pret_min)
-        pret_max = data.get('pret_max')
+            produse =produse.filter(pret__gte=pret_min)
+        pret_max =data.get('pret_max')
         if pret_max is not None:
-            produse = produse.filter(pret__lte=pret_max)
-            
-
-        stoc_min = data.get('stoc_min')
+            produse =produse.filter(pret__lte=pret_max)
+        stoc_min =data.get('stoc_min')
         if stoc_min is not None:
-            produse = produse.filter(stoc__gte=stoc_min)
-        stoc_max = data.get('stoc_max')
+            produse =produse.filter(stoc__gte=stoc_min)
+        stoc_max =data.get('stoc_max')
         if stoc_max is not None:
-            produse = produse.filter(stoc__lte=stoc_max)
-            
-        campanii = data.get('campanii')
+            produse =produse.filter(stoc__lte=stoc_max)
+        campanii =data.get('campanii')
         if campanii:
-            # .distinct() este necesar pentru a evita dublarea produselor
-            produse = produse.filter(campanii__in=campanii).distinct() 
-            
-        
-        data_adaugare_min = data.get('data_adaugare_min')
-        if data_adaugare_min:
-            produse = produse.filter(data_adaugare__gte=data_adaugare_min)
-        data_adaugare_max = data.get('data_adaugare_max')
-        if data_adaugare_max:
-            produse = produse.filter(data_adaugare__lte=data_adaugare_max)
-            
-        
-        are_imagine = data.get('are_imagine')
+            produse =produse.filter(campanii__in=campanii).distinct()
+        are_imagine =data.get('are_imagine')
         if are_imagine:
-            produse = produse.filter(imagine__isnull=False).exclude(imagine='')
-
-
-    
-    if sort_param == 'a': 
-        produse = produse.order_by('pret')
-    elif sort_param == 'd': 
-        produse = produse.order_by('-pret')
-
-
-
-
-    paginator = Paginator(produse, items_per_page)
-    page_number=request.GET.get('page')
-    
+            produse =produse.filter(imagine__isnull=False).exclude(imagine='')
+        data_adaugare_min =data.get('data_adaugare_min')
+        if data_adaugare_min:
+            produse =produse.filter(data_adaugare__gte=data_adaugare_min)
+        data_adaugare_max =data.get('data_adaugare_max')
+        if data_adaugare_max:
+            produse =produse.filter(data_adaugare__lte=data_adaugare_max)
+    sort_param =request.GET.get('sort', 'pret')
+    if sort_param == 'a':
+        produse =produse.order_by('pret')
+    elif sort_param == 'd':
+        produse =produse.order_by('-pret')
+        
+    paginator =Paginator(produse, items_per_page)
+    page_number =request.GET.get('page')
     try: 
-        page_obj = paginator.get_page(page_number)
+        page_obj=paginator.get_page(page_number)
     except Exception:
-        page_obj = paginator.get_page(1)
-
-    context = {
+        page_obj=paginator.get_page(1)
+    context ={
         'filter_form': filter_form,
-        'page_obj': page_obj, # Setul de produse pentru pagina curentă
-        repaginare_warning: repaginare_warning,
-        'sort': sort_param, # Parametrul de sortare curent
-        'categorie_selectata': categorie_selectata, # Obiectul Categorie, dacă există
-    }
-    
+        'page_obj': page_obj,
+        'categorie_selectata': categorie_selectata,
+        'repaginare_warning': repaginare_warning,
+        'sort': sort_param,
+        
+
+    }     
     return render(request, 'Magazin_de_muzica/produse.html', context)
+
+
+
+#lab 5 task 2 ex 4 
+
+
+def calculate_age_months(birth_date):
+    """Calculează vârsta exactă în format 'X ani și Y luni'."""
+    today = date.today()
+    
+    years = today.year - birth_date.year
+    
+    months = today.month - birth_date.month
+    
+    if today.day < birth_date.day:
+        months -= 1
+        
+    if months < 0:
+        months += 12
+        years -= 1
+        
+    return f"{years} ani și {months} luni"
+
+
+def preprocess_message_text(text):
+    """
+    Înlocuiește linii noi cu spații, comasează spațiile multiple 
+    și capitalizează literele de după terminatorii de frază.
+    """
+    
+    # 1. Linii noi -> Spații
+    text = text.replace('\n', ' ').replace('\r', ' ')
+    
+    # 2. Comasare spații multiple într-unul singur
+    text = re.sub(r'\s+', ' ', text).strip()
+    
+    # 3. Capitalizare după terminatori de frază (".", "?", "!", "...")
+    def capitalize_match(match):
+        # Grupul 1: terminatorul; Grupul 2: spațiile; Grupul 3: litera mică
+        return match.group(1) + match.group(2) + match.group(3).upper()
+
+    # Pattern: [Terminatori de frază] + [spații] + [literă mică]
+    text = re.sub(r'([.?!]|\.\.\.)(\s*)([a-z])', capitalize_match, text)
+    
+    return text
+
+
+def get_min_zile_asteptare_cerut(tip_mesaj):
+    """Returnează minimul de zile de așteptare cerut de regulile de validare."""
+    if tip_mesaj in ['review', 'cerere']:
+        return 4
+    elif tip_mesaj == 'intrebare':
+        return 2
+    else:
+        
+        return 1
+
+
+def contact_view(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        
+        if form.is_valid():
+            
+            # --- PREPROCESAREA DATELOR VALIDATE ---
+            data = form.cleaned_data
+            
+            # Extragem câmpurile necesare pentru preprocesare
+            data_nastere = data.pop('data_nastere')
+            
+            # 1. Calcul Vârstă (înlocuiește data_nastere)
+            data['varsta_ani_luni'] = calculate_age_months(data_nastere)
+            
+            # 2. Preprocesare Mesaj
+            data['mesaj'] = preprocess_message_text(data['mesaj'])
+            
+            # 3. Verificare Urgență (pentru flag și nume fișier)
+            tip_mesaj = data['tip_mesaj']
+            zile_asteptare_utilizator = data['min_zile_asteptare']
+            
+            min_cerut = get_min_zile_asteptare_cerut(tip_mesaj)
+            
+            # Setează campul "urgent" la true dacă timpul de așteptare este exact minimul cerut
+            is_urgent = (zile_asteptare_utilizator == min_cerut)
+            data['urgent'] = is_urgent 
+            
+
+            save_dir = os.path.join(settings.BASE_DIR, 'Mesaje')
+            os.makedirs(save_dir, exist_ok=True)
+            
+            urgent_tag = "_URGENT" if is_urgent else ""
+            nume_fisier = f"mesaj_{tip_mesaj}_{data['nume']}{urgent_tag}_{date.today().strftime('%Y%m%d_%H%M%S')}.txt"
+            file_path = os.path.join(save_dir, nume_fisier) 
+
+            
+            try:
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    for key, value in data.items():
+                        f.write(f"{key}: {value}\n")
+                
+                messages.success(request, f"Mesajul a fost trimis cu succes! Fișier salvat ca: {nume_fisier}")
+                
+            except Exception as e:
+                messages.error(request, f"A apărut o eroare la salvarea fișierului: {e}")
+
+            return redirect('contact_page') 
+    else:
+        
+        form = ContactForm()
+        
+    return render(request, 'Magazin_de_muzica/contact.html', {'form': form})
