@@ -6,8 +6,6 @@ import re
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 
-
-
 PAGINATION_CHOICES = [
     (5, '5 pe pagină (Implicit)'), 
     (10, '10 pe pagină'),
@@ -15,9 +13,7 @@ PAGINATION_CHOICES = [
     (50, '50 pe pagină'),
 ]
 class ProductFilterForm(forms.Form):
-    #lab 5 ex 6
     
-    #lab 5 task 1 ex 8 folosit pt cand e ascuns pentry a fi transmis la filtrare
     categorie_id =forms.IntegerField(
         label = "Id categorie",
         required=False,
@@ -34,7 +30,6 @@ class ProductFilterForm(forms.Form):
         max_length=200, 
         label='Căutare Denumire', 
         required=False,
-        #lab 5 ex 4
         widget=forms.TextInput(attrs={'placeholder': 'Căutare parțială...'})
     )
 
@@ -84,8 +79,6 @@ class ProductFilterForm(forms.Form):
         required=False
     )
     
-    #lab 5 ex 7 alegerea nr de produse pe pagina
-    
     produse_per_pagina = forms.ChoiceField(
         choices=PAGINATION_CHOICES,
         label='Produse afișate',
@@ -93,31 +86,32 @@ class ProductFilterForm(forms.Form):
         initial=PAGINATION_CHOICES[0][0] 
     )
     
-    #lab 5 ex 5
+    
     
     def clean(self):
         cleaned_data = super().clean()
         pret_min = cleaned_data.get('pret_min')
         pret_max = cleaned_data.get('pret_max')
+        
         if pret_min is not None and pret_max is not None and pret_min > pret_max:
             raise forms.ValidationError('Prețul minim nu poate fi mai mare decât prețul maxim.')
 
         stoc_min = cleaned_data.get('stoc_min')
         stoc_max = cleaned_data.get('stoc_max')
+        
         if stoc_min is not None and stoc_max is not None and stoc_min > stoc_max:
             raise forms.ValidationError('Stocul minim nu poate fi mai mare decât stocul maxim.')
 
         data_adaugare_min = cleaned_data.get('data_adaugare_min')
         data_adaugare_max = cleaned_data.get('data_adaugare_max')
+        
         if data_adaugare_min and data_adaugare_max and data_adaugare_min > data_adaugare_max:
             raise forms.ValidationError('Data adăugării minime nu poate fi după data maximă.')
 
         return cleaned_data
-    
-    
 
 
-#lab 5 task 2 ex 1
+#-----------------------------------------------------------------------------------------------------------------------------
 
 TIP_MESAJ_CHOICES = [
     ('neselectat', '--- Neselectat ---'),
@@ -130,7 +124,6 @@ TIP_MESAJ_CHOICES = [
     
 #2.i)
 def validare_format_text(value):
-    #se permite ca prenumele sa fie gol
     if not value:
         return 
     if not value[0].isupper():
@@ -140,7 +133,7 @@ def validare_format_text(value):
     
 #2.j)
 def validare_caps_after_separator(value):
-    #verifica daca dupa spatiu sau cratima urmeaza litera mare, pt nume si prenume
+    
     if not value:
         return
     if re.search(r'[ -][a-z]', value):
@@ -194,7 +187,7 @@ def validare_no_temp_email(value):
 
 #2. b)
 def validate_word_count(value):
-    words = re.findall(r'[A-Za-z0-9]+', value)
+    words = re.findall(r'[A-Za-z0-9]+', value) 
     count = len(words)
     
     if count < 5 or count > 100:
@@ -214,7 +207,8 @@ def validate_age_over_18(value):
     age = today.year - value.year - ((today.month, today.day) < (value.month, value.day))
     if age < 18:
         raise ValidationError('Expeditorul trebuie să aibă minim 18 ani (să fie major).', code='nu_este_major')
-    
+
+#----------------------------------------------------------------------------------------------------------------------------------------
 
 class ContactForm(forms.Form):
     nume= forms.CharField(max_length=10, label='Nume', required=True,
@@ -257,6 +251,10 @@ class ContactForm(forms.Form):
         widget=forms.Textarea(attrs={'rows': 5}),
         validators=[validare_no_links, validate_word_count, validate_word_length]
     )
+
+
+
+
 def clean_tip_mesaj(self):
         tip_mesaj = self.cleaned_data.get('tip_mesaj')
         if tip_mesaj == 'neselectat':
@@ -274,9 +272,12 @@ def clean(self):
         zile_asteptare = cleaned_data.get('min_zile_asteptare')
         mesaj = cleaned_data.get('mesaj')
 
+
         if email and confirmare_email and email != confirmare_email:
             self.add_error('confirmare_email', "Adresele de e-mail nu se potrivesc.", code='email_mismatch')
-        
+
+
+
         if tip_mesaj and zile_asteptare:
             
             if tip_mesaj in ['review', 'cerere'] and zile_asteptare < 4:
@@ -291,55 +292,62 @@ def clean(self):
                     "Pentru 'întrebare', minimul de zile de așteptare trebuie să fie de la 2 încolo."
                 )
 
+
+
         if nume and mesaj:
             import re
             
-            # Găsește ultimul cuvânt alfanumeric din mesaj, ignorând spațiile/punctuația
             match = re.search(r'([A-Za-z]+)\W*$', mesaj)
             
             if match:
                 ultimul_cuvant = match.group(1)
                 
-                # Asigurăm că se compară doar numele (dacă are un singur cuvânt)
-                # și facem comparația insensibilă la majuscule/minuscule
                 if ultimul_cuvant.lower() != nume.lower():
                     self.add_error('mesaj', 
                 "Mesajul trebuie să se încheie cu numele dumneavoastră (semnătura).", code='semnatura_invalida')
             else:
                 self.add_error('mesaj', "Mesajul trebuie să conțină o semnătură la final.", code='lipsa_semnatura')
-                
-        # --- 4. CNP vs. Data Nașterii ---
-        # Verifică dacă data extrasă din CNP se potrivește cu data nasterii introdusă
-        # Condiție: Ambele câmpuri trebuie să fie completate și să fi trecut de validările de format
+
+
+
+
         if cnp and data_nastere:
             try:
-                # Extragem componentele datate din CNP (presupunem secolul 19 sau 20)
+                
                 cnp_start_digit = int(cnp[0])
                 cnp_an = int(cnp[1:3])
                 cnp_luna = int(cnp[3:5])
                 cnp_zi = int(cnp[5:7])
 
-                # Deducem secolul: 1 sau 2 = 19xx sau 20xx
+                
                 an_complet = cnp_an + (1900 if cnp_start_digit in (1, 2) else 0) 
                 
-                # Creăm un obiect date din CNP
+                
                 data_nastere_cnp = date(an_complet, cnp_luna, cnp_zi)
                 
                 if data_nastere_cnp != data_nastere:
                     self.add_error('data_nastere', 
                         f"Data nașterii ({data_nastere.strftime('%d.%m.%Y')}) nu corespunde cu data extrasă din CNP ({data_nastere_cnp.strftime('%d.%m.%Y')}).", code='cnp_data_mismatch')
+                    
             except ValueError:
-                # Erorile de format (luna sau ziua invalida) sunt preluate de 'validare_cnp_format', 
-                # dar includem asta pentru orice eroare de conversie neprevăzută
+
                 self.add_error('CNP', "Eroare la extragerea datei din CNP. Vă rugăm verificați ambele câmpuri.", code='cnp_extract_fail_internal')
 
         return cleaned_data
-    
-    
-    
-    
-    
-#lab 5 task 3 
+
+
+
+
+
+
+
+
+
+
+
+
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 def validator_fara_cifre(value):
     if value.isdigit():

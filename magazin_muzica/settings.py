@@ -144,6 +144,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-ADMIN_EMAIL = 'emailul-tau-admin@exemplu.com'
-DEFAULT_FROM_EMAIL = 'contact@magazin-muzica.com'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# ADMIN_EMAIL = 'emailul-tau-admin@exemplu.com'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587 #ptc vrem sa l autentificam pe user
+EMAIL_USE_TLS = True 
+EMAIL_HOST_USER = 'test.tweb.node@gmail.com' #user
+EMAIL_HOST_PASSWORD = 'xdqswyrleddghrgm' #parola
+DEFAULT_FROM_EMAIL = 'Da-Boss <test.tweb.node@gmail.com>'
+
+

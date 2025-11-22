@@ -18,32 +18,30 @@
         </form>
     </div>
 
+
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Selectează toate butoanele/linkurile de resetare
             const resetLinks = document.querySelectorAll('.reset-button');
 
             resetLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
-                    // Preia URL-ul de resetare din atributul href
                     const resetUrl = link.getAttribute('href');
-                    
-                    // Afișează fereastra de confirmare
                     const userConfirmed = confirm(
                         "Sunteți sigur că doriți să resetați filtrele? Toate filtrele aplicate și criteriile de căutare vor fi șterse."
                     );
 
                     if (userConfirmed) {
-                        // Dacă utilizatorul confirmă, navighează la URL
                         window.location.href = resetUrl;
                     } else {
-                        // Dacă utilizatorul anulează, oprește acțiunea implicită a linkului
                         e.preventDefault();
                     }
                 });
             });
         });
     </script>
+
+
 
 <h1>
     {% if categorie_selectata %}
@@ -65,8 +63,6 @@
 </div>
 
 
-{% comment %} lab 5 task 1 ex 7 {% endcomment %}
-
 {% if repaginare_warning %}
         <div class="alert alert-info" style="padding: 15px; border: 1px solid #007bff; background-color: #e9ecef; color: #004085; margin-bottom: 20px;">
             <strong>Paginare schimbată!</strong>
@@ -74,9 +70,11 @@
         </div>
     {% endif %}
 
+{% comment %} -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- {% endcomment %}
 
-    
+
 {% if page_obj.paginator.count > 0 %}
+
 
     <div class="cards-container">
         {% for produs in page_obj %}
@@ -105,6 +103,7 @@
     </div>
 
 
+{% comment %} -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- {% endcomment %}
 
 
 <div class="pagination">
@@ -119,6 +118,8 @@
     {% endif %}
 </div>
 
+{% comment %} -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- {% endcomment %}
+
 
 {% else %}
         <div class="alert alert-warning" style="padding: 20px; border: 1px solid #ffcc00; background-color: #fffacd; text-align: center; margin-top: 30px;">
@@ -129,8 +130,7 @@
         </div>
     {% endif %}
 
-
-
+{% comment %} -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- {% endcomment %}
 
 <style>
 .cards-container {

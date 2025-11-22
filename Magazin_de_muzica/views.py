@@ -52,9 +52,6 @@ class Accesare:
         except ValueError:
             return None
 
-
-#laborator 1 tema 
-
 def afis_data(parametru):
     luni=['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie']
     zile=['Luni', 'Marti', 'Miercuri', 'Joi', 'Vineri', 'Sambata', 'Duminica']
@@ -81,6 +78,8 @@ def afis_data(parametru):
 
 def index(request):
     salvare_accesari(request, "prima pagina")
+    #trimite_email()
+    #return HttpResponse("""<html> <body> Mail trimis </body></html>""")
     return HttpResponse("""
         <html>
         <body>
@@ -122,10 +121,6 @@ def test_accesare(request):
         </html>
     """)
 
-
-
-
-
 def info(request):
     salvare_accesari(request, "Pagina info")
     parametru = request.GET.get("data") 
@@ -155,8 +150,6 @@ def salvare_accesari(request,nume_pagina):
         pagina_nume=nume_pagina
     )
     accesari.append(a)
-
-
 
 #LABORATOR 2 TEMA
 
@@ -271,25 +264,12 @@ def log(request):
         continut+= "</ul>"
     return render(request, "Magazin_de_muzica/log.html", {"continut": continut})
 
-
-
-
-
-
-
-
-
-
-
-
 def afis_template(request):
     context = {
         "nume": "Nume Paragraf",
         "user_ip": get_client_ip(request)
     }
     return render(request, "Magazin_de_muzica/exemplu.html", context)
-
-#afisarea produselor pentru utilizatori
 
 def afis_produse(request):
     salvare_accesari(request, "Pagina produselor")
@@ -299,7 +279,6 @@ def afis_produse(request):
             "produse": produse[0], 
         }
     )
-
 
 #TASK 2 LAB 2
 
@@ -315,11 +294,6 @@ def despre(request):
     salvare_accesari(request, "Pagina despre")
     context = {'user_ip': get_client_ip(request)}
     return render(request, 'Magazin_de_muzica/despre.html', context)
-    
-# def contact(request):
-#     salvare_accesari(request, "Pagina de contact")
-#     context = {'user_ip': get_client_ip(request)}
-#     return render(request, "Magazin_de_muzica/in_lucru.html", context)
 
 def cos_virtual(request):
     salvare_accesari(request, "Pagina cosului virtual")
@@ -344,25 +318,6 @@ def social(request):
     salvare_accesari(request, "Pagina de social media")
     context = {'user_ip': get_client_ip(request)}
     return render(request, "Magazin_de_muzica/in_lucru.html", context)
-
-
-#Curs 5 pentru laborator 5
-
-# def contact_view(request):
-#     if request.method == 'POST':
-#         form = ContactForm(request.POST)
-#         if form.is_valid():  
-#             nume = form.cleaned_data['nume']
-#             email = form.cleaned_data['email']
-#             mesaj = form.cleaned_data['mesaj']
-#             return redirect('mesaj_trimis')
-#     else:
-#         form = ContactForm()
-#     return render(request, 'aplicatie_exemplu/contact.html', {'form': form})
-
-
-
-#Task admin laborator 4
 
 def lista_produse(request):
     sort = request.GET.get('sort', 'a')
@@ -398,8 +353,6 @@ def detalii_produs(request, produs_id):
         'campanii': campanii
     })
 
-#Task QuerySets laborator 4 
-
 def produse_dupa_categorie(request, nume_categorie):
     cat=get_object_or_404(Categorie, nume_categorie=nume_categorie)
     
@@ -425,11 +378,6 @@ def produse_dupa_categorie(request, nume_categorie):
     })
 
 
-
-
-
-
-#Task 1 Laborator 5 
 
 # def filtre_produse(request):
 
@@ -523,9 +471,7 @@ def produse_dupa_categorie(request, nume_categorie):
     
 #     return render(request, 'Magazin_de_muzica/produse.html', context)
 
-
-
-
+#----------------------------------------------------------------------------------------------------------------------------------
 
 def product_list_view(request, categorie_slug=None):
     produse = Produs.objects.all()
@@ -545,8 +491,10 @@ def product_list_view(request, categorie_slug=None):
             filter_form.add_error('categorie', "Valoarea categoriei nu poate fi modificata pe aceasta pagina.")
             produse =Produs.objects.none()
         
-        filter_form.fields['categorie'].widget =forms.HiddenInput()
         
+        filter_form.fields['categorie'].widget =forms.HiddenInput()
+
+
     else:
         filter_form =ProductFilterForm(request.GET)
         
@@ -564,60 +512,75 @@ def product_list_view(request, categorie_slug=None):
         if denumire:
             produse =produse.filter(denumire__icontains=denumire)
         
+        
         pret_min =data.get('pret_min')
         if pret_min is not None:
             produse =produse.filter(pret__gte=pret_min)
+            
+            
         pret_max =data.get('pret_max')
         if pret_max is not None:
             produse =produse.filter(pret__lte=pret_max)
+            
+            
         stoc_min =data.get('stoc_min')
         if stoc_min is not None:
             produse =produse.filter(stoc__gte=stoc_min)
+            
+            
         stoc_max =data.get('stoc_max')
         if stoc_max is not None:
             produse =produse.filter(stoc__lte=stoc_max)
+            
+
         campanii =data.get('campanii')
         if campanii:
             produse =produse.filter(campanii__in=campanii).distinct()
+            
+            
         are_imagine =data.get('are_imagine')
         if are_imagine:
             produse =produse.filter(imagine__isnull=False).exclude(imagine='')
+        
+        
         data_adaugare_min =data.get('data_adaugare_min')
         if data_adaugare_min:
             produse =produse.filter(data_adaugare__gte=data_adaugare_min)
+            
+            
         data_adaugare_max =data.get('data_adaugare_max')
         if data_adaugare_max:
             produse =produse.filter(data_adaugare__lte=data_adaugare_max)
+
+
     sort_param =request.GET.get('sort', 'pret')
     if sort_param == 'a':
         produse =produse.order_by('pret')
+        
     elif sort_param == 'd':
         produse =produse.order_by('-pret')
-        
+
+
     paginator =Paginator(produse, items_per_page)
     page_number =request.GET.get('page')
     try: 
         page_obj=paginator.get_page(page_number)
     except Exception:
         page_obj=paginator.get_page(1)
+
     context ={
         'filter_form': filter_form,
         'page_obj': page_obj,
         'categorie_selectata': categorie_selectata,
         'repaginare_warning': repaginare_warning,
         'sort': sort_param,
-        
-
     }     
     return render(request, 'Magazin_de_muzica/produse.html', context)
 
-
-
-#lab 5 task 2 ex 4 
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 def calculate_age_months(birth_date):
-    """Calculează vârsta exactă în format 'X ani și Y luni'."""
     today = date.today()
     
     years = today.year - birth_date.year
@@ -635,30 +598,25 @@ def calculate_age_months(birth_date):
 
 
 def preprocess_message_text(text):
-    """
-    Înlocuiește linii noi cu spații, comasează spațiile multiple 
-    și capitalizează literele de după terminatorii de frază.
-    """
     
-    # 1. Linii noi -> Spații
     text = text.replace('\n', ' ').replace('\r', ' ')
     
-    # 2. Comasare spații multiple într-unul singur
+
     text = re.sub(r'\s+', ' ', text).strip()
     
-    # 3. Capitalizare după terminatori de frază (".", "?", "!", "...")
+    
     def capitalize_match(match):
-        # Grupul 1: terminatorul; Grupul 2: spațiile; Grupul 3: litera mică
+        
         return match.group(1) + match.group(2) + match.group(3).upper()
 
-    # Pattern: [Terminatori de frază] + [spații] + [literă mică]
+    
     text = re.sub(r'([.?!]|\.\.\.)(\s*)([a-z])', capitalize_match, text)
     
     return text
 
 
 def get_min_zile_asteptare_cerut(tip_mesaj):
-    """Returnează minimul de zile de așteptare cerut de regulile de validare."""
+    
     if tip_mesaj in ['review', 'cerere']:
         return 4
     elif tip_mesaj == 'intrebare':
@@ -732,43 +690,59 @@ def contact_view(request):
 
 
 
-#lab 5 tesk 3 
+
+
+
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 from .forms import ProdusForm 
 
 def introducere_produs(request):
-    # 1. GESTIONAREA DATELOR TRIMISE (POST)
+
     if request.method == 'POST':
-        # Instanțierea formularului cu datele trimise de utilizator
+
         form = ProdusForm(request.POST, request.FILES) 
         
-        # 2. RULAREA VALIDĂRILOR
         if form.is_valid():
             try:
-                # 3. SALVAREA OBIECTULUI
-                # Apelarea metodei save() din formular, care include logica cu commit=False,
-                # calcularea prețului final, setarea descrierii, și salvarea finală în baza de date.
+                
                 produs = form.save(commit=True) 
                 
-                # 4. REDIRECȚIONARE DUPĂ SUCCES
-                # Exemplu: Redirecționare către o pagină de succes sau o listă de produse.
                 return redirect(reverse('lista_produse')) 
 
             except Exception as e:
-                # Gestiune de erori la salvarea efectivă în baza de date (dacă există)
+                
                 print(f"Eroare la salvarea produsului: {e}")
-                # Poți adăuga un mesaj de eroare formularului
+                
                 form.add_error(None, "A apărut o eroare la salvarea în baza de date.")
     
-    # 5. GESTIONAREA CERERILOR NOI (GET)
+    
     else:
-        # Instanțierea unui formular gol pentru afișare
+        
         form = ProdusForm() 
 
-    # 6. AFIȘAREA FORMULARULUI
+    
     context = {
         'form': form,
         'titlu': 'Adaugă un Produs Nou'
     }
     return render(request, 'Magazin_de_muzica/adaugare_produs.html', context)
+
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+from django.core.mail import EmailMessage
+from django.core.mail import send_mail
+
+def trimite_email():
+    send_mail(
+        subject='Grigore Bianca grupa 234.',
+        message='Salut. Ce mai faci?',
+        html_message='<h1>Salut</h1><p>Ce mai faci?</p>',
+        from_email='adresa_email@gmail.com',
+        recipient_list=['destinatar@gmail.com'],
+        fail_silently=False,
+    )
+
 

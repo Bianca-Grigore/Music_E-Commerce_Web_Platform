@@ -8,7 +8,6 @@
         <h1>Contactați-ne</h1>
         <p>Vă rugăm să completați formularul de mai jos. Câmpurile marcate cu * sunt obligatorii.</p>
 
-        {# --- 1. Afișarea Mesajelor de Succes/Eroare (django.contrib.messages) --- #}
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }}" role="alert">
@@ -17,7 +16,6 @@
             {% endfor %}
         {% endif %}
 
-        {# --- 2. Formularul de Contact Django --- #}
         <form method="post" action="{% url 'contact_page' %}" class="contact-form">
             {% csrf_token %} 
 
