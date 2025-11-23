@@ -1,0 +1,9 @@
+{% extends "./baza.html" %}
+{%block content%}
+<h2>Schimbare Parolă</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Schimbă Parola</button>
+</form>
+{%endblock content%}

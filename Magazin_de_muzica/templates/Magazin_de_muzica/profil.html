@@ -1,0 +1,21 @@
+{% extends "./baza.html" %}
+{%block content%}
+<h2>Profilul Meu</h2>
+<p>Datele tale (din sesiune):</p>
+<ul>
+    <li>Username: <strong>{{ username }}</strong></li>
+    <li>Email: <strong>{{ email }}</strong></li>
+    <li>Nume: <strong>{{ first_name }} {{ last_name }}</strong></li>
+    <hr>
+    <li>Telefon: <strong>{{ telefon }}</strong></li>
+    <li>Tara: <strong>{{ tara }}</strong></li>
+    <li>Judet: <strong>{{ judet }}</strong></li>
+    <li>Oras: <strong>{{ oras }}</strong></li>
+    <li>Strada: <strong>{{ strada }}</strong></li>
+</ul>
+
+<hr>
+<p><a href="{% url 'schimbare_parola' %}">Schimbă Parola</a></p>
+
+<p><a href="{% url 'logout' %}">Logout</a></p>
+{%endblock content%}

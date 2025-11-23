@@ -1,5 +1,4 @@
-{% extends './baza.html' %}
-{% load static %}
+{% extends './baza.html' %} 
 
 {% block title %}Înregistrare{% endblock %}
 
@@ -7,6 +6,7 @@
 <form method="post">
     {% csrf_token %}
     {{ form.non_field_errors }}
+
     <div>
         {{ form.username.label_tag }} {{ form.username }}
         {{ form.username.errors }}
@@ -15,10 +15,37 @@
         {{ form.email.label_tag }} {{ form.email }}
         {{ form.email.errors }}
     </div>
+
+    <div>
+        {{ form.first_name.label_tag }} {{ form.first_name }}
+        {{ form.first_name.errors }}
+    </div>
+    <div>
+        {{ form.last_name.label_tag }} {{ form.last_name }}
+        {{ form.last_name.errors }}
+    </div>
+    
     <div>
         {{ form.telefon.label_tag }} {{ form.telefon }}
         {{ form.telefon.errors }}
     </div>
+    <div>
+        {{ form.tara.label_tag }} {{ form.tara }}
+        {{ form.tara.errors }}
+    </div>
+    <div>
+        {{ form.judet.label_tag }} {{ form.judet }}
+        {{ form.judet.errors }}
+    </div>
+    <div>
+        {{ form.oras.label_tag }} {{ form.oras }}
+        {{ form.oras.errors }}
+    </div>
+    <div>
+        {{ form.strada.label_tag }} {{ form.strada }}
+        {{ form.strada.errors }}
+    </div>
+    
     <div>
         {{ form.password1.label_tag }} {{ form.password1 }}
         {{ form.password1.errors }}
@@ -27,6 +54,7 @@
         {{ form.password2.label_tag }} {{ form.password2 }}
         {{ form.password2.errors }}
     </div>
-    <button type="submit">Register</button>
+    
+    <button type="submit">Înregistrare</button>
 </form>
 {% endblock %}

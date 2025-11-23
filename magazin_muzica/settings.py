@@ -96,7 +96,7 @@ DATABASES = {
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'backend.personalizat',
+    #'backend.personalizat',
 ]
 # AUTH_USER_MODEL = 'Magazin_de_muzica.CustomUser'
 

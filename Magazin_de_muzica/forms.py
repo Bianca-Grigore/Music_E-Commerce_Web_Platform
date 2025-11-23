@@ -11,6 +11,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Profil # Presupunând că ai importat corect modelul Profil
 
+#LABORATOR 6 EX 3
 class ProfilUserCreationForm(UserCreationForm):
     # Câmpurile User pe care UserCreationForm nu le cere automat, dar le vrem
     email = forms.EmailField(required=True, label='E-mail') # Email-ul nu e obligatoriu în UserCreationForm, dar e cerut în task
@@ -78,8 +79,21 @@ class ProfilUserCreationForm(UserCreationForm):
             profil.save()
             
         return user
-    
 
+#-----------------------------------------------------------------------------------------------------------------------------
+#Laborator 6 exercitiul 4 formular de login si logout 
+from django.contrib.auth.forms import AuthenticationForm
+class CustomAuthenticationForm(AuthenticationForm):
+    ramane_logat = forms.BooleanField(
+        required=False,
+        initial=False,
+        label='Ramaneti logat 1 zi?'
+    )
+
+    def clean(self):        
+        cleaned_data = super().clean()
+        ramane_logat = self.cleaned_data.get('ramane_logat')
+        return cleaned_data
 
 #-----------------------------------------------------------------------------------------------------------------------------
 PAGINATION_CHOICES = [

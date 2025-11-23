@@ -1,0 +1,6 @@
+{% extends './baza.html' %} 
+
+{% block content %}
+    <h2>V-ați delogat cu succes!</h2>
+    <p>Puteți să vă <a href="{% url 'login' %}">autentificați din nou aici</a>.</p>
+{% endblock content %}

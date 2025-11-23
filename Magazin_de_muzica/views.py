@@ -657,3 +657,111 @@ def register_view(request):
         form = ProfilUserCreationForm()
     
     return render(request, 'Magazin_de_muzica/inregistrare.html', {'form': form})
+
+#---------------------------------------------------------------------------------------------------------------------------
+#Laborator 6 exercitiul 4 view pentru login cu optiunea ramane_logat
+
+from django.contrib.auth import login
+from .forms import ProfilUserCreationForm, CustomAuthenticationForm 
+from .models import Profil
+
+def custom_login_view(request):
+    if request.method == 'POST':
+        
+        form = CustomAuthenticationForm(data=request.POST, request=request)
+        
+        if form.is_valid():
+            user = form.get_user()
+            if user is not None:
+                login(request, user)
+                print("Utilizator autentificat cu succes.")
+            
+# --- Aici începe Cerința 4 (memorarea în sesiune) ---
+            # Stocăm datele în sesiune la login [cite: 622-624]
+            
+            request.session['username'] = user.username
+            request.session['email'] = user.email
+            request.session['first_name'] = user.first_name
+            request.session['last_name'] = user.last_name
+            
+            try:
+                # Încercăm să luăm datele și din profil
+                profil = user.profil # 'profil' e numele relației
+                request.session['telefon'] = profil.telefon
+                request.session['tara'] = profil.tara
+                request.session['judet'] = profil.judet
+                request.session['oras'] = profil.oras
+                request.session['strada'] = profil.strada
+            except Profil.DoesNotExist:
+                # Dacă profilul nu există (ex. pt un superuser vechi)
+                pass 
+            # --- Sfârșitul Cerinței 4 (partea de stocare) ---
+
+
+            # --- Cerința 3 ("Remember Me" 1 zi) ---
+            if form.cleaned_data.get('ramane_logat'):
+                # Setează expirarea sesiunii la 1 zi (în secunde)
+                
+                request.session.set_expiry(24*60*60) 
+                
+            else:
+                
+                request.session.set_expiry(0) 
+
+            return redirect('profil')
+        
+    else:
+        form = CustomAuthenticationForm()
+
+    return render(request, 'Magazin_de_muzica/login.html', {'form': form})
+
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+#---------------------------------------------------------------------------------------------------------------------------
+#laborator 6 exercitiul 5 redirectionarea catre pagina de profil
+from django.contrib.auth.decorators import login_required
+@login_required
+def pagina_profil_view(request):
+    # Citim datele din sesiune (care au fost puse la login)
+    context = {
+        'username': request.session.get('username', 'N/A'),
+        'email': request.session.get('email', 'N/A'),
+        'first_name': request.session.get('first_name', 'N/A'),
+        'last_name': request.session.get('last_name', 'N/A'),
+        'telefon': request.session.get('telefon', 'N/A'),
+        'tara': request.session.get('tara', 'N/A'),
+        'judet': request.session.get('judet', 'N/A'),
+        'oras': request.session.get('oras', 'N/A'),
+        'strada': request.session.get('strada', 'N/A'),
+    }
+    
+    return render(request, 'Magazin_de_muzica/profil.html', context)
+
+#---------------------------------------------------------------------------------------------------------------------------
+#schimbare parola 
+# In acelasi views.py...
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+
+
+def change_password_view(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            # Actualizează sesiunea pentru a preveni delogarea [cite: 433]
+            update_session_auth_hash(request, request.user) 
+            messages.success(request, 'Parola a fost actualizata')
+            return redirect('profil') # Înapoi la profil
+        else:
+            messages.error(request, 'Exista erori.')
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+    return render(request, 'Magazin_de_muzica/schimba_parola.html', {'form': form})
