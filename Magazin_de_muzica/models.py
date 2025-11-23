@@ -1,5 +1,17 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User 
+
+
+class Profil(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    telefon = models.CharField(max_length=15, blank=True)
+    tara = models.CharField(max_length=100, blank=True)
+    judet = models.CharField(max_length=100, blank=True)
+    oras = models.CharField(max_length=100, blank=True)
+    strada = models.CharField(max_length=255, blank=True)
+    def __str__(self):
+        return f"Profil pentru {self.user.username}"
 
 class Categorie(models.Model):
     nume_categorie = models.CharField(max_length=100, unique=True)  
@@ -84,3 +96,4 @@ class Artist(models.Model):
 
     def __str__(self):
         return self.nume
+

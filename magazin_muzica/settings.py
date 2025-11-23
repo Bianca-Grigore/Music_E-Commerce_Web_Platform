@@ -98,8 +98,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'backend.personalizat',
 ]
-
-
+# AUTH_USER_MODEL = 'Magazin_de_muzica.CustomUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

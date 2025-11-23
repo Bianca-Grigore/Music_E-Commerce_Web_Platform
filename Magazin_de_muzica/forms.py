@@ -5,7 +5,83 @@ from datetime import date, timedelta
 import re
 from django.core.validators import MinValueValidator
 from decimal import Decimal
+#-------------------------------------------------------------
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from .models import Profil # Presupunând că ai importat corect modelul Profil
 
+class ProfilUserCreationForm(UserCreationForm):
+    # Câmpurile User pe care UserCreationForm nu le cere automat, dar le vrem
+    email = forms.EmailField(required=True, label='E-mail') # Email-ul nu e obligatoriu în UserCreationForm, dar e cerut în task
+    first_name = forms.CharField(max_length=150, required=False, label='Prenume') # Adăugat pentru a folosi în save()
+    last_name = forms.CharField(max_length=150, required=False, label='Nume') # Adăugat pentru a folosi în save()
+
+    # Câmpurile suplimentare din modelul Profil
+    telefon = forms.CharField(max_length=15, required=True, label='Telefon') # Setat pe True pentru a se aplica validările
+    tara = forms.CharField(max_length=100, required=True, label='Țara')
+    judet = forms.CharField(max_length=100, required=False, label='Județ')
+    oras = forms.CharField(max_length=100, required=False, label='Oraș')
+    strada = forms.CharField(max_length=255, required=False, label='Strada')
+
+    class Meta(UserCreationForm.Meta):
+        model = User
+        # Lăsăm doar câmpurile pe care le gestionează modelul User, 
+        # plus câmpurile noi adăugate la nivel de clasă (telefon, tara, etc. vor fi preluate automat)
+        fields = ('username', 'email', 'first_name', 'last_name') # Doar câmpurile din modelul User standard
+    
+    # --- Validările sunt corecte și rămân ca atare ---
+    def clean_telefon(self):
+        telefon = self.cleaned_data.get('telefon')
+        if not telefon.isdigit():
+            raise forms.ValidationError("Telefonul trebuie să conțină doar cifre.")
+        if len(telefon) < 10:
+            raise forms.ValidationError("Numărul de telefon este prea scurt.")
+        return telefon
+
+    def clean_tara(self):
+        tara = self.cleaned_data.get('tara')
+        if tara.lower() not in ["romania", "românia"]:
+            raise forms.ValidationError("Momentan acceptăm doar utilizatori din România.")
+        return tara
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Această adresă de e-mail este deja folosită.")
+        return email
+
+    def save(self, commit=True):
+        # 1. Salvarea User-ului
+        user = super().save(commit=False) 
+        
+        # Corectat: Folosim get() pe cleaned_data pentru a evita erorile 
+        # (deși first_name/last_name ar trebui să fie deja acolo)
+        user.email = self.cleaned_data.get("email")
+        user.first_name = self.cleaned_data.get("first_name")
+        user.last_name = self.cleaned_data.get("last_name")
+        
+        if commit:
+            user.save()
+            
+        # 2. Salvarea Profilului
+        profil = Profil(
+            user=user,
+            telefon=self.cleaned_data.get('telefon'),
+            tara=self.cleaned_data.get('tara'),
+            judet=self.cleaned_data.get('judet'),
+            oras=self.cleaned_data.get('oras'),
+            strada=self.cleaned_data.get('strada')
+        )
+        
+        if commit:
+            profil.save()
+            
+        return user
+    
+
+
+#-----------------------------------------------------------------------------------------------------------------------------
 PAGINATION_CHOICES = [
     (5, '5 pe pagină (Implicit)'), 
     (10, '10 pe pagină'),

@@ -20,4 +20,5 @@ urlpatterns = [
     path("contact/", views.contact_view, name="contact_page"),
     #path('adaugare/', views.introducere_produs, name='adaugare_produs'),
     path('adaugare_produs/', views.introducere_produs, name='adaugare'),
+    path('inregistrare/', views.register_view, name='register'),
 ]

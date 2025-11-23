@@ -377,100 +377,6 @@ def produse_dupa_categorie(request, nume_categorie):
         'categorie_selectata': cat
     })
 
-
-
-# def filtre_produse(request):
-
-#     produse = Produs.objects.all()
-#     categorie_selectata = None
-#     sort_param = request.GET.get('sort', 'denumire') 
-#     #preluarea datelor pentru formular
-#     filter_form = ProductFilterForm(request.GET)
-#     items_per_page=5
-#     repaginare_warning=False 
-
-    
-#     if filter_form.is_valid():
-#         data = filter_form.cleaned_data
-#         selected_items_per_page = data.get('produse_per_pagina')
-#         if selected_items_per_page:
-#             new_items_per_page = int(selected_items_per_page)
-#             if new_items_per_page != items_per_page:
-#                 repaginare_warning = True
-                
-#             items_per_page = new_items_per_page
-
-
-#         categorie = data.get('categorie')
-#         if categorie:
-#             produse = produse.filter(categorie=categorie)
-#             categorie_selectata = categorie # Păstrează obiectul pentru a fi afișat în titlu
-
-#         denumire = data.get('denumire')
-#         if denumire:
-#             produse = produse.filter(denumire__icontains=denumire)
-
-
-#         pret_min = data.get('pret_min')
-#         if pret_min is not None:
-#             produse = produse.filter(pret__gte=pret_min)
-#         pret_max = data.get('pret_max')
-#         if pret_max is not None:
-#             produse = produse.filter(pret__lte=pret_max)
-            
-
-#         stoc_min = data.get('stoc_min')
-#         if stoc_min is not None:
-#             produse = produse.filter(stoc__gte=stoc_min)
-#         stoc_max = data.get('stoc_max')
-#         if stoc_max is not None:
-#             produse = produse.filter(stoc__lte=stoc_max)
-            
-#         campanii = data.get('campanii')
-#         if campanii:
-            
-#             produse = produse.filter(campanii__in=campanii).distinct() 
-            
-        
-#         data_adaugare_min = data.get('data_adaugare_min')
-#         if data_adaugare_min:
-#             produse = produse.filter(data_adaugare__gte=data_adaugare_min)
-#         data_adaugare_max = data.get('data_adaugare_max')
-#         if data_adaugare_max:
-#             produse = produse.filter(data_adaugare__lte=data_adaugare_max)
-            
-        
-#         are_imagine = data.get('are_imagine')
-#         if are_imagine:
-#             produse = produse.filter(imagine__isnull=False).exclude(imagine='')
-
-
-    
-#     if sort_param == 'a': 
-#         produse = produse.order_by('pret')
-#     elif sort_param == 'd': 
-#         produse = produse.order_by('-pret')
-
-
-
-#     paginator = Paginator(produse, items_per_page)
-#     page_number=request.GET.get('page')
-    
-#     try: 
-#         page_obj = paginator.get_page(page_number)
-#     except Exception:
-#         page_obj = paginator.get_page(1)
-
-#     context = {
-#         'filter_form': filter_form,
-#         'page_obj': page_obj, 
-#         'repaginare_warning': repaginare_warning,
-#         'sort': sort_param, 
-#         'categorie_selectata': categorie_selectata, 
-#     }
-    
-#     return render(request, 'Magazin_de_muzica/produse.html', context)
-
 #----------------------------------------------------------------------------------------------------------------------------------
 
 def product_list_view(request, categorie_slug=None):
@@ -579,7 +485,6 @@ def product_list_view(request, categorie_slug=None):
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
 def calculate_age_months(birth_date):
     today = date.today()
     
@@ -595,7 +500,6 @@ def calculate_age_months(birth_date):
         years -= 1
         
     return f"{years} ani și {months} luni"
-
 
 def preprocess_message_text(text):
     
@@ -614,7 +518,6 @@ def preprocess_message_text(text):
     
     return text
 
-
 def get_min_zile_asteptare_cerut(tip_mesaj):
     
     if tip_mesaj in ['review', 'cerere']:
@@ -624,7 +527,6 @@ def get_min_zile_asteptare_cerut(tip_mesaj):
     else:
         
         return 1
-
 
 def contact_view(request):
     if request.method == 'POST':
@@ -688,12 +590,6 @@ def contact_view(request):
         form =ContactForm()
     return render(request, 'Magazin_de_muzica/contact.html', {'form': form})
 
-
-
-
-
-
-
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 from .forms import ProdusForm 
@@ -745,4 +641,19 @@ def trimite_email():
         fail_silently=False,
     )
 
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
+#Laborator 6 view de la forms 
+
+from .forms import ProfilUserCreationForm
+
+def register_view(request):
+    if request.method == 'POST':
+        form = ProfilUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')  
+    else:
+        form = ProfilUserCreationForm()
+    
+    return render(request, 'Magazin_de_muzica/inregistrare.html', {'form': form})
