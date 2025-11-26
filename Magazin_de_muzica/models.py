@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User 
-
+from django.contrib.auth.models import User
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+import uuid 
 
 class Profil(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -10,8 +11,14 @@ class Profil(models.Model):
     judet = models.CharField(max_length=100, blank=True)
     oras = models.CharField(max_length=100, blank=True)
     strada = models.CharField(max_length=255, blank=True)
+
+    cod=models.CharField(max_length=100, blank=True, null=True, unique=True)
+    email_confirmat=models.BooleanField(max_length=255, default=False)
+
     def __str__(self):
         return f"Profil pentru {self.user.username}"
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 class Categorie(models.Model):
     nume_categorie = models.CharField(max_length=100, unique=True)  

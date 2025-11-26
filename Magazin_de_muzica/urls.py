@@ -24,4 +24,5 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('profil/', views.pagina_profil_view, name='profil'),
     path('schimba_parola/', views.change_password_view, name='schimbare_parola'),
+    path('confirma_mail/<str:cod>/', views.confirma_email_view, name='confirma_mail'),
 ]

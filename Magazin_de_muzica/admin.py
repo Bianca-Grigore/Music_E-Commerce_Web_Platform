@@ -1,9 +1,26 @@
 from django.contrib import admin
 from .models import Categorie, Campanie_Promo, Produs, Produs_Artist, Artist
-
+from .models import Profil
 admin.site.site_header = "Magazin Muzical Admin"
 admin.site.site_title = "Magazin Muzical"
 admin.site.index_title = "Bine ați venit în Panoul de Administrare!"
+
+class ProfilAdmin(admin.ModelAdmin):
+    list_display = ('user', 'telefon', 'tara', 'judet', 'oras', 'strada', 'cod', 'email_confirmat')
+    
+    search_fields = ('user__username', 'telefon', 'tara', 'judet', 'oras', 'strada', 'cod')  
+    fieldsets = (
+        ('Informații Utilizator', {
+            'fields': ('user',)
+        }),
+        ('Informații Contact', {
+            'fields': ('telefon', 'tara', 'judet', 'oras', 'strada')
+        }),
+        ('Verificare Email', {
+            'fields': ('cod', 'email_confirmat')
+        }),
+    )
+admin.site.register(Profil, ProfilAdmin)
 
 class ProdusAdmin(admin.ModelAdmin):
     ordering = ['pret']

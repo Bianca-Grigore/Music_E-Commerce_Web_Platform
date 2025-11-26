@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirmare E-mail</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="center">
+                <table width="600" style="border-collapse: collapse; background-color: white; border: 1px solid #ddd; border-radius: 8px;">
+                    
+                    <tr>
+                        <td align="center" style="padding: 20px;">
+                            <img src="{% static 'Magazin_de_muzica/imagini/Music.jpg' %}" alt="Logo Site" style="max-width: 150px; height: auto; display: block; margin-bottom: 20px;">
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="padding: 0 40px 20px 40px;">
+                            <h1 style="color: #333; font-size: 24px;">Bun Venit pe Site-ul Nostru! 🎉</h1>
+                            <p style="color: #666; font-size: 16px;">
+                                Salut, **{{ user.first_name }} {{ user.last_name }}** (Username: **{{ user.username }}**),
+                            </p>
+                            <p style="color: #666; font-size: 16px;">
+                                Vă mulțumim pentru înregistrare. Pentru a vă activa contul, vă rugăm să confirmați adresa de e-mail dând click pe linkul de mai jos:
+                            </p>
+                            
+                            <p style="text-align: center; margin: 30px 0;">
+                                <a href="{{ link_confirmare }}" 
+                                style="display: inline-block; padding: 10px 20px; color: white; background-color: #007bff; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                                    Confirmă Adresa de E-mail
+                                </a>
+                            </p>
+                            
+                            <p style="color: #999; font-size: 14px;">
+                                Dacă nu puteți da click pe link, copiați și introduceți următorul URL în browser:
+                                <br>
+                                <a href="{{ link_confirmare }}" style="color: #007bff; word-break: break-all;">{{ link_confirmare }}</a>
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="padding: 20px 40px; border-top: 1px solid #eee; text-align: center;">
+                            <p style="color: #999; font-size: 12px;">
+                                Acesta este un e-mail automat. Vă rugăm să nu răspundeți.
+                            </p>
+                        </td>
+                    </tr>
+                    
+                </table>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
