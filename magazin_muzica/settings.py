@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'Magazin_de_muzica.apps.MagazinDeMuzicaConfig',
+    
 ]
 
 MIDDLEWARE = [
@@ -154,3 +156,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'biancagrigore208@gmail.com'
 EMAIL_HOST_PASSWORD = 'bsxw usew axok rhjs'
 DEFAULT_FROM_EMAIL = 'Default <biancagrigore208@gmail.com>'
+
+SITE_ID = 1

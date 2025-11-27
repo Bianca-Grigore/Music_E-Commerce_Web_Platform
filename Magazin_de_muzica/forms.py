@@ -9,17 +9,17 @@ from decimal import Decimal
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Profil # Presupunând că ai importat corect modelul Profil
+from .models import Profil 
 
 #LABORATOR 6 EX 3
 class ProfilUserCreationForm(UserCreationForm):
-    # Câmpurile User pe care UserCreationForm nu le cere automat, dar le vrem
-    email = forms.EmailField(required=True, label='E-mail') # Email-ul nu e obligatoriu în UserCreationForm, dar e cerut în task
-    first_name = forms.CharField(max_length=150, required=False, label='Prenume') # Adăugat pentru a folosi în save()
-    last_name = forms.CharField(max_length=150, required=False, label='Nume') # Adăugat pentru a folosi în save()
+    
+    email = forms.EmailField(required=True, label='E-mail') 
+    first_name = forms.CharField(max_length=150, required=False, label='Prenume') 
+    last_name = forms.CharField(max_length=150, required=False, label='Nume') 
 
-    # Câmpurile suplimentare din modelul Profil
-    telefon = forms.CharField(max_length=15, required=True, label='Telefon') # Setat pe True pentru a se aplica validările
+    
+    telefon = forms.CharField(max_length=15, required=True, label='Telefon') 
     tara = forms.CharField(max_length=100, required=True, label='Țara')
     judet = forms.CharField(max_length=100, required=False, label='Județ')
     oras = forms.CharField(max_length=100, required=False, label='Oraș')
@@ -27,11 +27,10 @@ class ProfilUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
-        # Lăsăm doar câmpurile pe care le gestionează modelul User, 
-        # plus câmpurile noi adăugate la nivel de clasă (telefon, tara, etc. vor fi preluate automat)
-        fields = ('username', 'email', 'first_name', 'last_name') # Doar câmpurile din modelul User standard
+
+        fields = ('username', 'email', 'first_name', 'last_name') 
     
-    # --- Validările sunt corecte și rămân ca atare ---
+
     def clean_telefon(self):
         telefon = self.cleaned_data.get('telefon')
         if not telefon.isdigit():
@@ -53,19 +52,16 @@ class ProfilUserCreationForm(UserCreationForm):
         return email
 
     def save(self, commit=True):
-        # 1. Salvarea User-ului
+        
         user = super().save(commit=False) 
         
-        # Corectat: Folosim get() pe cleaned_data pentru a evita erorile 
-        # (deși first_name/last_name ar trebui să fie deja acolo)
         user.email = self.cleaned_data.get("email")
         user.first_name = self.cleaned_data.get("first_name")
         user.last_name = self.cleaned_data.get("last_name")
         
         if commit:
             user.save()
-            
-        # 2. Salvarea Profilului
+
         profil = Profil(
             user=user,
             telefon=self.cleaned_data.get('telefon'),
@@ -94,6 +90,21 @@ class CustomAuthenticationForm(AuthenticationForm):
         cleaned_data = super().clean()
         ramane_logat = self.cleaned_data.get('ramane_logat')
         return cleaned_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #-----------------------------------------------------------------------------------------------------------------------------
 PAGINATION_CHOICES = [

@@ -648,19 +648,17 @@ def trimite_email():
 from .forms import ProfilUserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, update_session_auth_hash
-from django.contrib.auth.decorators import login_required
+
 from django.contrib import messages
 
-# Importuri pentru e-mail
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.contrib.sites.shortcuts import get_current_site
 import uuid 
-
-# Importați modelul Profil (presupunând că Profil este definit în același director)
+from django.contrib.sites.models import Site
 from .models import Profil
-from .forms import ProfilUserCreationForm, CustomAuthenticationForm # Asigurați-vă că formularele sunt importate
+from .forms import ProfilUserCreationForm, CustomAuthenticationForm 
 
 def register_view(request):
     if request.method == 'POST':
@@ -668,44 +666,43 @@ def register_view(request):
         if form.is_valid():
             
             user = form.save()
+            #genberare cod unic pentru confirmarea emailului
+            
             cod_unic = str(uuid.uuid4())
 
-            # 🎯 CORECTARE: Salvarea codului pe modelul Profil
-            # Presupunem că Profilul a fost creat automat de formular sau semnal.
             if hasattr(user, 'profil'):
                 user.profil.cod = cod_unic
-                user.profil.email_confirmat = False # Setează starea inițială
+                user.profil.email_confirmat = False 
                 user.profil.save()
             else:
-                # Plasa de siguranță: creează Profilul dacă lipsește
+                
                 Profil.objects.create(user=user, cod=cod_unic, email_confirmat=False)
 
+            obj_site=Site.objects.get_current()
+            domeniu=obj_site.domain
+            url_imagine = f"http://{domeniu}{settings.STATIC_URL}imagini/Music.jpg"
+            link_confirmare= f"http://{domeniu}/Magazin_de_muzica/confirma_mail/{cod_unic}/"
+            
 
-            # 🎯 ADĂUGARE: Trimiterea e-mailului de confirmare
-            # Detalii necesare pentru linkul absolut
-            current_site = get_current_site(request)
-            protocol = 'https' if request.is_secure() else 'http'
-            # link_confirmare = f"{protocol}://{current_site.domain}/confirma_mail/{cod_unic}/"
-            link_confirmare = (
-    f"{protocol}://{current_site.domain}/Magazin_de_muzica/confirma_mail/{cod_unic}/"
-)
+
             context = {
-                'user': user,
+                'nume': user.first_name,
+                'prenume': user.last_name,
+                'username': user.username,
                 'link_confirmare': link_confirmare,
-                
-                'protocol': protocol,
-                'domain': current_site.domain,
+                'url_imagine': url_imagine,
             }
 
             html_message = render_to_string('email/confirmare_email.html', context)
             plain_message = strip_tags(html_message)
-            
+
             send_mail(
                 subject='Confirmare Adresă de E-mail',
                 message=plain_message,
                 from_email='biancagrigore208@gmail.com', 
                 recipient_list=[user.email],
                 html_message=html_message,
+                fail_silently=False,
             )
             
             messages.success(request, 'Cont creat. Verifică-ți e-mailul pentru a-l confirma!')
@@ -722,57 +719,49 @@ from django.contrib.auth import login
 from .forms import ProfilUserCreationForm, CustomAuthenticationForm 
 from .models import Profil
 
+
 def custom_login_view(request):
     if request.method == 'POST':
-        
         form = CustomAuthenticationForm(data=request.POST, request=request)
         
         if form.is_valid():
             user = form.get_user()
             
             if user is not None:
+                # --- Aici este modificarea pentru Lab 7 (Task 1) ---
+                # Verificăm dacă are profil și dacă emailul NU este confirmat
                 if hasattr(user, 'profil') and not user.profil.email_confirmat:
                     messages.error(request, 'Trebuie să-ți confirmi adresa de e-mail înainte de a te loga.')
-                else: 
-                    login(request, user)
-                    print("Utilizator logat cu succes.")
-                    return redirect('profil')
+                    # IMPORTANT: Dăm return aici pentru a opri funcția. 
+                    # Utilizatorul NU este logat.
+                    return redirect('login') 
                 
-            
-# --- Aici începe Cerința 4 (memorarea în sesiune) ---
-            # Stocăm datele în sesiune la login [cite: 622-624]
-            
-            request.session['username'] = user.username
-            request.session['email'] = user.email
-            request.session['first_name'] = user.first_name
-            request.session['last_name'] = user.last_name
+                # --- Dacă trece de verificare, îl logăm efectiv ---
+                login(request, user)
 
-            try:
-                # Încercăm să luăm datele și din profil
-                profil = user.profil # 'profil' e numele relației
-                request.session['telefon'] = profil.telefon
-                request.session['tara'] = profil.tara
-                request.session['judet'] = profil.judet
-                request.session['oras'] = profil.oras
-                request.session['strada'] = profil.strada
+                # --- Aici continuă logica din Lab 6 ---
+                request.session['username'] = user.username
+                request.session['email'] = user.email
+                request.session['first_name'] = user.first_name
+                request.session['last_name'] = user.last_name
 
-            except Profil.DoesNotExist:
-                # Dacă profilul nu există (ex. pt un superuser vechi)
-                pass 
-            # --- Sfârșitul Cerinței 4 (partea de stocare) ---
+                try:
+                    profil = user.profil 
+                    request.session['telefon'] = profil.telefon
+                    request.session['tara'] = profil.tara
+                    request.session['judet'] = profil.judet
+                    request.session['oras'] = profil.oras
+                    request.session['strada'] = profil.strada
+                except Profil.DoesNotExist:
+                    pass 
 
+                # Gestionarea checkbox-ului "Rămâne logat"
+                if form.cleaned_data.get('ramane_logat'):
+                    request.session.set_expiry(24*60*60) 
+                else:
+                    request.session.set_expiry(0) 
 
-            # --- Cerința 3 ("Remember Me" 1 zi) ---
-            if form.cleaned_data.get('ramane_logat'):
-                # Setează expirarea sesiunii la 1 zi (în secunde)
-                
-                request.session.set_expiry(24*60*60) 
-                
-            else:
-                
-                request.session.set_expiry(0) 
-
-            return redirect('profil')
+                return redirect('profil')
         
     else:
         form = CustomAuthenticationForm()
@@ -791,7 +780,7 @@ def logout_view(request):
 from django.contrib.auth.decorators import login_required
 @login_required
 def pagina_profil_view(request):
-    # Citim datele din sesiune (care au fost puse la login)
+
     context = {
         'username': request.session.get('username', 'N/A'),
         'email': request.session.get('email', 'N/A'),
@@ -819,10 +808,10 @@ def change_password_view(request):
         form = PasswordChangeForm(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
-            # Actualizează sesiunea pentru a preveni delogarea [cite: 433]
+            
             update_session_auth_hash(request, request.user) 
             messages.success(request, 'Parola a fost actualizata')
-            return redirect('profil') # Înapoi la profil
+            return redirect('profil') 
         else:
             messages.error(request, 'Exista erori.')
     else:
@@ -832,16 +821,21 @@ def change_password_view(request):
 
 #---------------------------------------------------------------------------------------------------------------------------
 #laborator 7 task 1 
+from django.conf import settings
 
 def confirma_email_view(request, cod):
     try: 
-        profil=get_object_or_404(Profil, cod=cod)
+        # Căutăm profilul după cod
+        profil = get_object_or_404(Profil, cod=cod)
+        
         if profil.email_confirmat:
-            messages.warning(request, 'Adresa de e-mail a fost deja confirmata.')
+            messages.warning(request, 'Adresa de e-mail a fost deja confirmată.')
         else:
-            profil.email_confirmat =True
+            # Setăm confirmarea pe True (conform cerinței Task 1)
+            profil.email_confirmat = True
             profil.save()
-            messages.success(request, 'Adresa de e-mail a fost confirmata cu succes!')  
-    except Profil.DoesNotExist:
+            messages.success(request, 'Adresa de e-mail a fost confirmată cu succes! Te poți loga.')  
+    except Exception as e:
         messages.error(request, 'Link de confirmare invalid.')
-    return redirect('login') 
+        
+    return redirect('login')

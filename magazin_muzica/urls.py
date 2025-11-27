@@ -24,5 +24,5 @@ urlpatterns = [
     path('Magazin_de_muzica/', include("Magazin_de_muzica.urls")) 
     
 ]
-if settings.DEBUG:  # doar în development
+if settings.DEBUG:  
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
