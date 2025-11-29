@@ -1,0 +1,14 @@
+Subiect: {{ subiect }}
+
+Bună,
+
+Ești pregătit pentru noile hituri? Campania {{ nume_promotie }} a început!
+Am observat că ești interesat de produsele din categoria {{ nume_categorie }}.
+
+Profită acum până pe {{ data_expirare }}.
+Reducerea aplicată este de {{ procent }}%.
+
+Mesaj de la noi: {{ mesaj_extra }}
+
+Cu drag,
+Magazin Muzica

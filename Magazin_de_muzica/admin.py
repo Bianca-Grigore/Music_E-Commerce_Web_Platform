@@ -5,6 +5,18 @@ admin.site.site_header = "Magazin Muzical Admin"
 admin.site.site_title = "Magazin Muzical"
 admin.site.index_title = "Bine ați venit în Panoul de Administrare!"
 
+from. models import Rating, Review, Comanda, DetaliiComanda
+admin.site.register(Rating)
+admin.site.register(Review)
+admin.site.register(Comanda)
+admin.site.register(DetaliiComanda)
+
+from .models import Vizualizare 
+admin.site.register(Vizualizare)
+
+from .models import Promotii
+admin.site.register(Promotii)
+
 class ProfilAdmin(admin.ModelAdmin):
     list_display = ('user', 'telefon', 'tara', 'judet', 'oras', 'strada', 'cod', 'email_confirmat')
     

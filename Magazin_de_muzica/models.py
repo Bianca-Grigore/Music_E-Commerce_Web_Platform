@@ -1,8 +1,34 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 import uuid 
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Promotii(models.Model):
+    nume=models.CharField(max_length=100)
+    descriere=models.TextField()
+    data_creare=models.DateTimeField(default=timezone.now)
+    data_expirare=models.DateTimeField()
+    procent_reducere=models.DecimalField(max_digits=5, decimal_places=2)
+    subiect_email=models.CharField(max_length=255, help_text="Subiectul care va apărea în mail")
+    categorii=models.ManyToManyField('Categorie', help_text="Categorii la care se aplică promoția")
+    def __str__(self):
+        return f"{self.nume} (-{self.procent_reducere}%)"
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Vizualizare(models.Model):
+    utilizator = models.ForeignKey(User, on_delete=models.CASCADE)
+    produs=models.ForeignKey('Produs', on_delete=models.CASCADE)
+    # Folosim auto_now=True pentru ca data să se actualizeze de fiecare dată 
+    # când utilizatorul revede același produs (îl aduce în capul listei)
+    data_vizualizarii = models.DateTimeField(auto_now=True)
+    class Meta:
+        ordering=['-data_vizualizarii'] #cele mai recente primele
+    def __str__(self):
+        return f"{self.utilizator.username} a vizualizat {self.produs.denumire}"
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 class Profil(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -17,6 +43,81 @@ class Profil(models.Model):
 
     def __str__(self):
         return f"Profil pentru {self.user.username}"
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Comanda(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    data_comanda = models.DateTimeField(default=timezone.now)
+
+    METODA_PLATA = [
+        ('card', 'Card Online'),
+        ('ramburs', 'Ramburs la livrare'),
+        ('transfer', 'Transfer Bancar')
+    ]
+    metoda = models.CharField(max_length=20, choices=METODA_PLATA, default='ramburs')
+
+    STATUS_COMANDA = [
+        ('plasata', 'Plasată'),
+        ('procesare', 'În procesare'),
+        ('expediata', 'Expediată'),
+        ('finalizata', 'Finalizată'),
+        ('anulata', 'Anulată')
+    ]
+    status_comanda = models.CharField(max_length=20, choices=STATUS_COMANDA, default='plasata')
+    
+    status_livrare = models.CharField(max_length=50, blank=True, null=True)
+    data_livrare = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Comanda #{self.id} - {self.user.username} ({self.get_status_comanda_display()})"
+
+
+class DetaliiComanda(models.Model):
+
+    comanda = models.ForeignKey(Comanda, on_delete=models.CASCADE, related_name='detalii')
+    produs = models.ForeignKey('Produs', on_delete=models.CASCADE)
+    cantitate = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.produs.denumire} x {self.cantitate} (Cmd {self.comanda.id})"
+
+
+class Review(models.Model):
+
+    produs = models.ForeignKey('Produs', on_delete=models.CASCADE, related_name='reviewuri')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    descriere = models.TextField()
+    data_publicarii = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"Review de la {self.user.username} pentru {self.produs.denumire}"
+
+
+class Rating(models.Model):
+
+    produs = models.ForeignKey('Produs', on_delete=models.CASCADE, related_name='ratinguri')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    valoare = models.PositiveIntegerField()
+    
+    TIP_RATING = [
+        ('produs', 'Calitate Produs'),
+        ('livrare', 'Experiență Livrare'),
+        ('pret', 'Raport Calitate/Preț')
+    ]
+    tip_rating = models.CharField(max_length=20, choices=TIP_RATING, default='produs')
+    data_rating = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+
+        constraints = [
+            models.UniqueConstraint(fields=['produs', 'user', 'tip_rating'], name='unique_rating_user_produs')
+        ]
+
+    def __str__(self):
+        return f"{self.valoare}* - {self.produs.denumire} ({self.user.username})"
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

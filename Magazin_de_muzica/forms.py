@@ -10,7 +10,34 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Profil 
+from .models import Promotii
+#-------------------------------------------------------------
 
+class PromotiiForm(forms.ModelForm):
+    categorii=forms.ModelMultipleChoiceField(
+        queryset=Categorie.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label='Alegeti categoriile pentru promotie',
+        required=True
+)
+    data_expirare = forms.DateTimeField(
+        label='Data Expirare',
+        widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        input_formats=['%Y-%m-%dT%H:%M'])
+    subiect_email= forms.CharField(
+        max_length=255, 
+        label='Subiect Email')
+    mesaj=forms.CharField(
+        widget=forms.Textarea,
+        label='Alte date relevante pentru promotie')
+    class Meta:
+        model=Promotii
+        fields=['nume', 'descriere', 'data_expirare', 'procent_reducere', 'subiect_email', 'categorii']
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['categorii'].initial = self.fields['categorii'].queryset.all()
+
+#-------------------------------------------------------------
 #LABORATOR 6 EX 3
 class ProfilUserCreationForm(UserCreationForm):
     
@@ -90,23 +117,9 @@ class CustomAuthenticationForm(AuthenticationForm):
         cleaned_data = super().clean()
         ramane_logat = self.cleaned_data.get('ramane_logat')
         return cleaned_data
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 #-----------------------------------------------------------------------------------------------------------------------------
+
 PAGINATION_CHOICES = [
     (5, '5 pe pagină (Implicit)'), 
     (10, '10 pe pagină'),

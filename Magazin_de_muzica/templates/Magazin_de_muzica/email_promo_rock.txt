@@ -1,0 +1,15 @@
+Subiect: {{ subiect }}
+
+Salutare fan Rock!
+
+Avem o ofertă specială pentru tine: {{ nume_promotie }}.
+Pentru că știm că îți plac chitările și tobele, ți-am pregătit reduceri la categoria {{ nume_categorie }}.
+
+Detalii ofertă:
+- Expiră la: {{ data_expirare }}
+- Reducere: {{ procent }}%
+
+{{ mesaj_extra }}
+
+Rock on!
+Echipa Magazin Muzica

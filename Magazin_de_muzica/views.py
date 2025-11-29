@@ -20,6 +20,8 @@ import re
 import json
 import time
 from django.urls import reverse 
+from .models import Vizualizare
+from .models import Promotii  
 
 accesari = []
 
@@ -341,9 +343,36 @@ def lista_produse(request):
         'categorie_selectata': None
         })
 
+#----------------------------------------------------------------------------------------------------------------------------------
+#laborator 7 task 2 exercitiul 1
+
 def detalii_produs(request, produs_id):
+    # 1. Găsim produsul (Codul tău existent)
     produs = get_object_or_404(Produs, id=produs_id)
     
+    # --- ÎNCEPUT COD NOU PENTRU VIZUALIZĂRI ---
+    # Verificăm dacă utilizatorul este logat
+    if request.user.is_authenticated:
+        # A. Salvăm vizualizarea curentă
+        # Dacă există deja, se actualizează doar data (datorită auto_now=True din model)
+        Vizualizare.objects.update_or_create(
+            utilizator=request.user,
+            produs=produs
+        )
+
+        # B. Limităm istoricul la ultimele 5 intrări
+        # Obținem ID-urile celor mai recente 5 vizualizări
+        ultimele_ids = Vizualizare.objects.filter(
+            utilizator=request.user
+        ).order_by('-data_vizualizarii').values_list('id', flat=True)[:5]
+
+        # Ștergem tot ce nu se află în această listă de 5 ID-uri
+        Vizualizare.objects.filter(
+            utilizator=request.user
+        ).exclude(id__in=ultimele_ids).delete()
+    # --- SFÂRȘIT COD NOU ---
+
+    # 2. Restul codului tău existent
     produs_artist = get_object_or_404(Produs_Artist, produs=produs)
     campanii = Campanie_Promo.objects.filter(produs=produs)
     
@@ -839,3 +868,85 @@ def confirma_email_view(request, cod):
         messages.error(request, 'Link de confirmare invalid.')
         
     return redirect('login')
+
+#---------------------------------------------------------------------------------------------------------------------------
+#laborator 7 task 2 
+
+from .forms import PromotiiForm
+from django.db.models import Count
+from django.core.mail import send_mass_mail
+from .models import Promotii, Vizualizare, Categorie, User
+
+def pagina_promotii(request):
+    if request.method == 'POST':
+        form = PromotiiForm(request.POST)
+        if form.is_valid():
+            # 1. Salvăm promoția în baza de date
+            promotie = form.save()
+            
+            # Datele necesare pentru filtrare și email
+            categorii_alese = form.cleaned_data['categorii']
+            K = 2 # Pragul de vizualizări (K < N, unde N=5)
+            datatuple = [] # Aici vom aduna toate mailurile
+
+            # Definim maparea: Categorie -> Template
+            # Dacă categoria nu e aici, folosim un fallback (ex: pop)
+            template_map = {
+                'CD Rock': 'Magazin_de_muzica/email_promo_rock.txt',
+                'CD Pop': 'Magazin_de_muzica/email_promo_pop.txt',
+                # Putem adăuga și alte chei
+            }
+
+            # 2. Iterăm prin fiecare categorie selectată
+            for categorie in categorii_alese:
+                # Căutăm userii care au >= K vizualizări la produse din ACEASTĂ categorie
+                # vizualizare__produs__categorie face join-ul necesar
+                useri_targetati = User.objects.filter(
+                    vizualizare__produs__categorie=categorie
+                ).annotate(
+                    nr_vizualizari=Count('vizualizare')
+                ).filter(nr_vizualizari__gte=K).distinct()
+
+                # Alegem template-ul corect
+                nume_cat = categorie.nume_categorie
+                fisier_template = template_map.get(nume_cat, 'Magazin_de_muzica/email_promo_pop.txt')
+
+                # Generăm mailul pentru fiecare user găsit în această categorie
+                for user in useri_targetati:
+                    context = {
+                        'subiect': promotie.subiect_email,
+                        'nume_promotie': promotie.nume,
+                        'nume_categorie': nume_cat,
+                        'data_expirare': promotie.data_expirare.strftime('%d-%m-%Y'),
+                        'procent': promotie.procent_reducere,
+                        'mesaj_extra': form.cleaned_data['mesaj'] 
+                        # -----------------------------
+                    }
+                    
+                    mesaj_text = render_to_string(fisier_template, context)
+                    
+                    # Adăugăm în lista de trimitere masivă
+                    # Format: (Subiect, Mesaj, Expeditor, [Lista Destinatari])
+                    email_obj = (
+                        promotie.subiect_email,
+                        mesaj_text,
+                        'promotii@magazinmuzica.ro',
+                        [user.email]
+                    )
+                    datatuple.append(email_obj)
+
+            # 3. Trimitem toate mailurile într-o singură conexiune
+            if datatuple:
+                send_mass_mail(tuple(datatuple), fail_silently=False)
+                messages.success(request, f"Promoția a fost salvată și au fost trimise {len(datatuple)} mailuri!")
+            else:
+                messages.warning(request, "Promoția a fost salvată, dar niciun user nu a îndeplinit condiția K vizualizări.")
+
+            return redirect('pagina_promotii')
+    else:
+        form = PromotiiForm()
+
+    return render(request, 'Magazin_de_muzica/promotii.html', {'form': form})
+
+
+
