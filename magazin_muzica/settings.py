@@ -158,3 +158,6 @@ EMAIL_HOST_PASSWORD = 'bsxw usew axok rhjs'
 DEFAULT_FROM_EMAIL = 'Default <biancagrigore208@gmail.com>'
 
 SITE_ID = 1
+ADMINS = [('Admin1', 'grigorebianca76@gmail.com'),
+        ('Admin2', 'biancagrigore208@gmail.com'),
+        ]

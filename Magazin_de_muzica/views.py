@@ -25,6 +25,21 @@ from .models import Promotii
 
 accesari = []
 
+#laborator 7 task 3 
+from django.core.mail import mail_admins
+from django.template.loader import render_to_string
+
+def trimite_alerta_admin(subiect, mesaj_text, mesaj_html_body):
+    html_content = f'<h1 style="color: red;">{subiect}</h1>'
+    html_content += f"<div>{mesaj_html_body}</div>"
+    
+    mail_admins(
+        subject=subiect,
+        message=mesaj_text,
+        html_message=html_content, 
+        fail_silently=False
+    )
+
 class Accesare:
     counter = 0  
 
@@ -692,11 +707,28 @@ from .forms import ProfilUserCreationForm, CustomAuthenticationForm
 def register_view(request):
     if request.method == 'POST':
         form = ProfilUserCreationForm(request.POST)
+#laborator 7 
+        username_input = request.POST.get('username', '').lower()
+        email_input = request.POST.get('email', '')
+        if username_input == 'bianca':
+            # Trimitem alerta
+            subiect = "cineva incearca sa ne preia site-ul"
+            mesaj_text = f"Email utilizat: {email_input}"
+            detalii_html = f"<p>O tentativă de înregistrare cu userul 'admin' a fost detectată.</p><p>Email: {email_input}</p>"
+            
+            trimite_alerta_admin(subiect, mesaj_text, detalii_html)
+
+            # Refuzăm înregistrarea
+            messages.error(request, "Acest username este interzis.")
+            return render(request, 'Magazin_de_muzica/inregistrare.html', {'form': form})
+
+
+
         if form.is_valid():
             
             user = form.save()
-            #genberare cod unic pentru confirmarea emailului
-            
+
+
             cod_unic = str(uuid.uuid4())
 
             if hasattr(user, 'profil'):
@@ -704,14 +736,14 @@ def register_view(request):
                 user.profil.email_confirmat = False 
                 user.profil.save()
             else:
-                
+
                 Profil.objects.create(user=user, cod=cod_unic, email_confirmat=False)
 
             obj_site=Site.objects.get_current()
             domeniu=obj_site.domain
             url_imagine = f"http://{domeniu}{settings.STATIC_URL}imagini/Music.jpg"
             link_confirmare= f"http://{domeniu}/Magazin_de_muzica/confirma_mail/{cod_unic}/"
-            
+
 
 
             context = {
@@ -748,6 +780,7 @@ from django.contrib.auth import login
 from .forms import ProfilUserCreationForm, CustomAuthenticationForm 
 from .models import Profil
 
+import time # <--- Asigură-te că ai acest import sus de tot
 
 def custom_login_view(request):
     if request.method == 'POST':
@@ -757,18 +790,19 @@ def custom_login_view(request):
             user = form.get_user()
             
             if user is not None:
-                # --- Aici este modificarea pentru Lab 7 (Task 1) ---
-                # Verificăm dacă are profil și dacă emailul NU este confirmat
+                # --- Lab 7 (Task 1) - Verificare Email ---
                 if hasattr(user, 'profil') and not user.profil.email_confirmat:
                     messages.error(request, 'Trebuie să-ți confirmi adresa de e-mail înainte de a te loga.')
-                    # IMPORTANT: Dăm return aici pentru a opri funcția. 
-                    # Utilizatorul NU este logat.
                     return redirect('login') 
-                
-                # --- Dacă trece de verificare, îl logăm efectiv ---
+
+                # --- CERINȚA SECURITATE: Resetăm contorul la login reușit ---
+                if 'failed_login_attempts' in request.session:
+                    del request.session['failed_login_attempts']
+                # -----------------------------------------------------------
+
                 login(request, user)
 
-                # --- Aici continuă logica din Lab 6 ---
+                # --- Lab 6 - Sesiune ---
                 request.session['username'] = user.username
                 request.session['email'] = user.email
                 request.session['first_name'] = user.first_name
@@ -784,7 +818,6 @@ def custom_login_view(request):
                 except Profil.DoesNotExist:
                     pass 
 
-                # Gestionarea checkbox-ului "Rămâne logat"
                 if form.cleaned_data.get('ramane_logat'):
                     request.session.set_expiry(24*60*60) 
                 else:
@@ -792,6 +825,46 @@ def custom_login_view(request):
 
                 return redirect('profil')
         
+        # --- AICI ADAUGI LOGICA PENTRU LOGIN EȘUAT (CERINȚA 1) ---
+        else:
+            # 1. Luăm datele necesare
+            username_incercat = request.POST.get('username', 'necunoscut')
+            ip = request.META.get('REMOTE_ADDR')
+            acum = time.time()
+
+            # 2. Gestionăm lista din sesiune
+            attempts = request.session.get('failed_login_attempts', [])
+            
+            # Păstrăm doar încercările din ultimele 2 minute (120 secunde)
+            attempts = [t for t in attempts if t > acum - 120]
+            
+            # Adăugăm încercarea curentă
+            attempts.append(acum)
+            request.session['failed_login_attempts'] = attempts
+
+            # 3. Verificăm pragul de 3 încercări
+            if len(attempts) >= 3:
+                subiect = "Logari suspecte"
+                mesaj_text = f"Userul '{username_incercat}' a încercat să se logheze de 3 ori rapid de pe IP: {ip}"
+                
+                detalii_html = f"""
+                    <p>S-au detectat încercări multiple de autentificare eșuate.</p>
+                    <ul>
+                        <li><strong>Username vizat:</strong> {username_incercat}</li>
+                        <li><strong>IP Atacator:</strong> {ip}</li>
+                        <li><strong>Număr încercări (ultimele 2 min):</strong> {len(attempts)}</li>
+                    </ul>
+                """
+                
+                # Apelăm funcția helper definită anterior
+                trimite_alerta_admin(subiect, mesaj_text, detalii_html)
+                
+                # Opțional: Resetăm lista ca să nu trimită mail la fiecare click după al 3-lea
+                request.session['failed_login_attempts'] = [] 
+
+            messages.error(request, "Nume de utilizator sau parolă incorectă.")
+        # ---------------------------------------------------------
+
     else:
         form = CustomAuthenticationForm()
 
@@ -856,7 +929,7 @@ def confirma_email_view(request, cod):
     try: 
         # Căutăm profilul după cod
         profil = get_object_or_404(Profil, cod=cod)
-        
+
         if profil.email_confirmat:
             messages.warning(request, 'Adresa de e-mail a fost deja confirmată.')
         else:
@@ -866,7 +939,7 @@ def confirma_email_view(request, cod):
             messages.success(request, 'Adresa de e-mail a fost confirmată cu succes! Te poți loga.')  
     except Exception as e:
         messages.error(request, 'Link de confirmare invalid.')
-        
+
     return redirect('login')
 
 #---------------------------------------------------------------------------------------------------------------------------
@@ -877,6 +950,10 @@ from django.db.models import Count
 from django.core.mail import send_mass_mail
 from .models import Promotii, Vizualizare, Categorie, User
 
+
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 def pagina_promotii(request):
     if request.method == 'POST':
         form = PromotiiForm(request.POST)
@@ -886,21 +963,19 @@ def pagina_promotii(request):
             
             # Datele necesare pentru filtrare și email
             categorii_alese = form.cleaned_data['categorii']
-            K = 2 # Pragul de vizualizări (K < N, unde N=5)
+            K = 2 # Pragul de vizualizări
             datatuple = [] # Aici vom aduna toate mailurile
 
             # Definim maparea: Categorie -> Template
-            # Dacă categoria nu e aici, folosim un fallback (ex: pop)
             template_map = {
                 'CD Rock': 'Magazin_de_muzica/email_promo_rock.txt',
                 'CD Pop': 'Magazin_de_muzica/email_promo_pop.txt',
-                # Putem adăuga și alte chei
+                # Alte categorii...
             }
 
             # 2. Iterăm prin fiecare categorie selectată
             for categorie in categorii_alese:
                 # Căutăm userii care au >= K vizualizări la produse din ACEASTĂ categorie
-                # vizualizare__produs__categorie face join-ul necesar
                 useri_targetati = User.objects.filter(
                     vizualizare__produs__categorie=categorie
                 ).annotate(
@@ -919,34 +994,57 @@ def pagina_promotii(request):
                         'nume_categorie': nume_cat,
                         'data_expirare': promotie.data_expirare.strftime('%d-%m-%Y'),
                         'procent': promotie.procent_reducere,
+                        # Luăm mesajul extra din FORMULAR, nu din model
                         'mesaj_extra': form.cleaned_data['mesaj'] 
-                        # -----------------------------
                     }
                     
                     mesaj_text = render_to_string(fisier_template, context)
                     
-                    # Adăugăm în lista de trimitere masivă
-                    # Format: (Subiect, Mesaj, Expeditor, [Lista Destinatari])
+                    # Construim obiectul de email
                     email_obj = (
                         promotie.subiect_email,
                         mesaj_text,
-                        'promotii@magazinmuzica.ro',
-                        [user.email]
+                        'biancagrigore208@gmail.com', # Sender
+                        [user.email] # Recipient
                     )
                     datatuple.append(email_obj)
 
-            # 3. Trimitem toate mailurile într-o singură conexiune
-            if datatuple:
-                send_mass_mail(tuple(datatuple), fail_silently=False)
-                messages.success(request, f"Promoția a fost salvată și au fost trimise {len(datatuple)} mailuri!")
-            else:
-                messages.warning(request, "Promoția a fost salvată, dar niciun user nu a îndeplinit condiția K vizualizări.")
+            # 3. Trimitem mailurile (Zona TRY...EXCEPT cerută)
+            try:
+                if datatuple:
+                    # Linia critică de trimitere
+                    send_mass_mail(tuple(datatuple), fail_silently=False)
+                    messages.success(request, f"Promoția a fost salvată și au fost trimise {len(datatuple)} mailuri!")
+                else:
+                    messages.warning(request, "Promoția a fost salvată, dar niciun user nu a îndeplinit condiția K vizualizări.")
+            
+            except Exception as e:
+                # --- Aici tratăm eroarea și alertăm adminii ---
+                subiect_eroare = "Eroare Trimitere Promotii"
+                eroare_str = str(e)
+                
+                # Mesaj text simplu
+                mesaj_text_admin = f"A apărut o eroare la send_mass_mail: {eroare_str}"
+                
+                # Mesaj HTML cu background roșu (conform cerinței)
+                html_eroare = f"""
+                <p>A apărut o excepție în timpul trimiterii promoțiilor:</p>
+                <div style="background-color: red; color: white; padding: 15px; border-radius: 5px; font-family: monospace;">
+                    <strong>Detalii eroare:</strong><br>
+                    {eroare_str}
+                </div>
+                """
+                
+                # Apelăm funcția helper
+                trimite_alerta_admin(subiect_eroare, mesaj_text_admin, html_eroare)
+                
+                # Anunțăm utilizatorul din interfață că a apărut o problemă
+                messages.error(request, "A apărut o eroare tehnică la trimiterea email-urilor. Administratorii au fost notificați.")
 
             return redirect('pagina_promotii')
     else:
         form = PromotiiForm()
 
     return render(request, 'Magazin_de_muzica/promotii.html', {'form': form})
-
 
 

@@ -26,4 +26,5 @@ urlpatterns = [
     path('schimba_parola/', views.change_password_view, name='schimbare_parola'),
     path('confirma_mail/<str:cod>/', views.confirma_email_view, name='confirma_mail'),
     path('promotii/', views.pagina_promotii, name='pagina_promotii'),
+    path('trimite_alerta_admin', views.trimite_alerta_admin, name='trimite_alerta_admin'),
 ]
