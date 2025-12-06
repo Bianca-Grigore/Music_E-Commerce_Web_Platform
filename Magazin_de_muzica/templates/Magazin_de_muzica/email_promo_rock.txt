@@ -11,5 +11,4 @@ Detalii ofertă:
 
 {{ mesaj_extra }}
 
-Rock on!
-Echipa Magazin Muzica
+Rock and roll never dies!

@@ -41,33 +41,32 @@
 </div>
 
 <style>
-    /* Face lista de categorii să nu aibă puncte (bullets) */
+
     ul#id_categorii {
         list-style-type: none;
         padding-left: 0;
         margin-top: 5px;
     }
     
-    /* Spațiu între checkbox-uri */
     ul#id_categorii li {
         display: inline-block;
         margin-right: 15px;
     }
 
-    /* Stilizează etichetele formularului */
+
     label {
         font-weight: bold;
         color: #333;
     }
     
-    /* Input-urile text să ocupe toată lățimea */
+
     input[type="text"], textarea, input[type="number"], input[type="datetime-local"] {
         width: 100%;
         padding: 8px;
         margin-bottom: 15px;
         border: 1px solid #ccc;
         border-radius: 4px;
-        box-sizing: border-box; /* Asigură că padding-ul nu strică lățimea */
+        box-sizing: border-box;
     }
 </style>
 {% endblock %}

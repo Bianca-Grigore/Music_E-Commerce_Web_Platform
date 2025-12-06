@@ -138,26 +138,43 @@ def test_accesare(request):
         </html>
     """)
 
+#laborator 8 task 2 ex 3
 def info(request):
-    salvare_accesari(request, "Pagina info")
-    parametru = request.GET.get("data") 
-    afisat = ""
-    
-    if parametru:
-        afisat = afis_data(parametru)
-        
-    parametri = request.GET 
-    numar_param = len(parametri.keys())
-    nume_param = ",".join(parametri.keys())
-    sectiune_parametri = f"""
-        <section>
-            <h2>Parametri</h2>
-            <p>Numar parametri: {numar_param}</p>
-            <p>Nume parametri: {nume_param}</p>
-        </section>
-    """
+    is_admin_site = request.user.groups.filter(name='Administratori_site').exists()
 
-    return render(request, "Magazin_de_muzica/info.html", {"continut": afisat, "sectiune_parametri": sectiune_parametri })
+    if not is_admin_site:
+        
+        counter = request.session.get('counter_403', 0)
+        counter += 1
+        request.session['counter_403'] = counter
+        
+        context_error = {
+            'titlu': 'Acces Interzis',
+            'mesaj_personalizat': 'Doar administratorii site-ului pot vedea pagina info.',
+            'counter': counter,
+            'n_max': getattr(settings, 'N_MAX_403', 5),
+        }
+        return HttpResponseForbidden(render(request, 'Magazin_de_muzica/eroare_403.html', context_error))
+    else: 
+        salvare_accesari(request, "Pagina info")
+        parametru = request.GET.get("data") 
+        afisat = ""
+        
+        if parametru:
+            afisat = afis_data(parametru)
+            
+        parametri = request.GET 
+        numar_param = len(parametri.keys())
+        nume_param = ",".join(parametri.keys())
+        sectiune_parametri = f"""
+            <section>
+                <h2>Parametri</h2>
+                <p>Numar parametri: {numar_param}</p>
+                <p>Nume parametri: {nume_param}</p>
+            </section>
+        """
+
+        return render(request, "Magazin_de_muzica/info.html", {"continut": afisat, "sectiune_parametri": sectiune_parametri })
 
 def salvare_accesari(request,nume_pagina):
     a = Accesare(
@@ -169,117 +186,130 @@ def salvare_accesari(request,nume_pagina):
     accesari.append(a)
 
 #LABORATOR 2 TEMA
-
+#laborator 8 task 2 ex 4
+from django.contrib.auth.models import Group, User
 def log(request):
-    
-    salvare_accesari(request, "log")
-    
-    continut = ""
+    is_admin_site = request.user.groups.filter(name='Administratori_site').exists()
 
-    # accesari=nr sau detalii
-    
-    nr_accesari = request.GET.get("accesari")
-    if nr_accesari:
-        if nr_accesari.lower() == "nr":
-            total = len(accesari)
-            continut += f"<h2>Numarul total de accesari curente este {total}.</h2>"
-            
-        elif nr_accesari.lower() == "detalii":
-            continut += "<h1>Detalii accesari:</h1><ul>"
-            for a in accesari:
-                continut += f"<li>ID {a.id} — Pagina: {a.pagina()} — Data: {a.data_formatata()}</li>"
-            continut += "</ul>"
+    if not is_admin_site:
+        
+        counter = request.session.get('counter_403', 0)
+        counter += 1
+        request.session['counter_403'] = counter
+        
+        context_error = {
+            'titlu': 'Acces Interzis',
+            'mesaj_personalizat': 'Doar administratorii site-ului pot vedea log-urile.',
+            'counter': counter,
+            'n_max': getattr(settings, 'N_MAX_403', 5),
+        }
+        return HttpResponseForbidden(render(request, 'Magazin_de_muzica/eroare_403.html', context_error))
+    else :
+        salvare_accesari(request, "log")
 
-    # iduri si dubluri 
-    iduri = request.GET.getlist("iduri")
-    dubluri = request.GET.get("dubluri", "false").lower() == "true"
-    lista_id = []
-    for id_ in iduri:
-        lista_id.extend(id_.split(','))
-
-    if lista_id:
-        if not dubluri:
-            lista_id_finala = []
-            aux = set()
-            for id_ in lista_id:
-                if id_ not in aux:
-                    lista_id_finala.append(id_)
-                    aux.add(id_)
-        else:
-            lista_id_finala = lista_id
-
-        continut += "<h1>Accesari dupa id-uri:</h1><ul>"
-        for id_ in lista_id_finala:
-            try:
-                idx = int(id_) - 1
-                continut += f"<li>{accesari[idx].pagina()}</li>"
-            except (ValueError, IndexError):
-                continut += f"<li>ID invalid: {id_}</li>"
-        continut += "</ul>"
-
-
-
-    #  tabel 
-    parametru_tabel = request.GET.get("tabel")
-    if parametru_tabel:
-        proprietati = [p.strip() for p in parametru_tabel.split(',')]
-        if "tot" in proprietati:
-            proprietati = ["id", "ip_client", "url", "data"]
-
-        continut += "<h1>Accesari in tabel:</h1><table border='1'><tr>"
-        for prop in proprietati:
-            continut += f"<th>{prop}</th>"
-        continut += "</tr>"
-
-        for a in accesari:
-            continut += "<tr>"
-            for prop in proprietati:
-                valoare = getattr(a, prop, "N/A")
-                if prop == "data" and valoare:
-                    valoare = a.data_formatata()
-                elif callable(valoare):
-                    valoare = valoare()
-                continut += f"<td>{valoare}</td>"
-            continut += "</tr>"
-        continut += "</table>"
-
-        # Frecventa pagini
-        frecventa = Counter([a.pagina() for a in accesari])
-        if frecventa:
-            pagina_max = max(frecventa, key=frecventa.get)
-            pagina_min = min(frecventa, key=frecventa.get)
-            continut += f"<p>Cea mai accesata pagina: <b>{pagina_max}</b></p>"
-            continut += f"<p>Cea mai putin accesata pagina: <b>{pagina_min}</b></p>"
-
-    # ultimele
-    ultimele_accesari = request.GET.get("ultimele")
-    
-    if ultimele_accesari is not None:
-        try:
-            n = int(ultimele_accesari)
-            if n < 0:
-                raise ValueError
-        except ValueError:
-            continut += "<h2 style='color:purple'>Mesaj de eroare: parametrul nu este un numar intreg pozitiv</h2>"
-        else:
-            total_accesari = len(accesari)
-            if n > total_accesari:
-                continut += "<h1>Toate accesarile:</h1><ul>"
+        continut = ""
+        nr_accesari = request.GET.get("accesari")
+        if nr_accesari:
+            if nr_accesari.lower() == "nr":
+                total = len(accesari)
+                continut += f"<h2>Numarul total de accesari curente este {total}.</h2>"
+                
+            elif nr_accesari.lower() == "detalii":
+                continut += "<h1>Detalii accesari:</h1><ul>"
                 for a in accesari:
-                    continut += f"<li>{a.pagina()}</li>"
-                continut += f"</ul><p style='color:purple'>Exista doar {total_accesari} fata de {n} accesari cerute.</p>"
-            else:
-                continut += f"<h1>Ultimele {n} accesari sunt:</h1><ul>"
-                for a in accesari[-n:]:
-                    continut += f"<li>{a.pagina()}</li>"
+                    continut += f"<li>ID {a.id} — Pagina: {a.pagina()} — Data: {a.data_formatata()}</li>"
                 continut += "</ul>"
 
-    if not request.GET:
-        continut += "<h2>Cererile catre paginile din site:</h2><ul>"
-        for a in accesari:
-            continut += f"<p>ID {a.id} — Pagina: {a.pagina()} — Data: {a.data_formatata()}</p>"
-        continut+= "</ul>"
-    return render(request, "Magazin_de_muzica/log.html", {"continut": continut})
+        # iduri si dubluri 
+        iduri = request.GET.getlist("iduri")
+        dubluri = request.GET.get("dubluri", "false").lower() == "true"
+        lista_id = []
+        for id_ in iduri:
+            lista_id.extend(id_.split(','))
+
+        if lista_id:
+            if not dubluri:
+                lista_id_finala = []
+                aux = set()
+                for id_ in lista_id:
+                    if id_ not in aux:
+                        lista_id_finala.append(id_)
+                        aux.add(id_)
+            else:
+                lista_id_finala = lista_id
+
+            continut += "<h1>Accesari dupa id-uri:</h1><ul>"
+            for id_ in lista_id_finala:
+                try:
+                    idx = int(id_) - 1
+                    continut += f"<li>{accesari[idx].pagina()}</li>"
+                except (ValueError, IndexError):
+                    continut += f"<li>ID invalid: {id_}</li>"
+            continut += "</ul>"
+
+
+
+        #  tabel 
+        parametru_tabel = request.GET.get("tabel")
+        if parametru_tabel:
+            proprietati = [p.strip() for p in parametru_tabel.split(',')]
+            if "tot" in proprietati:
+                proprietati = ["id", "ip_client", "url", "data"]
+
+            continut += "<h1>Accesari in tabel:</h1><table border='1'><tr>"
+            for prop in proprietati:
+                continut += f"<th>{prop}</th>"
+            continut += "</tr>"
+
+            for a in accesari:
+                continut += "<tr>"
+                for prop in proprietati:
+                    valoare = getattr(a, prop, "N/A")
+                    if prop == "data" and valoare:
+                        valoare = a.data_formatata()
+                    elif callable(valoare):
+                        valoare = valoare()
+                    continut += f"<td>{valoare}</td>"
+                continut += "</tr>"
+            continut += "</table>"
+
+            # Frecventa pagini
+            frecventa = Counter([a.pagina() for a in accesari])
+            if frecventa:
+                pagina_max = max(frecventa, key=frecventa.get)
+                pagina_min = min(frecventa, key=frecventa.get)
+                continut += f"<p>Cea mai accesata pagina: <b>{pagina_max}</b></p>"
+                continut += f"<p>Cea mai putin accesata pagina: <b>{pagina_min}</b></p>"
+
+        # ultimele
+        ultimele_accesari = request.GET.get("ultimele")
+        
+        if ultimele_accesari is not None:
+            try:
+                n = int(ultimele_accesari)
+                if n < 0:
+                    raise ValueError
+            except ValueError:
+                continut += "<h2 style='color:purple'>Mesaj de eroare: parametrul nu este un numar intreg pozitiv</h2>"
+            else:
+                total_accesari = len(accesari)
+                if n > total_accesari:
+                    continut += "<h1>Toate accesarile:</h1><ul>"
+                    for a in accesari:
+                        continut += f"<li>{a.pagina()}</li>"
+                    continut += f"</ul><p style='color:purple'>Exista doar {total_accesari} fata de {n} accesari cerute.</p>"
+                else:
+                    continut += f"<h1>Ultimele {n} accesari sunt:</h1><ul>"
+                    for a in accesari[-n:]:
+                        continut += f"<li>{a.pagina()}</li>"
+                    continut += "</ul>"
+
+        if not request.GET:
+            continut += "<h2>Cererile catre paginile din site:</h2><ul>"
+            for a in accesari:
+                continut += f"<p>ID {a.id} — Pagina: {a.pagina()} — Data: {a.data_formatata()}</p>"
+            continut+= "</ul>"
+        return render(request, "Magazin_de_muzica/log.html", {"continut": continut})
 
 def afis_template(request):
     context = {
@@ -359,38 +389,31 @@ def lista_produse(request):
         })
 
 #----------------------------------------------------------------------------------------------------------------------------------
-#laborator 7 task 2 exercitiul 1
 
 def detalii_produs(request, produs_id):
-    # 1. Găsim produsul (Codul tău existent)
     produs = get_object_or_404(Produs, id=produs_id)
-    
-    # --- ÎNCEPUT COD NOU PENTRU VIZUALIZĂRI ---
-    # Verificăm dacă utilizatorul este logat
+
+#laborator 7 task 2 exercitiul 1 si 2
     if request.user.is_authenticated:
-        # A. Salvăm vizualizarea curentă
-        # Dacă există deja, se actualizează doar data (datorită auto_now=True din model)
+
         Vizualizare.objects.update_or_create(
             utilizator=request.user,
             produs=produs
         )
 
-        # B. Limităm istoricul la ultimele 5 intrări
-        # Obținem ID-urile celor mai recente 5 vizualizări
         ultimele_ids = Vizualizare.objects.filter(
             utilizator=request.user
         ).order_by('-data_vizualizarii').values_list('id', flat=True)[:5]
 
-        # Ștergem tot ce nu se află în această listă de 5 ID-uri
+
         Vizualizare.objects.filter(
             utilizator=request.user
         ).exclude(id__in=ultimele_ids).delete()
-    # --- SFÂRȘIT COD NOU ---
 
-    # 2. Restul codului tău existent
+
+#---------------------------------------------------------------------------------------------------------------------------------
     produs_artist = get_object_or_404(Produs_Artist, produs=produs)
     campanii = Campanie_Promo.objects.filter(produs=produs)
-    
     return render(request, 'Magazin_de_muzica/Detalii_produs.html', {
         'produs': produs,
         'produs_artist': produs_artist,
@@ -636,54 +659,49 @@ def contact_view(request):
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+#laborator 8 task 2 ex 3
+#laborator 8 task 1 
+
+from django.http import HttpResponseForbidden
+from django.conf import settings
 from .forms import ProdusForm 
 
 def introducere_produs(request):
+    if not request.user.has_perm('Magazin_de_muzica.add_produs'):
+
+        counter = request.session.get('counter_403', 0)
+        counter += 1
+        request.session['counter_403'] = counter
+        context_error = {
+            'titlu': 'Eroare adaugare produse',
+            'mesaj_personalizat': 'Nu ai voie să adaugi produse muzicale', 
+            'counter': counter,
+            'n_max': getattr(settings, 'N_MAX_403', 5),
+        }
+        return HttpResponseForbidden(render(request, 'Magazin_de_muzica/eroare_403.html', context_error))
 
     if request.method == 'POST':
-
         form = ProdusForm(request.POST, request.FILES) 
-        
         if form.is_valid():
             try:
-                
                 produs = form.save(commit=True) 
-                
                 return redirect(reverse('lista_produse')) 
-
             except Exception as e:
-                
                 print(f"Eroare la salvarea produsului: {e}")
-                
                 form.add_error(None, "A apărut o eroare la salvarea în baza de date.")
-    
-    
     else:
-        
         form = ProdusForm() 
 
-    
     context = {
         'form': form,
         'titlu': 'Adaugă un Produs Nou'
     }
     return render(request, 'Magazin_de_muzica/adaugare_produs.html', context)
 
-
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 from django.core.mail import EmailMessage
 from django.core.mail import send_mail
-
-def trimite_email():
-    send_mail(
-        subject='Grigore Bianca grupa 234.',
-        message='Salut. Ce mai faci?',
-        html_message='<h1>Salut</h1><p>Ce mai faci?</p>',
-        from_email='adresa_email@gmail.com',
-        recipient_list=['destinatar@gmail.com'],
-        fail_silently=False,
-    )
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -707,18 +725,19 @@ from .forms import ProfilUserCreationForm, CustomAuthenticationForm
 def register_view(request):
     if request.method == 'POST':
         form = ProfilUserCreationForm(request.POST)
+        
 #laborator 7 
         username_input = request.POST.get('username', '').lower()
         email_input = request.POST.get('email', '')
         if username_input == 'bianca':
-            # Trimitem alerta
+            
             subiect = "cineva incearca sa ne preia site-ul"
             mesaj_text = f"Email utilizat: {email_input}"
             detalii_html = f"<p>O tentativă de înregistrare cu userul 'admin' a fost detectată.</p><p>Email: {email_input}</p>"
             
             trimite_alerta_admin(subiect, mesaj_text, detalii_html)
 
-            # Refuzăm înregistrarea
+            
             messages.error(request, "Acest username este interzis.")
             return render(request, 'Magazin_de_muzica/inregistrare.html', {'form': form})
 
@@ -741,6 +760,8 @@ def register_view(request):
 
             obj_site=Site.objects.get_current()
             domeniu=obj_site.domain
+
+
             url_imagine = f"http://{domeniu}{settings.STATIC_URL}imagini/Music.jpg"
             link_confirmare= f"http://{domeniu}/Magazin_de_muzica/confirma_mail/{cod_unic}/"
 
@@ -765,10 +786,10 @@ def register_view(request):
                 html_message=html_message,
                 fail_silently=False,
             )
-            
+
             messages.success(request, 'Cont creat. Verifică-ți e-mailul pentru a-l confirma!')
             return redirect('login') 
-            
+
     else:
         form = ProfilUserCreationForm()
     
@@ -780,29 +801,29 @@ from django.contrib.auth import login
 from .forms import ProfilUserCreationForm, CustomAuthenticationForm 
 from .models import Profil
 
-import time # <--- Asigură-te că ai acest import sus de tot
-
 def custom_login_view(request):
     if request.method == 'POST':
         form = CustomAuthenticationForm(data=request.POST, request=request)
-        
+
         if form.is_valid():
             user = form.get_user()
-            
+
             if user is not None:
-                # --- Lab 7 (Task 1) - Verificare Email ---
+
+
+                #Lab 7 email neconfirmat
                 if hasattr(user, 'profil') and not user.profil.email_confirmat:
                     messages.error(request, 'Trebuie să-ți confirmi adresa de e-mail înainte de a te loga.')
                     return redirect('login') 
 
-                # --- CERINȚA SECURITATE: Resetăm contorul la login reușit ---
+
                 if 'failed_login_attempts' in request.session:
                     del request.session['failed_login_attempts']
-                # -----------------------------------------------------------
+
 
                 login(request, user)
 
-                # --- Lab 6 - Sesiune ---
+                #Lab 6 
                 request.session['username'] = user.username
                 request.session['email'] = user.email
                 request.session['first_name'] = user.first_name
@@ -824,25 +845,27 @@ def custom_login_view(request):
                     request.session.set_expiry(0) 
 
                 return redirect('profil')
-        
-        # --- AICI ADAUGI LOGICA PENTRU LOGIN EȘUAT (CERINȚA 1) ---
+
+
         else:
-            # 1. Luăm datele necesare
+
+                #task 3 mai mukt de 3 incercari de logare sub 2 minute
+                
             username_incercat = request.POST.get('username', 'necunoscut')
             ip = request.META.get('REMOTE_ADDR')
             acum = time.time()
 
-            # 2. Gestionăm lista din sesiune
+
             attempts = request.session.get('failed_login_attempts', [])
-            
-            # Păstrăm doar încercările din ultimele 2 minute (120 secunde)
+
+
             attempts = [t for t in attempts if t > acum - 120]
-            
-            # Adăugăm încercarea curentă
+
+
             attempts.append(acum)
             request.session['failed_login_attempts'] = attempts
 
-            # 3. Verificăm pragul de 3 încercări
+
             if len(attempts) >= 3:
                 subiect = "Logari suspecte"
                 mesaj_text = f"Userul '{username_incercat}' a încercat să se logheze de 3 ori rapid de pe IP: {ip}"
@@ -855,15 +878,15 @@ def custom_login_view(request):
                         <li><strong>Număr încercări (ultimele 2 min):</strong> {len(attempts)}</li>
                     </ul>
                 """
-                
-                # Apelăm funcția helper definită anterior
+
+
                 trimite_alerta_admin(subiect, mesaj_text, detalii_html)
-                
-                # Opțional: Resetăm lista ca să nu trimită mail la fiecare click după al 3-lea
+
+
                 request.session['failed_login_attempts'] = [] 
 
             messages.error(request, "Nume de utilizator sau parolă incorectă.")
-        # ---------------------------------------------------------
+
 
     else:
         form = CustomAuthenticationForm()
@@ -898,8 +921,6 @@ def pagina_profil_view(request):
     return render(request, 'Magazin_de_muzica/profil.html', context)
 
 #---------------------------------------------------------------------------------------------------------------------------
-#schimbare parola 
-
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
@@ -910,7 +931,6 @@ def change_password_view(request):
         form = PasswordChangeForm(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
-            
             update_session_auth_hash(request, request.user) 
             messages.success(request, 'Parola a fost actualizata')
             return redirect('profil') 
@@ -918,7 +938,6 @@ def change_password_view(request):
             messages.error(request, 'Exista erori.')
     else:
         form = PasswordChangeForm(user=request.user)
-
     return render(request, 'Magazin_de_muzica/schimba_parola.html', {'form': form})
 
 #---------------------------------------------------------------------------------------------------------------------------
@@ -927,66 +946,46 @@ from django.conf import settings
 
 def confirma_email_view(request, cod):
     try: 
-        # Căutăm profilul după cod
         profil = get_object_or_404(Profil, cod=cod)
-
         if profil.email_confirmat:
             messages.warning(request, 'Adresa de e-mail a fost deja confirmată.')
         else:
-            # Setăm confirmarea pe True (conform cerinței Task 1)
             profil.email_confirmat = True
             profil.save()
             messages.success(request, 'Adresa de e-mail a fost confirmată cu succes! Te poți loga.')  
     except Exception as e:
         messages.error(request, 'Link de confirmare invalid.')
-
     return redirect('login')
 
 #---------------------------------------------------------------------------------------------------------------------------
-#laborator 7 task 2 
 
 from .forms import PromotiiForm
 from django.db.models import Count
 from django.core.mail import send_mass_mail
 from .models import Promotii, Vizualizare, Categorie, User
-
-
-
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
+#laborator 7 task 2
 
 def pagina_promotii(request):
     if request.method == 'POST':
         form = PromotiiForm(request.POST)
         if form.is_valid():
-            # 1. Salvăm promoția în baza de date
             promotie = form.save()
-            
-            # Datele necesare pentru filtrare și email
             categorii_alese = form.cleaned_data['categorii']
-            K = 2 # Pragul de vizualizări
-            datatuple = [] # Aici vom aduna toate mailurile
-
-            # Definim maparea: Categorie -> Template
+            K = 2 
+            datatuple = [] 
             template_map = {
                 'CD Rock': 'Magazin_de_muzica/email_promo_rock.txt',
                 'CD Pop': 'Magazin_de_muzica/email_promo_pop.txt',
-                # Alte categorii...
             }
-
-            # 2. Iterăm prin fiecare categorie selectată
             for categorie in categorii_alese:
-                # Căutăm userii care au >= K vizualizări la produse din ACEASTĂ categorie
                 useri_targetati = User.objects.filter(
                     vizualizare__produs__categorie=categorie
                 ).annotate(
                     nr_vizualizari=Count('vizualizare')
                 ).filter(nr_vizualizari__gte=K).distinct()
-
-                # Alegem template-ul corect
                 nume_cat = categorie.nume_categorie
                 fisier_template = template_map.get(nume_cat, 'Magazin_de_muzica/email_promo_pop.txt')
-
-                # Generăm mailul pentru fiecare user găsit în această categorie
                 for user in useri_targetati:
                     context = {
                         'subiect': promotie.subiect_email,
@@ -994,39 +993,26 @@ def pagina_promotii(request):
                         'nume_categorie': nume_cat,
                         'data_expirare': promotie.data_expirare.strftime('%d-%m-%Y'),
                         'procent': promotie.procent_reducere,
-                        # Luăm mesajul extra din FORMULAR, nu din model
                         'mesaj_extra': form.cleaned_data['mesaj'] 
                     }
-                    
                     mesaj_text = render_to_string(fisier_template, context)
-                    
-                    # Construim obiectul de email
                     email_obj = (
                         promotie.subiect_email,
                         mesaj_text,
-                        'biancagrigore208@gmail.com', # Sender
-                        [user.email] # Recipient
+                        'biancagrigore208@gmail.com',
+                        [user.email]
                     )
                     datatuple.append(email_obj)
-
-            # 3. Trimitem mailurile (Zona TRY...EXCEPT cerută)
             try:
                 if datatuple:
-                    # Linia critică de trimitere
                     send_mass_mail(tuple(datatuple), fail_silently=False)
                     messages.success(request, f"Promoția a fost salvată și au fost trimise {len(datatuple)} mailuri!")
                 else:
                     messages.warning(request, "Promoția a fost salvată, dar niciun user nu a îndeplinit condiția K vizualizări.")
-            
             except Exception as e:
-                # --- Aici tratăm eroarea și alertăm adminii ---
                 subiect_eroare = "Eroare Trimitere Promotii"
                 eroare_str = str(e)
-                
-                # Mesaj text simplu
                 mesaj_text_admin = f"A apărut o eroare la send_mass_mail: {eroare_str}"
-                
-                # Mesaj HTML cu background roșu (conform cerinței)
                 html_eroare = f"""
                 <p>A apărut o excepție în timpul trimiterii promoțiilor:</p>
                 <div style="background-color: red; color: white; padding: 15px; border-radius: 5px; font-family: monospace;">
@@ -1034,17 +1020,89 @@ def pagina_promotii(request):
                     {eroare_str}
                 </div>
                 """
-                
-                # Apelăm funcția helper
                 trimite_alerta_admin(subiect_eroare, mesaj_text_admin, html_eroare)
-                
-                # Anunțăm utilizatorul din interfață că a apărut o problemă
                 messages.error(request, "A apărut o eroare tehnică la trimiterea email-urilor. Administratorii au fost notificați.")
-
             return redirect('pagina_promotii')
     else:
         form = PromotiiForm()
-
     return render(request, 'Magazin_de_muzica/promotii.html', {'form': form})
 
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+#lablrator 8 task 4
+
+from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Permission
+from django.http import HttpResponseForbidden
+from django.conf import settings
+
+@login_required
+def revendica_oferta(request):
+    # 1. Găsim permisiunea (Slide 122)
+    permisiune = Permission.objects.get(codename='vizualizeaza_oferta')
+    
+    # 2. O adăugăm utilizatorului curent (Slide 123)
+    request.user.user_permissions.add(permisiune)
+    
+    # 3. Redirecționăm la ofertă
+    return redirect('pagina_oferta')
+
+
+def afisare_oferta(request):
+    # Verificăm dacă are permisiunea (Slide 133)
+    if not request.user.has_perm('Magazin_de_muzica.vizualizeaza_oferta'):
+        
+        # Logica pentru task-ul 1 (contorizare)
+        counter = request.session.get('counter_403', 0) + 1
+        request.session['counter_403'] = counter
+        
+        context_error = {
+            'titlu': 'Eroare afisare oferta',
+            'mesaj_personalizat': 'Nu ai voie să vizualizezi oferta',
+            'counter': counter,
+            'n_max': getattr(settings, 'N_MAX_403', 5),
+        }
+        
+        # Returnăm eroarea folosind template-ul (Slide 424)
+        return HttpResponseForbidden(render(request, 'Magazin_de_muzica/eroare_403.html', context_error))
+
+    return render(request, 'Magazin_de_muzica/oferta-speciala.html')
+
+# views.py
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
+def custom_logout(request):
+    # Verificăm dacă userul e logat ca să nu dea eroare
+    if request.user.is_authenticated:
+        try:
+            # 1. Identificăm permisiunea (Slide 146)
+            permisiune = Permission.objects.get(codename='vizualizeaza_oferta')
+            
+            # 2. O ștergem de la utilizator (Slide 109)
+            request.user.user_permissions.remove(permisiune)
+            print(f"Permisiunea a fost ștearsă pentru {request.user.username}")
+            
+        except Permission.DoesNotExist:
+            pass # Dacă permisiunea nu există, nu facem nimic
+
+    logout(request)
+    return redirect('login') 
+
+# def setup_permisiune(request):
+#     content_type = ContentType.objects.get_for_model(Produs)
+    
+#     # Folosim get_or_create ca să nu primim eroare dacă dăm refresh
+#     perm, created = Permission.objects.get_or_create(
+#         codename='vizualizeaza_oferta',
+#         defaults={
+#             'name': 'Poate vizualiza oferta speciala',
+#             'content_type': content_type
+#         }
+#     )
+    
+#     if created:
+#         return HttpResponse("Succes! Permisiunea a fost creată.")
+#     else:
+#         return HttpResponse("Permisiunea exista deja.")

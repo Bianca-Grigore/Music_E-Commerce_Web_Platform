@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Acces Interzis</title>
+</head>
+<body>
+
+    <h1>{{ titlu|default:"Eroare 403" }}</h1>
+
+    <p>
+        {% if user.is_authenticated %}
+            Salut {{ user.username }}
+        {% else %}
+            Salut preastimate anonim
+        {% endif %}
+    </p>
+
+    <p><strong>Mesaj sistem:</strong> {{ mesaj_personalizat }}</p>
+
+    <hr>
+
+    <p>Ați accesat pagini interzise de {{ counter }} ori în această sesiune.</p>
+
+    {% if counter > n_max %}
+        <p style="color: red; font-weight: bold;">
+            ATENȚIE: Ați accesat resurse nepermise de prea multe ori!
+        </p>
+    {% endif %}
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+{% extends './baza.html' %}
+
+{% block title %}Oferta Speciala{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 50px;">
+    <h1 style="color: green; font-size: 3em;">🎉 FELICITĂRI! 🎉</h1>
+    
+    <h2 style="margin-top: 20px;">Ai deblocat Oferta Secretă!</h2>
+    
+    <div style="background-color: #f9f9f9; border: 2px dashed red; padding: 20px; margin: 30px auto; max-width: 600px;">
+        <h3>Cod Reducere: <span style="color: red; font-weight: bold;">MUZICA50</span></h3>
+        <p>Folosește acest cod la finalizarea comenzii pentru a primi <strong>50% reducere</strong> la orice chitară.</p>
+        <p><em>Ofertă valabilă doar pentru tine, cât timp rămâi logat.</em></p>
+    </div>
+
+    <a href="{% url 'lista_produse' %}" style="background-color: #333; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Vezi Produsele</a>
+</div>
+{% endblock %}

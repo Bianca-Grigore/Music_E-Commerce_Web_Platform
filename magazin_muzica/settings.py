@@ -64,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'Magazin_de_muzica.context_processors.categorii_context',
             ],
         },
     },
@@ -161,3 +162,5 @@ SITE_ID = 1
 ADMINS = [('Admin1', 'grigorebianca76@gmail.com'),
         ('Admin2', 'biancagrigore208@gmail.com'),
         ]
+
+N_MAX_403=5

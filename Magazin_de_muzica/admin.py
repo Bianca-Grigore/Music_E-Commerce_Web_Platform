@@ -17,22 +17,39 @@ admin.site.register(Vizualizare)
 from .models import Promotii
 admin.site.register(Promotii)
 
-class ProfilAdmin(admin.ModelAdmin):
-    list_display = ('user', 'telefon', 'tara', 'judet', 'oras', 'strada', 'cod', 'email_confirmat')
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
+from .models import Profil
+class ProfilInline(admin.StackedInline):
+    model = Profil
+    can_delete = False
+    verbose_name_plural = 'Profil Utilizator'
+
+class UserAdmin(BaseUserAdmin):
+    inlines = (ProfilInline,)
+
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
+
+# class ProfilAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'telefon', 'tara', 'judet', 'oras', 'strada', 'cod', 'email_confirmat')
     
-    search_fields = ('user__username', 'telefon', 'tara', 'judet', 'oras', 'strada', 'cod')  
-    fieldsets = (
-        ('Informații Utilizator', {
-            'fields': ('user',)
-        }),
-        ('Informații Contact', {
-            'fields': ('telefon', 'tara', 'judet', 'oras', 'strada')
-        }),
-        ('Verificare Email', {
-            'fields': ('cod', 'email_confirmat')
-        }),
-    )
-admin.site.register(Profil, ProfilAdmin)
+#     search_fields = ('user__username', 'telefon', 'tara', 'judet', 'oras', 'strada', 'cod')  
+#     fieldsets = (
+#         ('Informații Utilizator', {
+#             'fields': ('user',)
+#         }),
+#         ('Informații Contact', {
+#             'fields': ('telefon', 'tara', 'judet', 'oras', 'strada')
+#         }),
+#         ('Verificare Email', {
+#             'fields': ('cod', 'email_confirmat')
+#         }),
+#     )
+# admin.site.register(Profil, ProfilAdmin)
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 class ProdusAdmin(admin.ModelAdmin):
     ordering = ['pret']

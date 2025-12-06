@@ -20,11 +20,11 @@ class Promotii(models.Model):
 class Vizualizare(models.Model):
     utilizator = models.ForeignKey(User, on_delete=models.CASCADE)
     produs=models.ForeignKey('Produs', on_delete=models.CASCADE)
-    # Folosim auto_now=True pentru ca data să se actualizeze de fiecare dată 
-    # când utilizatorul revede același produs (îl aduce în capul listei)
+
+
     data_vizualizarii = models.DateTimeField(auto_now=True)
     class Meta:
-        ordering=['-data_vizualizarii'] #cele mai recente primele
+        ordering=['-data_vizualizarii'] 
     def __str__(self):
         return f"{self.utilizator.username} a vizualizat {self.produs.denumire}"
 

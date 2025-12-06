@@ -27,4 +27,8 @@ urlpatterns = [
     path('confirma_mail/<str:cod>/', views.confirma_email_view, name='confirma_mail'),
     path('promotii/', views.pagina_promotii, name='pagina_promotii'),
     path('trimite_alerta_admin', views.trimite_alerta_admin, name='trimite_alerta_admin'),
+    path('revendica-oferta/', views.revendica_oferta, name='revendica_oferta'),
+    path('oferta-speciala/', views.afisare_oferta, name='pagina_oferta'),
+    path('logout/', views.custom_logout, name='custom_logout'),
+    #path('setup-permisiune/', views.setup_permisiune, name='setup_permisiune'),
 ]

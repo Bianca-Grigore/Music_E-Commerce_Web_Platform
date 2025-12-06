@@ -5,7 +5,6 @@ from datetime import date, timedelta
 import re
 from django.core.validators import MinValueValidator
 from decimal import Decimal
-#-------------------------------------------------------------
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -14,12 +13,13 @@ from .models import Promotii
 #-------------------------------------------------------------
 
 class PromotiiForm(forms.ModelForm):
-    categorii=forms.ModelMultipleChoiceField(
-        queryset=Categorie.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        label='Alegeti categoriile pentru promotie',
-        required=True
-)
+    categorii = forms.ModelMultipleChoiceField(
+
+    queryset = Categorie.objects.filter(nume_categorie__in=['CD Rock', 'CD Pop']), 
+    widget = forms.CheckboxSelectMultiple,
+    label = 'Alegeti categoriile pentru promotie',
+    required = True
+)   
     data_expirare = forms.DateTimeField(
         label='Data Expirare',
         widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
@@ -117,7 +117,7 @@ class CustomAuthenticationForm(AuthenticationForm):
         cleaned_data = super().clean()
         ramane_logat = self.cleaned_data.get('ramane_logat')
         return cleaned_data
-    
+
 #-----------------------------------------------------------------------------------------------------------------------------
 
 PAGINATION_CHOICES = [
@@ -199,9 +199,7 @@ class ProductFilterForm(forms.Form):
         required=False,
         initial=PAGINATION_CHOICES[0][0] 
     )
-    
-    
-    
+
     def clean(self):
         cleaned_data = super().clean()
         pret_min = cleaned_data.get('pret_min')
@@ -223,7 +221,6 @@ class ProductFilterForm(forms.Form):
             raise forms.ValidationError('Data adăugării minime nu poate fi după data maximă.')
 
         return cleaned_data
-
 
 #-----------------------------------------------------------------------------------------------------------------------------
 
@@ -449,18 +446,6 @@ def clean(self):
 
         return cleaned_data
 
-
-
-
-
-
-
-
-
-
-
-
-
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 def validator_fara_cifre(value):
@@ -482,6 +467,11 @@ def validator_multiplu_zece(value):
     if value % 10 != 0:
         raise ValidationError('Stocul inițial trebuie să fie un multiplu de 10.', code='nu_multiplu_zece')
 
+
+
+
+
+
 class ProdusForm(forms.ModelForm):
     pret_cumparare = forms.DecimalField(
         max_digits= 10,
@@ -497,6 +487,10 @@ class ProdusForm(forms.ModelForm):
         validators=[MinValueValidator(10, message="Adaosul minim este 10%")],
         error_messages={'required': "Vă rugăm introduceți procentul de adaos comercial."},
     )
+    
+    
+    
+    
     class Meta:
         model = Produs 
         fields = ['categorie', 'denumire', 'stoc', 'campanii', 'imagine']
@@ -516,7 +510,10 @@ class ProdusForm(forms.ModelForm):
             },
 
         }
-        
+
+
+
+
     def clean_denumire(self):
         denumire=self.cleaned_data.get('denumire')
         validator_lungime_minima(denumire)
@@ -546,6 +543,9 @@ class ProdusForm(forms.ModelForm):
                     )
 
             return cleaned_data
+
+
+
     def save(self, commit=True):
             
             produs = super().save(commit=False)
