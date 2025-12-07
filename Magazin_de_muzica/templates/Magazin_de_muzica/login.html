@@ -1,5 +1,19 @@
 {% extends "./baza.html" %}
 {%block content%}
+{% comment %} laborator 8 task 4  {% endcomment %}
+{% if messages %}
+    <div class="mesaje-eroare">
+        {% for message in messages %}
+            <p class="alert {{ message.tags }}" style="color: red; font-weight: bold; background-color: #ffe6e6; padding: 10px; border: 1px solid red;">
+                {{ message }}
+            </p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+
+
 <form method="post">
     {% csrf_token %}
     

@@ -40,6 +40,7 @@ class Profil(models.Model):
 
     cod=models.CharField(max_length=100, blank=True, null=True, unique=True)
     email_confirmat=models.BooleanField(max_length=255, default=False)
+    blocat = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Profil pentru {self.user.username}"

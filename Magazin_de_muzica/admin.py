@@ -21,33 +21,49 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from .models import Profil
+
+#laborator 8 task 4 
 class ProfilInline(admin.StackedInline):
     model = Profil
     can_delete = False
     verbose_name_plural = 'Profil Utilizator'
 
-class UserAdmin(BaseUserAdmin):
+    def get_readonly_fields(self, request, obj=None):
+
+        if request.user.groups.filter(name='Moderatori').exists() and not request.user.is_superuser:
+
+            return ['telefon', 'tara', 'judet', 'oras', 'strada', 'cod', 'email_confirmat']
+        return []
+
+class CustomUserAdmin(BaseUserAdmin):
     inlines = (ProfilInline,)
 
-admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
+    def get_readonly_fields(self, request, obj=None):
 
-# class ProfilAdmin(admin.ModelAdmin):
-#     list_display = ('user', 'telefon', 'tara', 'judet', 'oras', 'strada', 'cod', 'email_confirmat')
-    
-#     search_fields = ('user__username', 'telefon', 'tara', 'judet', 'oras', 'strada', 'cod')  
-#     fieldsets = (
-#         ('Informații Utilizator', {
-#             'fields': ('user',)
-#         }),
-#         ('Informații Contact', {
-#             'fields': ('telefon', 'tara', 'judet', 'oras', 'strada')
-#         }),
-#         ('Verificare Email', {
-#             'fields': ('cod', 'email_confirmat')
-#         }),
-#     )
-# admin.site.register(Profil, ProfilAdmin)
+        if request.user.groups.filter(name='Moderatori').exists() and not request.user.is_superuser:
+
+            return [
+                'username', 'password', 'last_login', 'date_joined', 
+                'is_superuser', 'is_staff', 'is_active', 
+                'groups', 'user_permissions'
+            ]
+        return super().get_readonly_fields(request, obj)
+
+    def get_fieldsets(self, request, obj=None):
+
+        if request.user.groups.filter(name='Moderatori').exists() and not request.user.is_superuser:
+            return (
+                ('Informații Cont', {'fields': ('username',)}), 
+                ('Date Personale (Editabile)', {'fields': ('first_name', 'last_name', 'email')}), 
+                ('Status', {'fields': ('is_active', 'is_staff')}), 
+            )
+        return super().get_fieldsets(request, obj)
+
+
+admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)
+
+
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

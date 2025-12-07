@@ -320,12 +320,14 @@ def afis_template(request):
 
 def afis_produse(request):
     salvare_accesari(request, "Pagina produselor")
-    produse=Produs.objects.all()
-    return render(request, "Magazin_de_muzica/produse.html",
-        {          
-            "produse": produse[0], 
-        }
-    )
+    
+    # [DEBUG 1] Mesaj de depanare la accesarea listei simple
+    messages.debug(request, "DEBUG: S-a accesat view-ul simplu 'afis_produse'.")
+    
+    produse = Produs.objects.all()
+    # Tratare caz lista goală pentru a evita index error
+    context = {"produse": produse[0]} if produse.exists() else {"produse": None}
+    return render(request, "Magazin_de_muzica/produse.html", context)
 
 #TASK 2 LAB 2
 
@@ -349,8 +351,12 @@ def cos_virtual(request):
 
 def in_lucru(request):
     salvare_accesari(request, "Pagina in lucru")
+    
+    # [INFO 1] Mesaj informativ pentru utilizator
+    messages.info(request, "Această funcționalitate este momentan în dezvoltare. Te rugăm să revii mai târziu!")
+    
     context = {'user_ip': get_client_ip(request)}
-    return render(request, "Magazin_de_muzica/in_lucru.html", context) 
+    return render(request, "Magazin_de_muzica/in_lucru.html", context)
 
 def baza(request):
     salvare_accesari(request, "Pagina de baza")
@@ -392,8 +398,8 @@ def lista_produse(request):
 
 def detalii_produs(request, produs_id):
     produs = get_object_or_404(Produs, id=produs_id)
-
-#laborator 7 task 2 exercitiul 1 si 2
+    messages.debug(request, f"DEBUG: Se vizualizează detaliile pentru produsul ID: {produs_id}")
+    
     if request.user.is_authenticated:
 
         Vizualizare.objects.update_or_create(
@@ -411,7 +417,6 @@ def detalii_produs(request, produs_id):
         ).exclude(id__in=ultimele_ids).delete()
 
 
-#---------------------------------------------------------------------------------------------------------------------------------
     produs_artist = get_object_or_404(Produs_Artist, produs=produs)
     campanii = Campanie_Promo.objects.filter(produs=produs)
     return render(request, 'Magazin_de_muzica/Detalii_produs.html', {
@@ -541,13 +546,20 @@ def product_list_view(request, categorie_slug=None):
     except Exception:
         page_obj=paginator.get_page(1)
 
+
+
+    if request.GET and not page_obj.object_list:
+        # [WARNING 1] Avertisment că filtrele sunt prea restrictive
+        messages.warning(request, "Nu au fost găsite produse care să corespundă filtrelor selectate.") 
+
+
     context ={
         'filter_form': filter_form,
         'page_obj': page_obj,
         'categorie_selectata': categorie_selectata,
         'repaginare_warning': repaginare_warning,
         'sort': sort_param,
-    }     
+    }    
     return render(request, 'Magazin_de_muzica/produse.html', context)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -685,10 +697,18 @@ def introducere_produs(request):
         if form.is_valid():
             try:
                 produs = form.save(commit=True) 
+
+                # [SUCCESS 1] Confirmare adăugare produs
+                messages.success(request, f"Produsul '{produs.denumire}' a fost adăugat cu succes în baza de date!")
                 return redirect(reverse('lista_produse')) 
+
             except Exception as e:
                 print(f"Eroare la salvarea produsului: {e}")
-                form.add_error(None, "A apărut o eroare la salvarea în baza de date.")
+                # [ERROR 1] Eroare tehnică la salvare
+                messages.error(request, "A apărut o eroare critică la salvarea în baza de date.")
+        else:
+            # [ERROR 2] Eroare validare formular (generic)
+            messages.error(request, "Formularul conține erori. Verifică datele introduse.")
     else:
         form = ProdusForm() 
 
@@ -725,48 +745,28 @@ from .forms import ProfilUserCreationForm, CustomAuthenticationForm
 def register_view(request):
     if request.method == 'POST':
         form = ProfilUserCreationForm(request.POST)
-        
-#laborator 7 
         username_input = request.POST.get('username', '').lower()
         email_input = request.POST.get('email', '')
         if username_input == 'bianca':
-            
             subiect = "cineva incearca sa ne preia site-ul"
             mesaj_text = f"Email utilizat: {email_input}"
             detalii_html = f"<p>O tentativă de înregistrare cu userul 'admin' a fost detectată.</p><p>Email: {email_input}</p>"
-            
             trimite_alerta_admin(subiect, mesaj_text, detalii_html)
-
-            
             messages.error(request, "Acest username este interzis.")
             return render(request, 'Magazin_de_muzica/inregistrare.html', {'form': form})
-
-
-
         if form.is_valid():
-            
             user = form.save()
-
-
             cod_unic = str(uuid.uuid4())
-
             if hasattr(user, 'profil'):
                 user.profil.cod = cod_unic
                 user.profil.email_confirmat = False 
                 user.profil.save()
             else:
-
                 Profil.objects.create(user=user, cod=cod_unic, email_confirmat=False)
-
             obj_site=Site.objects.get_current()
             domeniu=obj_site.domain
-
-
             url_imagine = f"http://{domeniu}{settings.STATIC_URL}imagini/Music.jpg"
             link_confirmare= f"http://{domeniu}/Magazin_de_muzica/confirma_mail/{cod_unic}/"
-
-
-
             context = {
                 'nume': user.first_name,
                 'prenume': user.last_name,
@@ -774,10 +774,8 @@ def register_view(request):
                 'link_confirmare': link_confirmare,
                 'url_imagine': url_imagine,
             }
-
             html_message = render_to_string('email/confirmare_email.html', context)
             plain_message = strip_tags(html_message)
-
             send_mail(
                 subject='Confirmare Adresă de E-mail',
                 message=plain_message,
@@ -786,11 +784,13 @@ def register_view(request):
                 html_message=html_message,
                 fail_silently=False,
             )
-
             messages.success(request, 'Cont creat. Verifică-ți e-mailul pentru a-l confirma!')
             return redirect('login') 
-
     else:
+
+
+        # [INFO 2] Mesaj informativ la afișarea formularului
+        messages.info(request, "Pentru siguranță, alege o parolă complexă și un email valid.")
         form = ProfilUserCreationForm()
     
     return render(request, 'Magazin_de_muzica/inregistrare.html', {'form': form})
@@ -809,9 +809,13 @@ def custom_login_view(request):
             user = form.get_user()
 
             if user is not None:
+#laborator 8 task 4
+                if hasattr(user, 'profil') and user.profil.blocat:
+                    messages.error(request, "Contul tău a fost blocat. Contactează un administrator.")
+                    return redirect('login')
 
 
-                #Lab 7 email neconfirmat
+
                 if hasattr(user, 'profil') and not user.profil.email_confirmat:
                     messages.error(request, 'Trebuie să-ți confirmi adresa de e-mail înainte de a te loga.')
                     return redirect('login') 
