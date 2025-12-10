@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'Magazin_de_muzica.apps.MagazinDeMuzicaConfig',
-    
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 import uuid 
+from django.urls import reverse
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 class Promotii(models.Model):
@@ -135,6 +136,8 @@ class Categorie(models.Model):
     ]
     tip_categorie = models.CharField(max_length=1, choices=TIP_CATEGORIE, default='C') 
     culoare =models.CharField(max_length=20, default='#6A5ACD')
+    def get_absolute_url(self):
+        return reverse('produse_dupa_categorie', kwargs={'nume_categorie': self.nume_categorie})
     def __str__(self):
         return self.nume_categorie
 
@@ -150,7 +153,8 @@ class Campanie_Promo(models.Model):
         ('B', 'BlackFriday')
     ]
     tip_campanie = models.CharField(max_length=1, choices=TIP_CAMPANIE, default='S')  
-
+    def get_absolute_url(self):
+        return reverse('detaliu_campanie', kwargs={'pk': self.pk})
     def __str__(self):
         return self.nume_campanie
 
@@ -162,6 +166,10 @@ class Produs(models.Model):
     campanii = models.ManyToManyField(Campanie_Promo, blank=True)
     data_adaugare = models.DateTimeField(default=timezone.now)  
     imagine = models.ImageField(upload_to='produse/', blank=True, null=True) 
+    
+    def get_absolute_url(self):
+
+        return reverse('Detalii_produs', kwargs={'pk': self.pk})
     
     def __str__(self):
         return self.denumire
@@ -202,7 +210,9 @@ class Artist(models.Model):
     ]
     tip_activitate = models.CharField(max_length=1, choices=TIP_ACTIVITATE, default='S') 
     data_adaugare = models.DateTimeField(default=timezone.now) 
-
+    def get_absolute_url(self):
+        return reverse('detaliu_artist', kwargs={'pk': self.pk})
+    
     def __str__(self):
-        return self.nume
+        return self.nume 
 

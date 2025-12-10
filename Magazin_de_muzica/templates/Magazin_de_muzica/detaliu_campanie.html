@@ -1,0 +1,7 @@
+<h1>{{ campanie.nume_campanie }}</h1>
+<p>Incepe la: {{ campanie.data_inceput }}</p>
+<ul>
+{% for produs in produse %}
+    <li>{{ produs.denumire }}</li>
+{% endfor %}
+</ul>

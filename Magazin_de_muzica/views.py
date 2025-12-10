@@ -25,7 +25,6 @@ from .models import Promotii
 
 accesari = []
 
-#laborator 7 task 3 
 from django.core.mail import mail_admins
 from django.template.loader import render_to_string
 
@@ -138,7 +137,7 @@ def test_accesare(request):
         </html>
     """)
 
-#laborator 8 task 2 ex 3
+#laborator 8 task 2 ex 4
 def info(request):
     is_admin_site = request.user.groups.filter(name='Administratori_site').exists()
 
@@ -155,11 +154,12 @@ def info(request):
             'n_max': getattr(settings, 'N_MAX_403', 5),
         }
         return HttpResponseForbidden(render(request, 'Magazin_de_muzica/eroare_403.html', context_error))
+
     else: 
         salvare_accesari(request, "Pagina info")
         parametru = request.GET.get("data") 
         afisat = ""
-        
+
         if parametru:
             afisat = afis_data(parametru)
             
@@ -173,7 +173,6 @@ def info(request):
                 <p>Nume parametri: {nume_param}</p>
             </section>
         """
-
         return render(request, "Magazin_de_muzica/info.html", {"continut": afisat, "sectiune_parametri": sectiune_parametri })
 
 def salvare_accesari(request,nume_pagina):
@@ -185,7 +184,6 @@ def salvare_accesari(request,nume_pagina):
     )
     accesari.append(a)
 
-#LABORATOR 2 TEMA
 #laborator 8 task 2 ex 4
 from django.contrib.auth.models import Group, User
 def log(request):
@@ -318,18 +316,17 @@ def afis_template(request):
     }
     return render(request, "Magazin_de_muzica/exemplu.html", context)
 
+#laborator 9
+
 def afis_produse(request):
     salvare_accesari(request, "Pagina produselor")
     
-    # [DEBUG 1] Mesaj de depanare la accesarea listei simple
+    # DEBUG 1
     messages.debug(request, "DEBUG: S-a accesat view-ul simplu 'afis_produse'.")
     
     produse = Produs.objects.all()
-    # Tratare caz lista goală pentru a evita index error
     context = {"produse": produse[0]} if produse.exists() else {"produse": None}
     return render(request, "Magazin_de_muzica/produse.html", context)
-
-#TASK 2 LAB 2
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -349,10 +346,11 @@ def cos_virtual(request):
     context = {'user_ip': get_client_ip(request)}
     return render(request, "Magazin_de_muzica/in_lucru.html", context)
 
+#laborator 9 
 def in_lucru(request):
     salvare_accesari(request, "Pagina in lucru")
     
-    # [INFO 1] Mesaj informativ pentru utilizator
+    # INFO 1
     messages.info(request, "Această funcționalitate este momentan în dezvoltare. Te rugăm să revii mai târziu!")
     
     context = {'user_ip': get_client_ip(request)}
@@ -395,9 +393,10 @@ def lista_produse(request):
         })
 
 #----------------------------------------------------------------------------------------------------------------------------------
-
+#laborator 9
 def detalii_produs(request, produs_id):
     produs = get_object_or_404(Produs, id=produs_id)
+    # DEBUG 2
     messages.debug(request, f"DEBUG: Se vizualizează detaliile pentru produsul ID: {produs_id}")
     
     if request.user.is_authenticated:
@@ -450,6 +449,8 @@ def produse_dupa_categorie(request, nume_categorie):
     })
 
 #----------------------------------------------------------------------------------------------------------------------------------
+
+#laborator 9 
 
 def product_list_view(request, categorie_slug=None):
     produse = Produs.objects.all()
@@ -549,7 +550,7 @@ def product_list_view(request, categorie_slug=None):
 
 
     if request.GET and not page_obj.object_list:
-        # [WARNING 1] Avertisment că filtrele sunt prea restrictive
+        # WARNING 1
         messages.warning(request, "Nu au fost găsite produse care să corespundă filtrelor selectate.") 
 
 
@@ -671,6 +672,7 @@ def contact_view(request):
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+#laborator 9 
 #laborator 8 task 2 ex 3
 #laborator 8 task 1 
 
@@ -698,16 +700,16 @@ def introducere_produs(request):
             try:
                 produs = form.save(commit=True) 
 
-                # [SUCCESS 1] Confirmare adăugare produs
+                # SUCCESS 1
                 messages.success(request, f"Produsul '{produs.denumire}' a fost adăugat cu succes în baza de date!")
                 return redirect(reverse('lista_produse')) 
 
             except Exception as e:
                 print(f"Eroare la salvarea produsului: {e}")
-                # [ERROR 1] Eroare tehnică la salvare
+                # ERROR 1
                 messages.error(request, "A apărut o eroare critică la salvarea în baza de date.")
         else:
-            # [ERROR 2] Eroare validare formular (generic)
+            # ERROR 2
             messages.error(request, "Formularul conține erori. Verifică datele introduse.")
     else:
         form = ProdusForm() 
@@ -725,8 +727,6 @@ from django.core.mail import send_mail
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-#Laborator 6 view de la forms 
-
 from .forms import ProfilUserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, update_session_auth_hash
@@ -741,6 +741,8 @@ import uuid
 from django.contrib.sites.models import Site
 from .models import Profil
 from .forms import ProfilUserCreationForm, CustomAuthenticationForm 
+
+#laborator 9 
 
 def register_view(request):
     if request.method == 'POST':
@@ -789,17 +791,18 @@ def register_view(request):
     else:
 
 
-        # [INFO 2] Mesaj informativ la afișarea formularului
+        # INFO 2
         messages.info(request, "Pentru siguranță, alege o parolă complexă și un email valid.")
         form = ProfilUserCreationForm()
     
     return render(request, 'Magazin_de_muzica/inregistrare.html', {'form': form})
 #---------------------------------------------------------------------------------------------------------------------------
-#Laborator 6 exercitiul 4 view pentru login cu optiunea ramane_logat
 
 from django.contrib.auth import login
 from .forms import ProfilUserCreationForm, CustomAuthenticationForm 
 from .models import Profil
+
+#laborator 8 
 
 def custom_login_view(request):
     if request.method == 'POST':
@@ -852,9 +855,6 @@ def custom_login_view(request):
 
 
         else:
-
-                #task 3 mai mukt de 3 incercari de logare sub 2 minute
-                
             username_incercat = request.POST.get('username', 'necunoscut')
             ip = request.META.get('REMOTE_ADDR')
             acum = time.time()
@@ -1041,23 +1041,19 @@ from django.contrib.auth.models import Permission
 from django.http import HttpResponseForbidden
 from django.conf import settings
 
+#laborator 8 task 3 
+
 @login_required
 def revendica_oferta(request):
-    # 1. Găsim permisiunea (Slide 122)
     permisiune = Permission.objects.get(codename='vizualizeaza_oferta')
-    
-    # 2. O adăugăm utilizatorului curent (Slide 123)
     request.user.user_permissions.add(permisiune)
-    
-    # 3. Redirecționăm la ofertă
     return redirect('pagina_oferta')
 
 
 def afisare_oferta(request):
-    # Verificăm dacă are permisiunea (Slide 133)
+
     if not request.user.has_perm('Magazin_de_muzica.vizualizeaza_oferta'):
         
-        # Logica pentru task-ul 1 (contorizare)
         counter = request.session.get('counter_403', 0) + 1
         request.session['counter_403'] = counter
         
@@ -1067,32 +1063,28 @@ def afisare_oferta(request):
             'counter': counter,
             'n_max': getattr(settings, 'N_MAX_403', 5),
         }
-        
-        # Returnăm eroarea folosind template-ul (Slide 424)
+
         return HttpResponseForbidden(render(request, 'Magazin_de_muzica/eroare_403.html', context_error))
 
     return render(request, 'Magazin_de_muzica/oferta-speciala.html')
 
-# views.py
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 
 def custom_logout(request):
-    # Verificăm dacă userul e logat ca să nu dea eroare
     if request.user.is_authenticated:
         try:
-            # 1. Identificăm permisiunea (Slide 146)
             permisiune = Permission.objects.get(codename='vizualizeaza_oferta')
-            
-            # 2. O ștergem de la utilizator (Slide 109)
             request.user.user_permissions.remove(permisiune)
             print(f"Permisiunea a fost ștearsă pentru {request.user.username}")
             
         except Permission.DoesNotExist:
-            pass # Dacă permisiunea nu există, nu facem nimic
-
+            pass 
     logout(request)
     return redirect('login') 
+
+
+#laborator 8 task 3 exercitiul 1
 
 # def setup_permisiune(request):
 #     content_type = ContentType.objects.get_for_model(Produs)
@@ -1110,3 +1102,26 @@ def custom_logout(request):
 #         return HttpResponse("Succes! Permisiunea a fost creată.")
 #     else:
 #         return HttpResponse("Permisiunea exista deja.")
+
+
+#laborator 9 task 2
+def vizualizare_produs(request, pk):
+    produs = get_object_or_404(Produs, pk=pk)
+    return render(request, 'Magazin_de_muzica/Detalii_produs.html', {'produs': produs})
+
+
+def produse_dupa_categorie(request, nume_categorie):
+    categorie = get_object_or_404(Categorie, nume_categorie=nume_categorie)
+    produse = Produs.objects.filter(categorie=categorie)
+    return render(request, 'Magazin_de_muzica/produse_categorie.html', {'categorie': categorie, 'produse': produse})
+
+
+from .models import Artist
+def detalii_artist(request, pk):
+    artist = get_object_or_404(Artist, pk=pk)
+    return render(request, 'Magazin_de_muzica/detaliu_artist.html', {'artist': artist})
+
+def detalii_campanie(request, pk):
+    campanie = get_object_or_404(Campanie_Promo, pk=pk)
+    produse = campanie.produs_set.all() 
+    return render(request, 'Magazin_de_muzica/detaliu_campanie.html', {'campanie': campanie, 'produse': produse})

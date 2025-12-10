@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Categorie Produse</title>
+    <style>
+        .lista-produse { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 20px; }
+        .produs-card { border: 1px solid #ccc; padding: 10px; text-align: center; }
+        .pret { color: green; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1>Categoria: {{ categorie.nume }}</h1>
+    <hr>
+
+    <div class="lista-produse">
+        {% for produs in produse %}
+            <div class="produs-card">
+                <h3>{{ produs.denumire }}</h3>
+                
+                <p class="pret">Preț: {{ produs.pret }} RON</p>
+                
+                <a href="{{ produs.get_absolute_url }}">Vezi detalii</a>
+            </div>
+        {% empty %}
+            <p>Nu am găsit produse în această categorie.</p>
+        {% endfor %}
+    </div>
+
+    <br>
+    <a href="/">Înapoi acasă</a>
+
+</body>
+</html>
