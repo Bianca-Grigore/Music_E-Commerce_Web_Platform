@@ -169,7 +169,6 @@ from django.contrib.messages import constants as message_constants
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
-#Personalizarea nivelurilor de mesaje:
 MESSAGE_TAGS = {
     message_constants.DEBUG: 'debug',
     message_constants.INFO: 'info',
@@ -177,3 +176,91 @@ MESSAGE_TAGS = {
     message_constants.WARNING: 'warning',
     message_constants.ERROR: 'error',
 }
+
+import os
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+#laborator 7 task 4 
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}', 
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{', 
+        },
+    },
+
+
+    'handlers': {
+        # pt Warning, Error, Critical
+        'console': {
+            'level': 'WARNING', 
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+
+
+        'file_debug': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'debug.log'),
+            'formatter': 'verbose',
+        },
+        'file_info': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'info.log'),
+            'formatter': 'verbose',
+        },
+        'file_warning': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'warning.log'),
+            'formatter': 'verbose',
+        },
+        'file_error': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'error.log'),
+            'formatter': 'verbose',
+        },
+        'file_critical': {
+            'level': 'CRITICAL',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'critical.log'),
+            'formatter': 'verbose',
+        },
+    },
+
+
+    'loggers': {
+        'django': { 
+            'handlers': ['console', 'file_debug', 'file_info', 'file_warning', 'file_error', 'file_critical'],
+            'level': 'DEBUG', 
+            'propagate': True,
+        },
+    },
+}
+
+#laborator 9 task 3 
+
+TASK_K_MINUTES = 2 
+
+TASK_NEWSLETTER_DAY = "monday"    
+TASK_NEWSLETTER_HOUR = "09:00"   
+TASK_X_MINUTES_OLD = 60           
+
+TASK_M_MINUTES = 5       
+
+TASK_Z2_DAY = "friday"            
+TASK_O2_HOUR = "18:00"           

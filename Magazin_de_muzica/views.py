@@ -22,11 +22,12 @@ import time
 from django.urls import reverse 
 from .models import Vizualizare
 from .models import Promotii  
-
-accesari = []
-
 from django.core.mail import mail_admins
 from django.template.loader import render_to_string
+import logging
+logger = logging.getLogger('django')
+
+accesari = []
 
 def trimite_alerta_admin(subiect, mesaj_text, mesaj_html_body):
     html_content = f'<h1 style="color: red;">{subiect}</h1>'
@@ -137,7 +138,7 @@ def test_accesare(request):
         </html>
     """)
 
-#laborator 8 task 2 ex 4
+#laborator 8 
 def info(request):
     is_admin_site = request.user.groups.filter(name='Administratori_site').exists()
 
@@ -184,7 +185,7 @@ def salvare_accesari(request,nume_pagina):
     )
     accesari.append(a)
 
-#laborator 8 task 2 ex 4
+#laborator 8 
 from django.contrib.auth.models import Group, User
 def log(request):
     is_admin_site = request.user.groups.filter(name='Administratori_site').exists()
@@ -320,10 +321,12 @@ def afis_template(request):
 
 def afis_produse(request):
     salvare_accesari(request, "Pagina produselor")
-    
+
+    logger.debug(f"DEBUG: S-a accesat lista de produse. IP User: {get_client_ip(request)}")
+
     # DEBUG 1
     messages.debug(request, "DEBUG: S-a accesat view-ul simplu 'afis_produse'.")
-    
+
     produse = Produs.objects.all()
     context = {"produse": produse[0]} if produse.exists() else {"produse": None}
     return render(request, "Magazin_de_muzica/produse.html", context)
@@ -349,7 +352,9 @@ def cos_virtual(request):
 #laborator 9 
 def in_lucru(request):
     salvare_accesari(request, "Pagina in lucru")
-    
+
+    logger.info(f"INFO: Utilizator (IP: {get_client_ip(request)}) a accesat o pagină 'În Lucru'.")
+
     # INFO 1
     messages.info(request, "Această funcționalitate este momentan în dezvoltare. Te rugăm să revii mai târziu!")
     
@@ -394,8 +399,12 @@ def lista_produse(request):
 
 #----------------------------------------------------------------------------------------------------------------------------------
 #laborator 9
+
 def detalii_produs(request, produs_id):
     produs = get_object_or_404(Produs, id=produs_id)
+
+    logger.debug(f"DEBUG: Detalii solicitate pentru produsul ID={produs_id} ({produs.denumire})")
+
     # DEBUG 2
     messages.debug(request, f"DEBUG: Se vizualizează detaliile pentru produsul ID: {produs_id}")
     
@@ -550,6 +559,8 @@ def product_list_view(request, categorie_slug=None):
 
 
     if request.GET and not page_obj.object_list:
+
+        logger.warning(f"WARNING: Filtrare fara rezultate. Parametrii: {request.GET}")
         # WARNING 1
         messages.warning(request, "Nu au fost găsite produse care să corespundă filtrelor selectate.") 
 
@@ -626,7 +637,7 @@ def contact_view(request):
             zile_asteptare_utilizator = data['min_zile_asteptare']
             
             min_cerut = get_min_zile_asteptare_cerut(tip_mesaj)
-            
+
 
             is_urgent = (zile_asteptare_utilizator == min_cerut)
             data['urgent'] = is_urgent 
@@ -665,6 +676,8 @@ def contact_view(request):
                 messages.success(request, f"Mesajul a fost trimis cu succes! Fișier JSON salvat ca: {nume_fisier}")
     
             except Exception as e:
+                logger.error(f"ERROR: Nu s-a putut salva mesajul de contact in JSON. Eroare: {e}")
+
                 messages.error(request, f"A apărut o eroare la salvarea fișierului JSON: {e}")
     else:
         form =ContactForm()
@@ -707,6 +720,9 @@ def introducere_produs(request):
             except Exception as e:
                 print(f"Eroare la salvarea produsului: {e}")
                 # ERROR 1
+
+                logger.error(f"ERROR: Esec salvare produs in DB. Detalii: {e}")
+
                 messages.error(request, "A apărut o eroare critică la salvarea în baza de date.")
         else:
             # ERROR 2
@@ -790,9 +806,10 @@ def register_view(request):
             return redirect('login') 
     else:
 
-
+        logger.info("INFO: Formularul de înregistrare a fost afișat unui vizitator.")
         # INFO 2
         messages.info(request, "Pentru siguranță, alege o parolă complexă și un email valid.")
+
         form = ProfilUserCreationForm()
     
     return render(request, 'Magazin_de_muzica/inregistrare.html', {'form': form})
@@ -872,6 +889,9 @@ def custom_login_view(request):
 
             if len(attempts) >= 3:
                 subiect = "Logari suspecte"
+
+                logger.critical(f"CRITICAL: POSIBIL ATAC. User: {username_incercat}, IP: {ip}")
+
                 mesaj_text = f"Userul '{username_incercat}' a încercat să se logheze de 3 ori rapid de pe IP: {ip}"
                 
                 detalii_html = f"""
@@ -952,6 +972,8 @@ def confirma_email_view(request, cod):
     try: 
         profil = get_object_or_404(Profil, cod=cod)
         if profil.email_confirmat:
+            logger.warning(f"WARNING: Tentativă repetată de confirmare email pentru codul: {cod}")
+
             messages.warning(request, 'Adresa de e-mail a fost deja confirmată.')
         else:
             profil.email_confirmat = True
@@ -1015,6 +1037,9 @@ def pagina_promotii(request):
                     messages.warning(request, "Promoția a fost salvată, dar niciun user nu a îndeplinit condiția K vizualizări.")
             except Exception as e:
                 subiect_eroare = "Eroare Trimitere Promotii"
+
+                logger.critical(f"CRITICAL: Serviciul de Email Mass-Mail a esuat total! Eroare: {e}")
+
                 eroare_str = str(e)
                 mesaj_text_admin = f"A apărut o eroare la send_mass_mail: {eroare_str}"
                 html_eroare = f"""
@@ -1033,7 +1058,7 @@ def pagina_promotii(request):
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-#lablrator 8 task 4
+#laborator 8 task 4
 
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -1088,8 +1113,6 @@ def custom_logout(request):
 
 # def setup_permisiune(request):
 #     content_type = ContentType.objects.get_for_model(Produs)
-    
-#     # Folosim get_or_create ca să nu primim eroare dacă dăm refresh
 #     perm, created = Permission.objects.get_or_create(
 #         codename='vizualizeaza_oferta',
 #         defaults={

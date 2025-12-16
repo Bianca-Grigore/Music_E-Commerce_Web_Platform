@@ -1,0 +1,57 @@
+INFO 2025-12-16 10:10:55,428 autoreload Watching for file changes with StatReloader
+INFO 2025-12-16 10:12:02,539 autoreload C:\Users\grigo\magazin_muzica\magazin_muzica\settings.py changed, reloading.
+INFO 2025-12-16 10:12:03,247 autoreload Watching for file changes with StatReloader
+INFO 2025-12-16 10:21:31,076 autoreload C:\Users\grigo\magazin_muzica\Magazin_de_muzica\views.py changed, reloading.
+INFO 2025-12-16 10:21:31,555 autoreload Watching for file changes with StatReloader
+INFO 2025-12-16 10:35:34,182 autoreload Watching for file changes with StatReloader
+WARNING 2025-12-16 10:35:37,631 log Forbidden: /Magazin_de_muzica/info/
+WARNING 2025-12-16 10:35:37,633 basehttp "GET /Magazin_de_muzica/info/ HTTP/1.1" 403 420
+WARNING 2025-12-16 10:35:37,766 log Not Found: /favicon.ico
+WARNING 2025-12-16 10:35:37,766 basehttp "GET /favicon.ico HTTP/1.1" 404 2546
+INFO 2025-12-16 10:35:43,841 basehttp "GET /Magazin_de_muzica/exemplu HTTP/1.1" 301 0
+INFO 2025-12-16 10:35:44,084 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 7804
+WARNING 2025-12-16 10:35:44,100 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2025-12-16 10:35:45,433 basehttp "GET /Magazin_de_muzica/login/ HTTP/1.1" 200 7449
+WARNING 2025-12-16 10:35:45,449 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2025-12-16 10:35:48,458 basehttp "POST /Magazin_de_muzica/login/ HTTP/1.1" 302 0
+INFO 2025-12-16 10:35:48,534 basehttp "GET /Magazin_de_muzica/profil/ HTTP/1.1" 200 7734
+WARNING 2025-12-16 10:35:48,551 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2025-12-16 10:35:53,098 basehttp "GET /Magazin_de_muzica/log/ HTTP/1.1" 200 7287
+WARNING 2025-12-16 10:35:53,114 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2025-12-16 10:39:48,256 autoreload C:\Users\grigo\magazin_muzica\Magazin_de_muzica\views.py changed, reloading.
+INFO 2025-12-16 10:39:48,842 autoreload Watching for file changes with StatReloader
+INFO 2025-12-16 10:42:13,190 autoreload C:\Users\grigo\magazin_muzica\magazin_muzica\settings.py changed, reloading.
+INFO 2025-12-16 10:42:13,875 autoreload Watching for file changes with StatReloader
+INFO 2025-12-16 10:53:42,389 autoreload C:\Users\grigo\magazin_muzica\magazin_muzica\settings.py changed, reloading.
+INFO 2025-12-16 10:53:43,662 autoreload Watching for file changes with StatReloader
+INFO 2025-12-16 10:58:30,625 autoreload Watching for file changes with StatReloader
+INFO 2025-12-16 11:18:37,038 autoreload Watching for file changes with StatReloader
+INFO 2025-12-16 11:23:37,261 basehttp "GET /admin/ HTTP/1.1" 200 18621
+INFO 2025-12-16 11:23:39,265 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 29357
+INFO 2025-12-16 11:23:39,357 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-12-16 11:24:22,212 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 29357
+INFO 2025-12-16 11:24:22,271 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-12-16 11:24:23,308 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 29357
+INFO 2025-12-16 11:24:23,366 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-12-16 11:24:27,706 basehttp "GET /Magazin_de_muzica/logout/ HTTP/1.1" 302 0
+INFO 2025-12-16 11:24:27,868 basehttp "GET /Magazin_de_muzica/login/ HTTP/1.1" 200 7449
+WARNING 2025-12-16 11:24:27,892 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2025-12-16 11:24:29,674 basehttp "POST /Magazin_de_muzica/login/ HTTP/1.1" 302 0
+INFO 2025-12-16 11:24:29,856 basehttp "GET /Magazin_de_muzica/profil/ HTTP/1.1" 200 7734
+WARNING 2025-12-16 11:24:29,872 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2025-12-16 11:24:32,889 basehttp "GET /Magazin_de_muzica/contact/ HTTP/1.1" 200 9920
+WARNING 2025-12-16 11:24:32,905 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2025-12-16 11:24:46,950 basehttp "GET /admin/ HTTP/1.1" 200 18621
+INFO 2025-12-16 11:24:50,149 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 29357
+INFO 2025-12-16 11:24:50,207 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-12-16 11:24:57,748 basehttp "GET /admin/auth/user/19/change/ HTTP/1.1" 200 33131
+INFO 2025-12-16 11:24:57,810 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-12-16 11:25:38,438 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 22709
+INFO 2025-12-16 11:25:40,666 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 22709
+INFO 2025-12-16 11:25:40,736 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-12-16 11:34:58,646 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 22709
+INFO 2025-12-16 11:34:58,731 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-12-16 11:35:05,306 basehttp "GET /Magazin_de_muzica/produse/ HTTP/1.1" 200 14477
+WARNING 2025-12-16 11:35:05,328 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2025-12-16 11:48:53,047 autoreload C:\Users\grigo\magazin_muzica\Magazin_de_muzica\context_processors.py changed, reloading.
+INFO 2025-12-16 11:48:53,530 autoreload Watching for file changes with StatReloader

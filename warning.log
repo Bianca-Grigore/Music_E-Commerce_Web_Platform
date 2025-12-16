@@ -1,0 +1,12 @@
+WARNING 2025-12-16 10:35:37,631 log Forbidden: /Magazin_de_muzica/info/
+WARNING 2025-12-16 10:35:37,633 basehttp "GET /Magazin_de_muzica/info/ HTTP/1.1" 403 420
+WARNING 2025-12-16 10:35:37,766 log Not Found: /favicon.ico
+WARNING 2025-12-16 10:35:37,766 basehttp "GET /favicon.ico HTTP/1.1" 404 2546
+WARNING 2025-12-16 10:35:44,100 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-12-16 10:35:45,449 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-12-16 10:35:48,551 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-12-16 10:35:53,114 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-12-16 11:24:27,892 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-12-16 11:24:29,872 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-12-16 11:24:32,905 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-12-16 11:35:05,328 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853

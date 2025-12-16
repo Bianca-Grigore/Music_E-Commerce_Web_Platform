@@ -84,10 +84,15 @@
             {% if perms.Magazin_de_muzica.add_produs %}
                 <li><a href="{% url 'adaugare' %}" style="color: lightgreen;">Adaugă Produs</a></li>
             {% endif %}
+
             <li><a href="{% url 'pagina_oferta' %}">Oferte</a></li>
             <li><a href="{% url 'cos_virtual' %}">Coș</a></li>
             <li><a href="{% url 'comenzi' %}">Comenzi</a></li>
             <li><a href="{% url 'contact_page' %}">Contact</a></li>
+
+
+
+{% comment %} laborator 8 task 2 exercitiu 4 {% endcomment %}
 
             {% if user.is_authenticated %}
                 {% for group in user.groups.all %}
@@ -97,6 +102,8 @@
                     {% endif %}
                 {% endfor %}
             {% endif %}
+
+{% comment %}                                 {% endcomment %}
 
             {% if user.is_authenticated %}
                 <li class="user-info">Salut, {{ user.username }}</li>
@@ -128,18 +135,13 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Verificăm dacă userul este logat (folosind template tag Django)
-        // Django randează "True" sau "False" ca string aici
         var isUserAuthenticated = "{{ user.is_authenticated }}" === "True";
-
-        // Dacă e logat, dăm cu zarul (30% șanse)
         if (isUserAuthenticated && Math.random() < 0.3) {
             var banner = document.getElementById("banner-oferta");
-            
-            // Afișăm bannerul
+
             banner.style.display = "block";
-            
-            // Adăugăm animația simplă (Pulse)
+
+
             banner.animate([
                 { transform: 'scale(1)' },
                 { transform: 'scale(1.02)' },
@@ -149,9 +151,9 @@
                 iterations: Infinity
             });
 
-            // Adăugăm evenimentul de click
+
             banner.addEventListener("click", function() {
-                // Redirecționăm către URL-ul care dă permisiunea
+
                 window.location.href = "{% url 'revendica_oferta' %}";
             });
         }

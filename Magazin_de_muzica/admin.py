@@ -22,49 +22,59 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from .models import Profil
 
-#laborator 8 task 4 
+#laborator 8 task 4
+from django.contrib.auth.admin import UserAdmin
+
+# laborator 8 task 4
 class ProfilInline(admin.StackedInline):
     model = Profil
     can_delete = False
     verbose_name_plural = 'Profil Utilizator'
-
+    
     def get_readonly_fields(self, request, obj=None):
 
         if request.user.groups.filter(name='Moderatori').exists() and not request.user.is_superuser:
+
 
             return ['telefon', 'tara', 'judet', 'oras', 'strada', 'cod', 'email_confirmat']
+
         return []
 
-class CustomUserAdmin(BaseUserAdmin):
-    inlines = (ProfilInline,)
 
+class CustomUserAdmin(UserAdmin):
+    inlines = (ProfilInline,)
+    
     def get_readonly_fields(self, request, obj=None):
 
-        if request.user.groups.filter(name='Moderatori').exists() and not request.user.is_superuser:
+        if request.user.is_superuser:
+            return super().get_readonly_fields(request, obj)
 
-            return [
-                'username', 'password', 'last_login', 'date_joined', 
-                'is_superuser', 'is_staff', 'is_active', 
-                'groups', 'user_permissions'
+
+        if request.user.groups.filter(name='Moderatori').exists():
+
+            readonly_fields = set([f.name for f in self.model._meta.fields])
+
+            allowed_fields = ['first_name', 'last_name', 'email']
+            
+            # 3. Scoatem câmpurile permise din lista de read-only
+            for field in allowed_fields:
+                if field in readonly_fields:
+                    readonly_fields.remove(field)
+
+
+            extra_readonly = [
+                'password', 'username', 'last_login', 'date_joined',
+                'user_permissions', 'groups', 'is_superuser', 'is_staff', 'is_active'
             ]
+            readonly_fields.update(extra_readonly)
+
+            return list(readonly_fields)
+
         return super().get_readonly_fields(request, obj)
 
-    def get_fieldsets(self, request, obj=None):
 
-        if request.user.groups.filter(name='Moderatori').exists() and not request.user.is_superuser:
-            return (
-                ('Informații Cont', {'fields': ('username',)}), 
-                ('Date Personale (Editabile)', {'fields': ('first_name', 'last_name', 'email')}), 
-                ('Status', {'fields': ('is_active', 'is_staff')}), 
-            )
-        return super().get_fieldsets(request, obj)
-
-
-admin.site.unregister(User)
-admin.site.register(User, CustomUserAdmin)
-
-
-
+# admin.site.unregister(User)
+# admin.site.register(User, CustomUserAdmin)
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 class ProdusAdmin(admin.ModelAdmin):
