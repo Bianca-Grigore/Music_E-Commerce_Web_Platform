@@ -3,58 +3,90 @@
 {% block title %}Înregistrare{% endblock %}
 
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
+<div class="premium-form-container" style="max-width: 700px;"> <h2 style="color: white; text-align: center; margin-bottom: 30px; font-weight: 800;">
+        Creare Cont Nou
+    </h2>
 
-    <div>
-        {{ form.username.label_tag }} {{ form.username }}
-        {{ form.username.errors }}
-    </div>
-    <div>
-        {{ form.email.label_tag }} {{ form.email }}
-        {{ form.email.errors }}
-    </div>
+    <form method="post">
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+            <div class="errorlist nonfield">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
 
-    <div>
-        {{ form.first_name.label_tag }} {{ form.first_name }}
-        {{ form.first_name.errors }}
-    </div>
-    <div>
-        {{ form.last_name.label_tag }} {{ form.last_name }}
-        {{ form.last_name.errors }}
-    </div>
-    
-    <div>
-        {{ form.telefon.label_tag }} {{ form.telefon }}
-        {{ form.telefon.errors }}
-    </div>
-    <div>
-        {{ form.tara.label_tag }} {{ form.tara }}
-        {{ form.tara.errors }}
-    </div>
-    <div>
-        {{ form.judet.label_tag }} {{ form.judet }}
-        {{ form.judet.errors }}
-    </div>
-    <div>
-        {{ form.oras.label_tag }} {{ form.oras }}
-        {{ form.oras.errors }}
-    </div>
-    <div>
-        {{ form.strada.label_tag }} {{ form.strada }}
-        {{ form.strada.errors }}
-    </div>
-    
-    <div>
-        {{ form.password1.label_tag }} {{ form.password1 }}
-        {{ form.password1.errors }}
-    </div>
-    <div>
-        {{ form.password2.label_tag }} {{ form.password2 }}
-        {{ form.password2.errors }}
-    </div>
-    
-    <button type="submit">Înregistrare</button>
-</form>
+        <fieldset style="border: none; border-bottom: 1px solid #333; padding: 0 0 20px 0; margin-bottom: 20px;">
+            <legend style="color: var(--accent-color); font-weight: bold; margin-bottom: 15px; text-transform: uppercase; font-size: 0.9rem;">Date Cont</legend>
+            <p>
+                {{ form.username.label_tag }} {{ form.username }}
+                {% if form.username.errors %}<span class="errorlist">{{ form.username.errors }}</span>{% endif %}
+            </p>
+            <p>
+                {{ form.email.label_tag }} {{ form.email }}
+                {% if form.email.errors %}<span class="errorlist">{{ form.email.errors }}</span>{% endif %}
+            </p>
+        </fieldset>
+
+        <fieldset style="border: none; border-bottom: 1px solid #333; padding: 0 0 20px 0; margin-bottom: 20px;">
+            <legend style="color: var(--accent-color); font-weight: bold; margin-bottom: 15px; text-transform: uppercase; font-size: 0.9rem;">Date Personale</legend>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <p style="margin-bottom: 0;">
+                    {{ form.first_name.label_tag }} {{ form.first_name }}
+                    {% if form.first_name.errors %}<span class="errorlist">{{ form.first_name.errors }}</span>{% endif %}
+                </p>
+                <p style="margin-bottom: 0;">
+                    {{ form.last_name.label_tag }} {{ form.last_name }}
+                    {% if form.last_name.errors %}<span class="errorlist">{{ form.last_name.errors }}</span>{% endif %}
+                </p>
+            </div>
+
+            <p style="margin-top: 20px;">
+                {{ form.telefon.label_tag }} {{ form.telefon }}
+                {% if form.telefon.errors %}<span class="errorlist">{{ form.telefon.errors }}</span>{% endif %}
+            </p>
+        </fieldset>
+
+        <fieldset style="border: none; border-bottom: 1px solid #333; padding: 0 0 20px 0; margin-bottom: 20px;">
+            <legend style="color: var(--accent-color); font-weight: bold; margin-bottom: 15px; text-transform: uppercase; font-size: 0.9rem;">Adresă de Livrare</legend>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <p style="margin-bottom: 0;">
+                    {{ form.tara.label_tag }} {{ form.tara }}
+                    {% if form.tara.errors %}<span class="errorlist">{{ form.tara.errors }}</span>{% endif %}
+                </p>
+                <p style="margin-bottom: 0;">
+                    {{ form.judet.label_tag }} {{ form.judet }}
+                    {% if form.judet.errors %}<span class="errorlist">{{ form.judet.errors }}</span>{% endif %}
+                </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 15px; margin-top: 20px;">
+                <p style="margin-bottom: 0;">
+                    {{ form.oras.label_tag }} {{ form.oras }}
+                    {% if form.oras.errors %}<span class="errorlist">{{ form.oras.errors }}</span>{% endif %}
+                </p>
+                <p style="margin-bottom: 0;">
+                    {{ form.strada.label_tag }} {{ form.strada }}
+                    {% if form.strada.errors %}<span class="errorlist">{{ form.strada.errors }}</span>{% endif %}
+                </p>
+            </div>
+        </fieldset>
+
+        <fieldset style="border: none; padding: 0 0 20px 0; margin-bottom: 10px;">
+            <legend style="color: var(--accent-color); font-weight: bold; margin-bottom: 15px; text-transform: uppercase; font-size: 0.9rem;">Securitate</legend>
+            <p>
+                {{ form.password1.label_tag }} {{ form.password1 }}
+                {% if form.password1.errors %}<span class="errorlist">{{ form.password1.errors }}</span>{% endif %}
+            </p>
+            <p>
+                {{ form.password2.label_tag }} {{ form.password2 }}
+                {% if form.password2.errors %}<span class="errorlist">{{ form.password2.errors }}</span>{% endif %}
+            </p>
+        </fieldset>
+        
+        <button type="submit" class="btn-submit-premium">Creează Contul</button>
+    </form>
+</div>
 {% endblock %}

@@ -2,221 +2,306 @@
 {% load static %}
 
 {% block content %}
-<head>
-    <title>Produse</title>
-    <script> 
-        window.onload= function(){
-        var butoane = document.getElementByClassName("btn_cos_virtual") 
-        for(let btn of butoane){
-            btn.onclick=function(){
-                let iduri_cos=localStorage.getItem("cos_virtual")
-                this.parentNode.style.borderColor= "purple";
-                if(iduri_cos){
-                    let vector_iduri=iduri_cos.split(",")
-                    vector_iduri.push(this.dataset["id"])
-                    localStorage.setItem("cos_virtual", vector_iduri)
-                }
-                else{
-                    localStorage.setItem("cos_virtual", this.dataset["id"])
-                }
-            } 
-        }
-        }
-    </script>
-</head>
+<div class="container py-4">
+    
+    <h1 class="all-products-title" style="color: white; font-weight: 800; margin-bottom: 25px;">
+        {% if categorie_selectata %}
+            Produse: {{ categorie_selectata.nume_categorie }}
+        {% else %}
+            Toate produsele
+        {% endif %}
+    </h1>
 
-<body>
-    {% for produs in produse %}
-    <article data-id= "{{produs.id}}" class="produs">
-    <p>{{produs.denumire}} </p>
-    <p>{{produs.pret}} </p>
-    <button data-id= "{{produs.id}}"    data-nume={{produs.denumire}} class ="btn_cos_virtual"> Adăugați în coș </button>
-    </article>
-    {%endfor%}
-    <button id="cumpara">Cumpără</button>
-
-    <div class="filtrare-container">
+    <div class="filtrare-container-modern">
         <form method="get" action=""> 
-            {{ filter_form.as_p }}
             
-            <button type="submit">Aplică Filtre</button>
+            <div class="grid-filtre">
+                {{ filter_form.as_p }}
+            </div>
             
-            {% if categorie_selectata %}
-                <a href="{% url 'produse_dupa_categorie' categorie_selectata.nume_categorie %}" class="reset-button">Resetare Filtre</a>
-            {% else %}
-                <a href="{% url 'product_list_view' %}" class="reset-button">Resetare Filtre</a>
-            {% endif %}
+            <div class="actiuni-filtre">
+                <button type="submit" class="btn-aplica">Aplică Filtre</button>
+                
+                {% if categorie_selectata %}
+                    <a href="{% url 'produse_dupa_categorie' categorie_selectata.nume_categorie %}" class="btn-reset">✕ Resetare Filtre</a>
+                {% else %}
+                    <a href="{% url 'product_list_view' %}" class="btn-reset">✕ Resetare Filtre</a>
+                {% endif %}
+
+                <div class="sort-box" style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
+                    <span style="color: #b3b3b3; font-weight: 600;">Sortare Preț:</span>
+                    <a href="?{{ request.GET.urlencode }}&sort=a" class="btn-reset" style="color: white;">Crescător</a>
+                    <span style="color: #444;">|</span>
+                    <a href="?{{ request.GET.urlencode }}&sort=d" class="btn-reset" style="color: white;">Descrescător</a>
+                </div>
+            </div>
+            
         </form>
     </div>
 
-
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const resetLinks = document.querySelectorAll('.reset-button');
-
-            resetLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    const resetUrl = link.getAttribute('href');
-                    const userConfirmed = confirm(
-                        "Sunteți sigur că doriți să resetați filtrele? Toate filtrele aplicate și criteriile de căutare vor fi șterse."
-                    );
-
-                    if (userConfirmed) {
-                        window.location.href = resetUrl;
-                    } else {
-                        e.preventDefault();
-                    }
-                });
-            });
-        });
-    </script>
-
-
-
-<h1>
-    {% if categorie_selectata %}
-        Produse din categoria: {{ categorie_selectata.nume_categorie }}
-    {% else %}
-        Toate produsele
-    {% endif %}
-</h1>
-
-{% if categorie_selectata %}
-    <p><em>Tip categorie: {{ categorie_selectata.get_tip_categorie_display }}</em></p>
-    <p><em>Creată la: {{ categorie_selectata.data_creare|date:"d.m.Y H:i" }}</em></p>
-{% endif %}
-
-<div class="sortare">
-    <strong>Sortare Preț:</strong>
-    <a href="?{{ request.GET.urlencode | urlencode }}&sort=a">Crescător</a> | 
-    <a href="?{{ request.GET.urlencode | urlencode }}&sort=d">Descrescător</a>
-</div>
-
-
-{% if repaginare_warning %}
-        <div class="alert alert-info" style="padding: 15px; border: 1px solid #007bff; background-color: #e9ecef; color: #004085; margin-bottom: 20px;">
-            <strong>Paginare schimbată!</strong>
-            <p style="margin: 0;">Ați modificat numărul de elemente afișate pe pagină. Vă rugăm rețineți că acest lucru ar putea duce la afișarea unor produse deja văzute sau la omiterea unora, dacă vă aflați pe o pagină avansată.</p>
+    {% if repaginare_warning %}
+        <div class="alert-custom" style="background: rgba(29, 185, 84, 0.1); border-left: 4px solid var(--accent-color); padding: 15px; color: white; margin-bottom: 25px;">
+            <strong style="color: var(--accent-color);">Paginare schimbată!</strong> Produsele afișate s-au reorganizat.
         </div>
     {% endif %}
 
-{% comment %} -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- {% endcomment %}
-
-
-{% if page_obj.paginator.count > 0 %}
-
-
+    {% if page_obj.paginator.count > 0 %}
     <div class="cards-container">
         {% for produs in page_obj %}
-        <div class="card">
-        <div class="card-image">
-            {% if produs.imagine %}
-                <img src= '{{ produs.imagine.url }}' alt='{{ produs.denumire }}' style="width:100%; height:auto;">
-            
-            {% else %}
-                <img src="{% static 'media/default.jpg' %}" alt="Imagine lipsă">
-            {% endif %} </div>
+        <article class="card" data-id="{{produs.id}}">
+            <div class="card-image">
+                {% if produs.imagine %}
+                    <img src="{{ produs.imagine.url }}" alt="{{ produs.denumire }}">
+                {% else %}
+                    <img src="{% static 'media/default.jpg' %}" alt="Fără imagine">
+                {% endif %}
+            </div>
 
-
-
-
-        <div class="card-content">
-            <h3>
-                <a href="{% url 'Detalii_produs' produs.id %}">
-                {{ produs.denumire }}
-                </a>
-            </h3>
-
-            <p><strong>Preț:</strong> {{ produs.pret }} RON</p>
-            <p><strong>Categorie:</strong>
-
-        <a href="{% url 'produse_dupa_categorie' produs.categorie.nume_categorie %}"
-        style="color: {{ produs.categorie.culoare }}; font-weight: bold;">
-        {{ produs.categorie.nume_categorie }}
-        </a>
-    </p>
-<button data-id="{{produs.id}}" data-nume="{{produs.denumire}}" class="btn_cos_virtual" style="margin-top: 10px; cursor: pointer;"> 
-        Adăugați în coș 
-    </button>
-</div>
-        </div>
+            <div class="card-content">
+                <h3><a href="{% url 'Detalii_produs' produs.id %}">{{ produs.denumire }}</a></h3>
+                <p class="price">{{ produs.pret }} RON</p>
+                <p class="cat-label">
+                    <a href="{% url 'produse_dupa_categorie' produs.categorie.nume_categorie %}" style="color: {{ produs.categorie.culoare|default:'#1DB954' }};">
+                        {{ produs.categorie.nume_categorie }}
+                    </a>
+                </p>
+                <button data-id="{{produs.id}}" data-nume="{{produs.denumire}}" class="btn_cos_virtual">
+                    Adăugați în coș
+                </button>
+            </div>
+        </article>
         {% endfor %}
     </div>
 
+    <div class="pagination-container" style="display: flex; justify-content: center; gap: 20px; align-items: center; margin-top: 50px;">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" style="background: #333; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none;">« Înapoi</a>
+        {% endif %}
 
-{% comment %} -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- {% endcomment %}
+        <span style="color: #b3b3b3; font-weight: bold;">Pagina {{ page_obj.number }} din {{ page_obj.paginator.num_pages }}</span>
 
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" style="background: #1DB954; color: black; font-weight: bold; padding: 10px 20px; border-radius: 8px; text-decoration: none;">Înainte »</a>
+        {% endif %}
+    </div>
 
-<div class="pagination">
-    {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">« Previous</a>
-    {% endif %}
-
-    <span>Pagina {{ page_obj.number }} din {{ page_obj.paginator.num_pages }}</span>
-
-    {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Next »</a>
+    {% else %}
+        <div class="no-results" style="text-align: center; padding: 60px; background: #1a1a1a; border-radius: 20px; border: 1px dashed #333;">
+            <h3 style="color: white; margin-bottom: 20px;">Niciun produs găsit</h3>
+            <p style="color: #b3b3b3;">Nu există produse care să corespundă filtrelor selectate.</p>
+            <a href="{% url 'product_list_view' %}" class="btn-aplica" style="text-decoration: none; display: inline-block; margin-top: 20px;">Vezi toate produsele</a>
+        </div>
     {% endif %}
 </div>
 
-{% comment %} -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- {% endcomment %}
-
-
-{% else %}
-        <div class="alert alert-warning" style="padding: 20px; border: 1px solid #ffcc00; background-color: #fffacd; text-align: center; margin-top: 30px;">
-            <p style="font-size: 1.2em; color: #856404;">
-                Ne pare rău, niciun produs nu se potrivește criteriilor de filtrare introduse.
-            </p>
-            <p>Încercați să modificați filtrele sau să apăsați pe "Resetare Filtre".</p>
-        </div>
-    {% endif %}
-
-
-{% comment %} -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- {% endcomment %}
-
 <style>
-.cards-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    margin-top: 20px;
-}
+    body {
+        background-color: #121212 !important; 
+        font-family: 'Inter', -apple-system, sans-serif; 
+    }
 
-.card {
-    border: 3px solid purple;
-    border-radius: 0px;
-    width: 250px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    overflow: hidden;
-    transition: transform 0.2s;
-}
+    /* -------------------------------------
+       1. STILURI PENTRU FILTRE (TOP BAR)
+       ------------------------------------- */
+    .filtrare-container-modern {
+        background-color: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 40px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
 
-.card:hover {
-    transform: translateY(-5px);
-}
+    .grid-filtre {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        align-items: start;
+    }
 
-.card-image img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-}
+    .grid-filtre p {
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        color: #ffffff;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
 
-.card-content {
-    padding: 15px;
-    text-align: center;
-}
+    .grid-filtre input[type="text"],
+    .grid-filtre input[type="number"],
+    .grid-filtre input[type="datetime-local"],
+    .grid-filtre select {
+        background-color: #2b2b2b !important;
+        color: #ffffff !important;
+        border: 1px solid #444 !important;
+        padding: 10px !important;
+        border-radius: 8px !important;
+        margin-top: 5px !important;
+        outline: none;
+    }
 
-.card-content h3 {
-    margin: 0 0 10px 0;
-    font-size: 1.1em;
-}
+    .grid-filtre input:focus, .grid-filtre select:focus { border-color:  rgb(157, 72, 255) !important; }
+    
+    .grid-filtre select[multiple] { height: 90px !important; }
 
-.card-content p {
-    margin: 5px 0;
-    font-size: 0.9em;
-}
+    .grid-filtre p:has(input[type="checkbox"]) {
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        margin-top: 25px;
+    }
+
+    .grid-filtre input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color:  rgb(157, 72, 255);
+        cursor: pointer;
+    }
+
+    .actiuni-filtre {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #333;
+    }
+
+    .btn-aplica {
+        background-color: rgb(157, 72, 255) !important;
+        color: black !important;
+        border: none !important;
+        padding: 10px 25px !important;
+        border-radius: 20px !important;
+        font-weight: 800 !important;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: transform 0.2s;
+    }
+
+    .btn-aplica:hover { transform: scale(1.05); }
+
+    .btn-reset { color: #ff4b2b; font-weight: bold; text-decoration: none; transition: 0.2s; }
+    .btn-reset:hover { color: white; }
+
+    .helptext { font-size: 0.75rem; color: #888; margin-top: 3px; font-weight: normal; }
+
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px;
+        justify-content: center;
+        padding: 20px 0;
+    }
+
+    .card {
+        background: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 16px;
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+        border-color:  rgb(157, 72, 255);
+    }
+
+    .card-image {
+        width: 100%;
+        height: 280px;
+        background: #1a1a1a;
+        border-bottom: 1px solid #333;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .card:hover .card-image img { transform: scale(1.05); }
+
+    .card-content {
+        padding: 20px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-grow: 1;
+    }
+
+    .card-content h3 { margin: 0 0 10px 0; font-size: 1.15em; font-weight: 700; line-height: 1.3; }
+    .card-content h3 a { color: #ffffff; text-decoration: none; transition: color 0.2s; }
+    .card-content h3 a:hover { color:  rgb(157, 72, 255); }
+
+    .price { font-size: 1.2rem; font-weight: 800; color:  rgb(157, 72, 255); margin: 5px 0 15px 0; }
+    .cat-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #b3b3b3; margin-bottom: 15px; }
+
+    .btn_cos_virtual {
+        margin-top: auto;
+        background-color: #000;
+        color: #fff;
+        border: 2px solid #333;
+        padding: 12px 25px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        text-transform: uppercase;
+    }
+
+    .btn_cos_virtual:hover {
+        background-color:  rgb(157, 72, 255);
+        color: black;
+        border-color:  rgb(157, 72, 255);
+    }
 </style>
-</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const butoane = document.getElementsByClassName("btn_cos_virtual");
+        for(let btn of butoane) {
+            btn.onclick = function() {
+                let id = this.dataset["id"];
+                let cos = localStorage.getItem("cos_virtual");
+                
+                if(cos) {
+                    let vector = cos.split(",");
+                    vector.push(id);
+                    localStorage.setItem("cos_virtual", vector.join(","));
+                } else {
+                    localStorage.setItem("cos_virtual", id);
+                }
+                
+                // Feedback vizual Premium
+                this.innerHTML = "Adăugat! ✅";
+                this.style.background = "#1DB954";
+                this.style.color = "black";
+                setTimeout(() => {
+                    this.innerHTML = "Adăugați în coș";
+                    this.style.background = "#000";
+                    this.style.color = "white";
+                }, 1500);
+            }
+        }
+    });
+</script>
+
 {% endblock %}

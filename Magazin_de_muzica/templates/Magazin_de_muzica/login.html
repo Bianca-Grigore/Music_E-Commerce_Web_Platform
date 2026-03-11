@@ -1,34 +1,53 @@
 {% extends "./baza.html" %}
-{%block content%}
-{% comment %} laborator 8 task 4  {% endcomment %}
-{% if messages %}
-    <div class="mesaje-eroare">
-        {% for message in messages %}
-            <p class="alert {{ message.tags }}" style="color: red; font-weight: bold; background-color: #ffe6e6; padding: 10px; border: 1px solid red;">
-                {{ message }}
-            </p>
-        {% endfor %}
-    </div>
-{% endif %}
 
-
-
-
-<form method="post">
-    {% csrf_token %}
+{% block content %}
+<div class="premium-form-container">
     
-    {{ form.non_field_errors }}
-    <div>
-        {{ form.username.label_tag }} {{ form.username }}
-        {{ form.username.errors }}
-    </div>
-    <div>
-        {{ form.password.label_tag }} {{ form.password }}
-        {{ form.password.errors }}
-    </div>
-    <div>
-        {{ form.ramane_logat.label_tag }} {{ form.ramane_logat }}
-    </div>
-    <button type="submit">Login</button>
-</form>
-{%endblock content%}
+    <h2 style="color: white; text-align: center; margin-bottom: 30px; font-weight: 800;">
+        Autentificare
+    </h2>
+
+    {% if messages %}
+        <div class="mesaje-eroare" style="margin-bottom: 20px;">
+            {% for message in messages %}
+                <div class="alert {{ message.tags }}" style="color: #ff4b2b; background: rgba(255, 75, 43, 0.1); padding: 12px; border-left: 4px solid #ff4b2b; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+            <div class="errorlist nonfield">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <p>
+            {{ form.username.label_tag }} 
+            {{ form.username }}
+            {% if form.username.errors %}
+                <span class="errorlist">{{ form.username.errors }}</span>
+            {% endif %}
+        </p>
+        
+        <p>
+            {{ form.password.label_tag }} 
+            {{ form.password }}
+            {% if form.password.errors %}
+                <span class="errorlist">{{ form.password.errors }}</span>
+            {% endif %}
+        </p>
+        
+        <p style="flex-direction: row; align-items: center; gap: 10px; margin-top: 10px;">
+            {{ form.ramane_logat }}
+            {{ form.ramane_logat.label_tag }} 
+        </p>
+        
+        <button type="submit" class="btn-submit-premium">Login</button>
+    </form>
+</div>
+{% endblock content %}

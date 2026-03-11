@@ -6,38 +6,235 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Magazin Muzica{% endblock %}</title>
     
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
     <style>
-        /* --- STILURI PENTRU MENIU (CSS INTEGRAT) --- */
-        body { margin: 0; font-family: Arial, sans-serif; }
-        header { background-color: #333; }
+        /* --- 1. SETĂRI GLOBALE (DARK MODE) --- */
+        :root {
+            --accent-color: #b231e6; /* Movul ales de tine */
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --muted-text: #b3b3b3;
+        }
+
+        body { 
+            margin: 0; 
+            font-family: 'Inter', Arial, sans-serif; 
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main { flex: 1; padding: 20px; }
+
+        a { text-decoration: none; transition: 0.3s; }
+
+        /* --- 2. HEADER ȘI NAVBAR MODERN --- */
+        .modern-header {
+            background-color: #0a0a0a;
+            border-bottom: 1px solid #222;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 5px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links, .nav-actions {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Link-uri meniu principal */
+        .nav-links > li > a, 
+        .nav-actions > li > a:not(.nav-btn-outline):not(.nav-btn-solid):not(.nav-btn-logout) {
+            color: var(--muted-text);
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 10px 15px;
+            border-radius: 8px;
+        }
+
+        .nav-links > li > a:hover, 
+        .nav-actions > li > a:not(.nav-btn-outline):not(.nav-btn-solid):not(.nav-btn-logout):hover {
+            color: var(--text-color);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Dropdown-uri */
+        .dropdown, .dropdown-categorii { position: relative; }
         
-        .nav-links { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; flex-wrap: wrap; }
-        .nav-links > li { position: relative; }
-        .nav-links > li > a, .dropbtn { display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none; }
-        .nav-links > li > a:hover { background-color: #575757; }
+        .dropdown-content, .submeniu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #151515;
+            min-width: 200px;
+            box-shadow: 0px 8px 20px rgba(0,0,0,0.6);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 10px 0;
+            z-index: 1001;
+        }
 
-        /* --- MENIUL DROPDOWN --- */
-        .dropdown-content, .submeniu { display: none; position: absolute; top: 100%; left: 0; background-color: #f9f9f9; min-width: 200px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1000; list-style: none; padding: 0; }
-        .dropdown-content li a, .submeniu li a { color: black; padding: 12px 16px; text-decoration: none; display: block; text-align: left; }
-        .dropdown-content li a:hover, .submeniu li a:hover { background-color: #ddd; }
-        .dropdown:hover .dropdown-content, .dropdown-categorii:hover .submeniu { display: block; }
-        .user-info { color: #d1b3ff; font-weight: bold; padding: 14px 16px; }
-        footer { background-color: #333; color: white; text-align: center; padding: 10px; margin-top: 50px; }
+        .dropdown:hover .dropdown-content, 
+        .dropdown-categorii:hover .submeniu { display: block; }
 
-        /* --- STIL PENTRU BANNER OFERTĂ (NOU) --- */
+        .dropdown-content li, .submeniu li { list-style: none; }
+        
+        .dropdown-content li a, .submeniu li a {
+            color: var(--muted-text);
+            padding: 10px 20px;
+            display: block;
+        }
+
+        .dropdown-content li a:hover, .submeniu li a:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--accent-color);
+            padding-left: 25px; /* Efect glisare */
+        }
+
+        /* Acțiuni Meniu Dreapta */
+        .user-greeting {
+            color: var(--accent-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+            padding: 0 15px;
+        }
+
+        .nav-btn-outline {
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color) !important;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .nav-btn-outline:hover {
+            background-color: var(--accent-color);
+            color: white !important;
+        }
+
+        .nav-btn-logout {
+            color: #ff4b2b !important;
+            font-weight: bold;
+            padding: 8px 15px;
+        }
+        
+        .nav-btn-solid {
+            background-color: white;
+            color: black !important;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* --- 3. BANNER OFERTĂ --- */
         #banner-oferta {
-            display: none; /* Ascuns implicit */
-            background-color: gold; 
-            color: red; 
+            display: none;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: white; 
             text-align: center; 
             padding: 15px; 
-            font-size: 18px; 
+            font-size: 1.1rem; 
             font-weight: bold; 
-            border-bottom: 3px solid red; 
             cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 75, 43, 0.3);
+            border-bottom: none;
         }
+
+        /* --- 4. FOOTER --- */
+        footer { 
+            background-color: #0a0a0a; 
+            color: var(--muted-text); 
+            text-align: center; 
+            padding: 30px 10px; 
+            margin-top: auto; 
+            border-top: 1px solid #222;
+        }
+        footer strong { color: var(--accent-color); }
+
+        /* --- 5. STILIZARE UNIVERSALĂ FORMULARE DJANGO --- */
+        .premium-form-container {
+            background: #151515;
+            border-radius: 16px;
+            padding: 35px;
+            border: 1px solid #2a2a2a;
+            max-width: 600px; 
+            margin: 40px auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .premium-form-container p { display: flex; flex-direction: column; margin-bottom: 20px; }
+        .premium-form-container label { color: var(--muted-text); font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; }
+
+        .premium-form-container input:not([type="checkbox"]):not([type="radio"]:not([type="submit"])), 
+        .premium-form-container select, 
+        .premium-form-container textarea {
+            background: #222 !important;
+            border: 1px solid #333 !important;
+            color: white !important;
+            padding: 12px 15px !important;
+            border-radius: 8px !important;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .premium-form-container input:focus, 
+        .premium-form-container select:focus, 
+        .premium-form-container textarea:focus {
+            border-color: var(--accent-color) !important;
+            box-shadow: 0 0 0 2px rgba(178, 49, 230, 0.2);
+        }
+
+        .premium-form-container p:has(input[type="checkbox"]) { flex-direction: row; align-items: center; gap: 10px; }
+        .premium-form-container input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent-color); cursor: pointer; }
+
+        .premium-form-container .helptext { font-size: 0.8rem; color: #777; margin-top: 6px; }
+        .premium-form-container .errorlist { color: #ff4b2b; list-style: none; padding: 0; margin-top: 5px; font-size: 0.85rem; font-weight: bold; }
+        .errorlist.nonfield { background: rgba(255, 75, 43, 0.1); padding: 15px; border-left: 4px solid #ff4b2b; border-radius: 5px; margin-bottom: 20px; }
+
+        .btn-submit-premium {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 800;
+            width: 100%;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+
+        .btn-submit-premium:hover { transform: scale(1.02); filter: brightness(1.2); }
     </style>
     
     {% block extra_css %}{% endblock %}
@@ -48,117 +245,96 @@
         🎉 OFERTĂ SPECIALĂ: Click aici pentru 50% reducere! (Doar azi) 🎉
     </div>
 
-<header>
-    <nav>
-        <ul class="nav-links">
-            <li class="dropdown">
-                <a href="{% url 'exemplu' %}">Pagina principală ▼</a>
-                <ul class="dropdown-content">
-                    <li><a href="{% url 'exemplu' %}#introducere">Introducere</a></li>
-                    <li><a href="{% url 'exemplu' %}#produse-recomandate">Recomandări</a></li>
-                    <li><a href="{% url 'exemplu' %}#testimoniale">Testimoniale</a></li>
-                </ul>
-            </li>
+    <header class="modern-header">
+        <nav class="nav-container">
+            <ul class="nav-links">
+                <li class="dropdown">
+                    <a href="{% url 'exemplu'|default:'#' %}">Pagina principală ▼</a>
+                    <ul class="dropdown-content">
+                        <li><a href="{% url 'exemplu'|default:'#' %}#introducere">Introducere</a></li>
+                        <li><a href="{% url 'exemplu'|default:'#' %}#produse-recomandate">Recomandări</a></li>
+                        <li><a href="{% url 'exemplu'|default:'#' %}#testimoniale">Testimoniale</a></li>
+                    </ul>
+                </li>
 
-            <li class="dropdown">
-                <a href="{% url 'despre' %}">Despre noi ▼</a>
-                <ul class="dropdown-content">
-                    <li><a href="{% url 'despre' %}#istoric">Istoric</a></li>
-                    <li><a href="{% url 'despre' %}#echipa">Echipa</a></li>
-                </ul>
-            </li>
+                <li class="dropdown">
+                    <a href="{% url 'despre'|default:'#' %}">Despre noi ▼</a>
+                    <ul class="dropdown-content">
+                        <li><a href="{% url 'despre'|default:'#' %}#istoric">Istoric</a></li>
+                        <li><a href="{% url 'despre'|default:'#' %}#echipa">Echipa</a></li>
+                    </ul>
+                </li>
 
-            <li class="dropdown-categorii">
-                <a href="#">Categorii ▼</a>
-                <ul class="submeniu">
-                    {% for cat in categorie %}
-                        <li><a href="{% url 'produse_dupa_categorie' cat.nume_categorie %}">{{ cat.nume_categorie }}</a></li>
-                    {% empty %}
-                        <li><a href="#">Nicio categorie</a></li>
+                <li class="dropdown-categorii">
+                    <a href="#">Categorii ▼</a>
+                    <ul class="submeniu">
+                        {% for cat in categorie %}
+                            <li><a href="{% url 'produse_dupa_categorie' cat.nume_categorie %}">{{ cat.nume_categorie }}</a></li>
+                        {% empty %}
+                            <li><a href="#">Nicio categorie</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+
+                <li><a href="{% url 'lista_produse' %}">Produse</a></li>
+                <li><a href="{% url 'pagina_oferta' %}">Oferte</a></li>
+                <li><a href="{% url 'cos_virtual' %}">Coș</a></li>
+                <li><a href="{% url 'comenzi' %}">Comenzi</a></li>
+                <li><a href="{% url 'contact_page' %}">Contact</a></li>
+            </ul>
+
+            <ul class="nav-actions">
+                {% if perms.Magazin_de_muzica.add_produs %}
+                    <li><a href="{% url 'adaugare' %}" class="nav-btn-outline">Adaugă Produs</a></li>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                    {% for group in user.groups.all %}
+                        {% if group.name == 'Administratori_site' %}
+                            <li><a href="{% url 'log' %}" style="color: orange;">Log</a></li>
+                            <li><a href="{% url 'info' %}" style="color: orange;">Info</a></li>
+                        {% endif %}
                     {% endfor %}
-                </ul>
-            </li>
+                    <li class="user-greeting">Salut, {{ user.username }}</li>
+                    <li><a href="{% url 'profil' %}">Profil</a></li>
+                    <li><a href="{% url 'custom_logout' %}" class="nav-btn-logout">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'register' %}" class="nav-btn-solid">Înregistrare</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
 
-            <li><a href="{% url 'lista_produse' %}">Produse</a></li>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
 
-            {% if perms.Magazin_de_muzica.add_produs %}
-                <li><a href="{% url 'adaugare' %}" style="color: lightgreen;">Adaugă Produs</a></li>
-            {% endif %}
+    <footer>
+        <p>&copy; 2026 Magazinul de Muzică</p>
+        <p>Adresa IP: <strong>{{ user_ip|default:'Nedisponibil' }}</strong></p>
+    </footer>
 
-            <li><a href="{% url 'pagina_oferta' %}">Oferte</a></li>
-            <li><a href="{% url 'cos_virtual' %}">Coș</a></li>
-            <li><a href="{% url 'comenzi' %}">Comenzi</a></li>
-            <li><a href="{% url 'contact_page' %}">Contact</a></li>
-
-
-
-{% comment %} laborator 8 task 2 exercitiu 4 {% endcomment %}
-
-            {% if user.is_authenticated %}
-                {% for group in user.groups.all %}
-                    {% if group.name == 'Administratori_site' %}
-                        <li><a href="{% url 'log' %}" style="color: orange;">Log</a></li>
-                        <li><a href="{% url 'info' %}" style="color: orange;">Info</a></li>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-
-{% comment %}                                 {% endcomment %}
-
-            {% if user.is_authenticated %}
-                <li class="user-info">Salut, {{ user.username }}</li>
-                <li><a href="{% url 'profil' %}">Profil</a></li>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var isUserAuthenticated = "{{ user.is_authenticated }}" === "True";
+            if (isUserAuthenticated && Math.random() < 0.3) {
+                var banner = document.getElementById("banner-oferta");
+                banner.style.display = "block";
                 
-                <li><a href="{% url 'custom_logout' %}">Logout</a></li>
-            {% else %}
-                <li><a href="{% url 'register' %}">Înregistrare</a></li>
-                <li><a href="{% url 'login' %}">Login</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-</header>
+                banner.animate([
+                    { transform: 'scale(1)' },
+                    { transform: 'scale(1.02)' },
+                    { transform: 'scale(1)' }
+                ], { duration: 1000, iterations: Infinity });
 
-<main>
-    {% block content %}
-    {% endblock %}
-</main>
-
-<footer>
-    <p>&copy; 2025 Magazinul de Muzică</p>
-    <p>Adresa IP: <strong>{{ user_ip|default:'Nedisponibil' }}</strong></p>
-</footer>
-
-
-
-
-{% comment %} laborator 8 task 3  {% endcomment %}
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var isUserAuthenticated = "{{ user.is_authenticated }}" === "True";
-        if (isUserAuthenticated && Math.random() < 0.3) {
-            var banner = document.getElementById("banner-oferta");
-
-            banner.style.display = "block";
-
-
-            banner.animate([
-                { transform: 'scale(1)' },
-                { transform: 'scale(1.02)' },
-                { transform: 'scale(1)' }
-            ], {
-                duration: 1000,
-                iterations: Infinity
-            });
-
-
-            banner.addEventListener("click", function() {
-
-                window.location.href = "{% url 'revendica_oferta' %}";
-            });
-        }
-    });
-</script>
+                banner.addEventListener("click", function() {
+                    window.location.href = "{% url 'revendica_oferta'|default:'#' %}";
+                });
+            }
+        });
+    </script>
 
 </body>
 </html>

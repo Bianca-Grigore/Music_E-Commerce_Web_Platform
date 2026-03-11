@@ -4,32 +4,39 @@
 {% block title %}Contact - Magazin de Muzică{% endblock %}
 
 {% block content %}
-    <div class="container my-5">
-        <h1>Contactați-ne</h1>
-        <p>Vă rugăm să completați formularul de mai jos. Câmpurile marcate cu * sunt obligatorii.</p>
+<div class="premium-form-container" style="max-width: 700px;">
+    
+    <h2 style="color: white; text-align: center; margin-bottom: 10px; font-weight: 800;">
+        Contactați-ne
+    </h2>
+    <p style="text-align: center; color: #b3b3b3; margin-bottom: 30px; font-size: 0.9rem;">
+        Vă rugăm să completați formularul de mai jos.<br> Câmpurile marcate cu * sunt obligatorii.
+    </p>
 
-        {% if messages %}
+    {% if messages %}
+        <div style="margin-bottom: 25px;">
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}" role="alert">
+                <div class="alert {{ message.tags }}" style="color: var(--accent-color); background: rgba(29, 185, 84, 0.1); padding: 15px; border-left: 4px solid var(--accent-color); border-radius: 5px; font-weight: bold; font-size: 0.95rem; text-align: center;">
                     {{ message }}
                 </div>
             {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'contact_page' %}">
+        {% csrf_token %} 
+
+        {% if form.non_field_errors %}
+            <div class="errorlist nonfield">
+                <strong style="display: block; margin-bottom: 5px;">Erori generale:</strong>
+                {{ form.non_field_errors }}
+            </div>
         {% endif %}
+        
+        {{ form.as_p }}
 
-        <form method="post" action="{% url 'contact_page' %}" class="contact-form">
-            {% csrf_token %} 
+        <button type="submit" class="btn-submit-premium" style="margin-top: 20px;">Trimite Mesajul</button>
+    </form>
 
-            {% if form.non_field_errors %}
-                <div class="alert alert-danger">
-                    <strong>Erori generale:</strong>
-                    {{ form.non_field_errors }}
-                </div>
-            {% endif %}
-            
-            {{ form.as_p }}
-
-            <button type="submit" class="btn btn-primary mt-3">Trimite Mesajul</button>
-        </form>
-
-    </div>
+</div>
 {% endblock %}

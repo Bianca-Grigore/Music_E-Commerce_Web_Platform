@@ -1,21 +1,164 @@
 {% extends "./baza.html" %}
-{%block content%}
-<h2>Profilul Meu</h2>
-<p>Datele tale (din sesiune):</p>
-<ul>
-    <li>Username: <strong>{{ username }}</strong></li>
-    <li>Email: <strong>{{ email }}</strong></li>
-    <li>Nume: <strong>{{ first_name }} {{ last_name }}</strong></li>
-    <hr>
-    <li>Telefon: <strong>{{ telefon }}</strong></li>
-    <li>Tara: <strong>{{ tara }}</strong></li>
-    <li>Judet: <strong>{{ judet }}</strong></li>
-    <li>Oras: <strong>{{ oras }}</strong></li>
-    <li>Strada: <strong>{{ strada }}</strong></li>
-</ul>
 
-<hr>
-<p><a href="{% url 'schimbare_parola' %}">Schimbă Parola</a></p>
+{% block content %}
+<div class="premium-form-container" style="max-width: 700px;">
+    
+    <div style="text-align: center; margin-bottom: 40px;">
+        <div style="width: 80px; height: 80px; background: #1DB954; color: black; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; margin: 0 auto 15px auto;">
+            {{ username|make_list|first|upper }}
+        </div>
+        <h2 style="color: white; font-weight: 800; margin: 0;">Salut, {{ first_name|default:username }}!</h2>
+        <p style="color: #b3b3b3; font-size: 0.9rem; margin-top: 5px;">Acesta este panoul tău de control.</p>
+    </div>
 
-<p><a href="{% url 'logout' %}">Logout</a></p>
-{%endblock content%}
+    <div class="profile-section">
+        <h3>Informații Cont</h3>
+        <div class="profile-grid">
+            <div class="profile-card">
+                <span class="label">Username</span>
+                <span class="value">{{ username }}</span>
+            </div>
+            <div class="profile-card">
+                <span class="label">Email</span>
+                <span class="value">{{ email }}</span>
+            </div>
+            <div class="profile-card" style="grid-column: 1 / -1;">
+                <span class="label">Nume Complet</span>
+                <span class="value">{{ first_name }} {{ last_name }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-section">
+        <h3>Adresă și Contact</h3>
+        <div class="profile-grid">
+            <div class="profile-card">
+                <span class="label">Telefon</span>
+                <span class="value">{{ telefon|default:"Necompletat" }}</span>
+            </div>
+            <div class="profile-card">
+                <span class="label">Țară</span>
+                <span class="value">{{ tara|default:"Necompletat" }}</span>
+            </div>
+            <div class="profile-card">
+                <span class="label">Județ</span>
+                <span class="value">{{ judet|default:"Necompletat" }}</span>
+            </div>
+            <div class="profile-card">
+                <span class="label">Oraș</span>
+                <span class="value">{{ oras|default:"Necompletat" }}</span>
+            </div>
+            <div class="profile-card" style="grid-column: 1 / -1;">
+                <span class="label">Stradă</span>
+                <span class="value">{{ strada|default:"Necompletat" }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-actions">
+        <a href="{% url 'schimbare_parola' %}" class="btn-action btn-password">Schimbă Parola</a>
+        <a href="{% url 'logout' %}" class="btn-action btn-logout">Deconectare</a>
+    </div>
+
+</div>
+
+<style>
+    /* Secțiuni despărțitoare */
+    .profile-section {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .profile-section h3 {
+        color: var(--accent-color, #b231e6);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+
+    /* Grid-ul pentru informații */
+    .profile-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    /* Cardurile mici care țin datele */
+    .profile-card {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid #333;
+        padding: 15px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .profile-card .label {
+        color: #888;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    .profile-card .value {
+        color: white;
+        font-size: 1.05rem;
+        font-weight: 500;
+    }
+
+    /* Zona de butoane jos */
+    .profile-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .btn-action {
+        flex: 1; /* Le face să împartă spațiul 50/50 */
+        text-align: center;
+        padding: 12px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-password {
+        background: var(--accent-color, #b231e6);
+        color: black;
+    }
+
+    .btn-password:hover {
+        transform: scale(1.02);
+        background: #b231e6;
+    }
+
+    .btn-logout {
+        background: transparent;
+        border: 1px solid #ff4b2b;
+        color: #ff4b2b;
+    }
+
+    .btn-logout:hover {
+        background: rgba(255, 75, 43, 0.1);
+        color: #ff4b2b;
+    }
+
+    /* Pe ecrane mici (telefoane), le punem una sub alta */
+    @media (max-width: 500px) {
+        .profile-grid {
+            grid-template-columns: 1fr;
+        }
+        .profile-actions {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock content %}
