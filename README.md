@@ -32,14 +32,3 @@ The application features complex, custom backend validations to ensure data inte
 * **Backend:** Python 3.x, Django 5.x
 * **Frontend:** HTML5, CSS3 (Custom Dark Theme), Vanilla JavaScript, Bootstrap 5 (Grid baseline)
 * **Database:** SQLite (default) / PostgreSQL (production ready)
-
----
-
-## 🚀 Local Setup & Installation
-
-Follow these steps to get the project running on your local machine.
-
-### 1. Clone the repository
-```bash
-git clone [https://github.com/yourusername/your-repo-name.git](https://github.com/yourusername/your-repo-name.git)
-cd your-repo-name
