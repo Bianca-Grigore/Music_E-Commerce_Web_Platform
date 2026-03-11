@@ -7,6 +7,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'magazin_muzica.settings')
 django.setup()
 from django.conf import settings
 from Magazin_de_muzica import tasks
+
 def run_scheduler():
 
     k = settings.TASK_K_MINUTES

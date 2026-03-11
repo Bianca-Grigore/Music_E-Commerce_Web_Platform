@@ -4,6 +4,7 @@ from django.contrib.sitemaps.views import sitemap
 from django.contrib.sitemaps import GenericSitemap
 from .models import Campanie_Promo
 from .sitemaps import ProdusSitemap, StaticViewSitemap, CategorieSitemap, ArtistSitemap
+#laborator 9 task 2
 info_campanii = {
     'queryset': Campanie_Promo.objects.all(),
     'date_field': 'data_inceput',
@@ -14,7 +15,7 @@ sitemaps = {
     'produse': ProdusSitemap,
     'categorii': CategorieSitemap,
     'artisti': ArtistSitemap,
-    'campanii': GenericSitemap(info_campanii, priority=0.6, changefreq='seasonal'),
+    'campanii': GenericSitemap(info_campanii, priority=0.6, changefreq='monthly'),
 }
 
 urlpatterns = [

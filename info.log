@@ -55,3 +55,118 @@ INFO 2025-12-16 11:35:05,306 basehttp "GET /Magazin_de_muzica/produse/ HTTP/1.1"
 WARNING 2025-12-16 11:35:05,328 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
 INFO 2025-12-16 11:48:53,047 autoreload C:\Users\grigo\magazin_muzica\Magazin_de_muzica\context_processors.py changed, reloading.
 INFO 2025-12-16 11:48:53,530 autoreload Watching for file changes with StatReloader
+INFO 2025-12-16 16:07:46,703 autoreload Watching for file changes with StatReloader
+WARNING 2025-12-16 16:07:51,482 log Forbidden: /Magazin_de_muzica/info/
+WARNING 2025-12-16 16:07:51,484 basehttp "GET /Magazin_de_muzica/info/ HTTP/1.1" 403 420
+WARNING 2025-12-16 16:07:51,669 log Not Found: /favicon.ico
+WARNING 2025-12-16 16:07:51,672 basehttp "GET /favicon.ico HTTP/1.1" 404 2546
+WARNING 2025-12-16 16:07:56,474 log Not Found: /Magazin_de_muzica/exempolu
+WARNING 2025-12-16 16:07:56,475 basehttp "GET /Magazin_de_muzica/exempolu HTTP/1.1" 404 12393
+INFO 2025-12-16 16:08:02,707 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 7804
+WARNING 2025-12-16 16:08:02,731 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2025-12-16 16:08:04,588 basehttp "GET /Magazin_de_muzica/login/ HTTP/1.1" 200 7449
+WARNING 2025-12-16 16:08:04,607 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2025-12-16 16:08:07,156 basehttp "POST /Magazin_de_muzica/login/ HTTP/1.1" 302 0
+INFO 2025-12-16 16:08:07,323 basehttp "GET /Magazin_de_muzica/profil/ HTTP/1.1" 200 7734
+WARNING 2025-12-16 16:08:07,361 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2025-12-16 16:08:13,188 basehttp "GET /Magazin_de_muzica/adaugare_produs/ HTTP/1.1" 200 11487
+WARNING 2025-12-16 16:08:13,232 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2025-12-16 16:08:13,925 basehttp "GET /Magazin_de_muzica/produse/ HTTP/1.1" 200 14477
+WARNING 2025-12-16 16:08:13,953 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2025-12-16 16:20:18,019 autoreload C:\Users\grigo\magazin_muzica\Magazin_de_muzica\urls.py changed, reloading.
+INFO 2025-12-16 16:20:18,706 autoreload Watching for file changes with StatReloader
+INFO 2025-12-16 16:20:21,443 basehttp "GET /Magazin_de_muzica/produse/ HTTP/1.1" 200 14477
+WARNING 2025-12-16 16:20:21,459 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2025-12-16 16:23:10,571 autoreload C:\Users\grigo\magazin_muzica\Magazin_de_muzica\urls.py changed, reloading.
+INFO 2025-12-16 16:23:11,175 autoreload Watching for file changes with StatReloader
+INFO 2026-01-06 11:55:48,292 autoreload Watching for file changes with StatReloader
+INFO 2026-01-06 11:55:58,451 basehttp "GET /admin/Magazin_de_muzica/ HTTP/1.1" 302 0
+INFO 2026-01-06 11:55:58,916 basehttp "GET /admin/login/?next=/admin/Magazin_de_muzica/ HTTP/1.1" 200 4207
+INFO 2026-01-06 11:55:59,228 basehttp "GET /static/admin/css/login.css HTTP/1.1" 200 951
+INFO 2026-01-06 11:55:59,230 basehttp "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2026-01-06 11:55:59,234 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2808
+INFO 2026-01-06 11:55:59,234 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+INFO 2026-01-06 11:55:59,234 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2026-01-06 11:55:59,234 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
+INFO 2026-01-06 11:55:59,262 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+WARNING 2026-01-06 11:55:59,437 log Not Found: /favicon.ico
+WARNING 2026-01-06 11:55:59,437 basehttp "GET /favicon.ico HTTP/1.1" 404 2546
+INFO 2026-01-06 11:56:04,391 basehttp "POST /admin/login/?next=/admin/Magazin_de_muzica/ HTTP/1.1" 302 0
+INFO 2026-01-06 11:56:04,582 basehttp "GET /admin/Magazin_de_muzica/ HTTP/1.1" 200 12430
+INFO 2026-01-06 11:56:04,609 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2026-01-06 11:56:04,615 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2026-01-06 11:56:04,616 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2026-01-08 11:52:33,580 autoreload Watching for file changes with StatReloader
+INFO 2026-01-08 11:52:42,198 basehttp "GET /Magazin_de_muzica/ HTTP/1.1" 200 956
+WARNING 2026-01-08 11:52:42,629 log Not Found: /favicon.ico
+WARNING 2026-01-08 11:52:42,634 basehttp "GET /favicon.ico HTTP/1.1" 404 2546
+INFO 2026-01-08 11:52:46,417 basehttp "GET /Magazin_de_muzica/exemplu HTTP/1.1" 301 0
+INFO 2026-01-08 11:52:46,670 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 7804
+WARNING 2026-01-08 11:52:46,701 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-01-08 11:52:46,836 basehttp "GET /static/Magazin_de_muzica/imagini/TSimagine.jpg HTTP/1.1" 200 36546
+INFO 2026-01-08 11:52:57,744 basehttp "GET /Magazin_de_muzica/despre/ HTTP/1.1" 200 8180
+WARNING 2026-01-08 11:52:57,765 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-01-08 11:52:57,777 basehttp "GET /static/Magazin_de_muzica/imagini/Spooky.jpg HTTP/1.1" 200 118411
+INFO 2026-01-08 11:53:02,417 basehttp "GET /Magazin_de_muzica/produse/ HTTP/1.1" 200 13998
+INFO 2026-01-08 11:53:02,440 basehttp "GET /media/produse/hozier.jpg HTTP/1.1" 200 40096
+WARNING 2026-01-08 11:53:02,436 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-01-08 11:53:02,445 basehttp "GET /media/produse/death.jpg HTTP/1.1" 200 208790
+INFO 2026-01-08 11:53:02,449 basehttp "GET /media/produse/father_gGOSBBk.jpg HTTP/1.1" 200 125388
+INFO 2026-01-08 11:53:02,449 basehttp "GET /media/produse/antidote_BeYLYr1.jpg HTTP/1.1" 200 106831
+INFO 2026-01-08 11:53:02,452 basehttp "GET /media/produse/cancelled_mVllxdm.jpg HTTP/1.1" 200 141644
+INFO 2026-01-08 11:53:04,866 basehttp "GET /Magazin_de_muzica/produse/?page=2 HTTP/1.1" 200 14028
+WARNING 2026-01-08 11:53:04,880 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-01-08 11:53:04,906 basehttp "GET /media/produse/lotus.jpg HTTP/1.1" 200 34867
+INFO 2026-01-08 11:53:04,915 basehttp "GET /media/produse/speak.jpg HTTP/1.1" 200 31019
+INFO 2026-01-08 11:53:04,918 basehttp "GET /media/produse/tricouhozier.jpg HTTP/1.1" 200 41402
+INFO 2026-01-08 11:53:04,921 basehttp "GET /media/produse/debut.jpg HTTP/1.1" 200 173916
+INFO 2026-01-08 11:53:04,926 basehttp "GET /media/produse/bastard_lnjXyRc.jpg HTTP/1.1" 200 182908
+INFO 2026-01-08 11:53:11,428 basehttp "GET /Magazin_de_muzica/produs/12/ HTTP/1.1" 200 7770
+WARNING 2026-01-08 11:53:11,441 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-01-08 11:53:20,380 basehttp "GET /Magazin_de_muzica/produse/ HTTP/1.1" 200 13998
+WARNING 2026-01-08 11:53:20,396 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-01-08 11:53:26,646 basehttp "GET /Magazin_de_muzica/produse/?page=2 HTTP/1.1" 200 14028
+WARNING 2026-01-08 11:53:26,675 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-01-08 11:53:32,769 log Forbidden: /Magazin_de_muzica/oferta-speciala/
+WARNING 2026-01-08 11:53:32,769 basehttp "GET /Magazin_de_muzica/oferta-speciala/ HTTP/1.1" 403 407
+INFO 2026-01-08 11:53:36,094 basehttp "GET /Magazin_de_muzica/login/ HTTP/1.1" 200 7449
+WARNING 2026-01-08 11:53:36,116 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-01-08 11:53:38,426 basehttp "POST /Magazin_de_muzica/login/ HTTP/1.1" 200 7885
+WARNING 2026-01-08 11:53:38,438 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-01-08 11:53:45,584 basehttp "GET /Magazin_de_muzica/categorii/Casete%20Anii%2080/ HTTP/1.1" 200 631
+WARNING 2026-01-08 11:53:47,093 log Not Found: /
+WARNING 2026-01-08 11:53:47,093 basehttp "GET / HTTP/1.1" 404 2495
+INFO 2026-01-08 11:53:52,449 basehttp "GET /Magazin_de_muzica/categorii/CD%20Rock/ HTTP/1.1" 200 821
+WARNING 2026-01-08 11:53:55,172 log Not Found: /
+WARNING 2026-01-08 11:53:55,174 basehttp "GET / HTTP/1.1" 404 2495
+INFO 2026-01-08 11:54:00,175 basehttp "GET /Magazin_de_muzica/inregistrare/ HTTP/1.1" 200 8789
+WARNING 2026-01-08 11:54:00,195 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-01-08 11:54:02,090 basehttp "GET /Magazin_de_muzica/contact/ HTTP/1.1" 200 9645
+WARNING 2026-01-08 11:54:02,110 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-01-08 11:54:05,729 basehttp "GET /Magazin_de_muzica/comenzi/ HTTP/1.1" 200 6877
+WARNING 2026-01-08 11:54:05,750 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-01-09 20:33:14,425 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 20:33:22,714 basehttp "GET /Magazin_de_muzica/info HTTP/1.1" 301 0
+INFO 2026-01-09 20:33:22,932 basehttp "GET /Magazin_de_muzica/info/ HTTP/1.1" 200 7377
+WARNING 2026-01-09 20:33:22,956 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-01-09 20:33:23,013 log Not Found: /favicon.ico
+WARNING 2026-01-09 20:33:23,014 basehttp "GET /favicon.ico HTTP/1.1" 404 2546
+INFO 2026-01-09 20:33:34,329 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 8283
+WARNING 2026-01-09 20:33:34,350 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-01-09 20:33:34,449 basehttp "GET /static/Magazin_de_muzica/imagini/TSimagine.jpg HTTP/1.1" 200 36546
+INFO 2026-01-09 20:38:44,991 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 20:38:51,254 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 8283
+WARNING 2026-01-09 20:38:51,279 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-01-09 20:38:57,573 basehttp "GET /Magazin_de_muzica/categorii/Casete%20Anii%2070/ HTTP/1.1" 200 631
+WARNING 2026-01-09 20:38:59,572 log Not Found: /
+WARNING 2026-01-09 20:38:59,574 basehttp "GET / HTTP/1.1" 404 2495
+INFO 2026-01-09 20:44:36,790 basehttp "GET /Magazin_de_muzica/logout/ HTTP/1.1" 302 0
+INFO 2026-01-09 20:44:37,035 basehttp "GET /Magazin_de_muzica/login/ HTTP/1.1" 200 7449
+WARNING 2026-01-09 20:44:37,052 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-01-09 20:45:04,068 basehttp "POST /Magazin_de_muzica/login/ HTTP/1.1" 302 0
+INFO 2026-01-09 20:45:04,152 basehttp "GET /Magazin_de_muzica/profil/ HTTP/1.1" 200 7734
+WARNING 2026-01-09 20:45:04,180 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-01-09 20:45:08,963 basehttp "GET /Magazin_de_muzica/adaugare_produs/ HTTP/1.1" 200 11487
+WARNING 2026-01-09 20:45:08,984 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-01-09 20:45:19,157 basehttp "GET /Magazin_de_muzica/adaugare_produs/ HTTP/1.1" 200 11487
+WARNING 2026-01-09 20:45:19,171 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853

@@ -1148,3 +1148,24 @@ def detalii_campanie(request, pk):
     campanie = get_object_or_404(Campanie_Promo, pk=pk)
     produse = campanie.produs_set.all() 
     return render(request, 'Magazin_de_muzica/detaliu_campanie.html', {'campanie': campanie, 'produse': produse})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
