@@ -577,3 +577,452 @@ INFO 2026-03-11 19:49:03,426 basehttp "GET /Magazin_de_muzica/adaugare_produs/ H
 WARNING 2026-03-11 19:49:03,437 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
 INFO 2026-03-11 19:49:16,932 basehttp "GET /Magazin_de_muzica/profil/ HTTP/1.1" 200 17941
 WARNING 2026-03-11 19:49:16,952 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 10:43:20,565 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 10:44:24,800 autoreload C:\Users\grigo\magazin_muzica\Magazin_de_muzica\models.py changed, reloading.
+INFO 2026-03-12 10:44:25,548 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 10:44:59,192 autoreload C:\Users\grigo\magazin_muzica\Magazin_de_muzica\admin.py changed, reloading.
+INFO 2026-03-12 10:44:59,793 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 10:45:33,462 autoreload C:\Users\grigo\magazin_muzica\magazin_muzica\settings.py changed, reloading.
+INFO 2026-03-12 10:45:34,121 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 10:45:35,374 autoreload C:\Users\grigo\magazin_muzica\magazin_muzica\settings.py changed, reloading.
+INFO 2026-03-12 10:45:36,022 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 10:47:34,973 basehttp "GET /Magazin_de_muzica/ HTTP/1.1" 200 956
+WARNING 2026-03-12 10:47:35,209 log Not Found: /favicon.ico
+WARNING 2026-03-12 10:47:35,209 basehttp "GET /favicon.ico HTTP/1.1" 404 2546
+INFO 2026-03-12 10:47:38,476 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 13961
+WARNING 2026-03-12 10:47:38,489 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 10:49:32,318 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 17263
+WARNING 2026-03-12 10:49:32,339 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 10:49:32,354 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+INFO 2026-03-12 10:50:25,119 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 17207
+WARNING 2026-03-12 10:50:25,136 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 10:50:25,153 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+WARNING 2026-03-12 10:50:47,223 log Not Found: /produse/
+WARNING 2026-03-12 10:50:47,224 basehttp "GET /produse/ HTTP/1.1" 404 2537
+INFO 2026-03-12 10:51:55,127 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 10:51:59,535 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 17224
+WARNING 2026-03-12 10:51:59,549 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 10:51:59,561 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+WARNING 2026-03-12 10:52:01,049 log Not Found: /Magazin_de_muzica/exemplu/Magazin_de_muzica/produse/
+WARNING 2026-03-12 10:52:01,049 basehttp "GET /Magazin_de_muzica/exemplu/Magazin_de_muzica/produse/ HTTP/1.1" 404 12471
+INFO 2026-03-12 10:53:11,664 autoreload Watching for file changes with StatReloader
+WARNING 2026-03-12 10:53:15,038 log Not Found: /Magazin_de_muzica/exemplu/Magazin_de_muzica/produse/
+WARNING 2026-03-12 10:53:15,038 basehttp "GET /Magazin_de_muzica/exemplu/Magazin_de_muzica/produse/ HTTP/1.1" 404 12471
+INFO 2026-03-12 10:53:18,967 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 17211
+WARNING 2026-03-12 10:53:18,988 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 10:53:19,009 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+WARNING 2026-03-12 10:53:21,522 log Not Found: /Magazin_de_muzica/exemplu/lista_produse
+WARNING 2026-03-12 10:53:21,522 basehttp "GET /Magazin_de_muzica/exemplu/lista_produse HTTP/1.1" 404 12432
+INFO 2026-03-12 10:54:02,975 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 10:54:05,118 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 17225
+WARNING 2026-03-12 10:54:05,139 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 10:54:05,154 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+INFO 2026-03-12 10:54:06,233 basehttp "GET /Magazin_de_muzica/produse/ HTTP/1.1" 200 24557
+WARNING 2026-03-12 10:54:06,256 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 10:54:09,939 basehttp "GET /Magazin_de_muzica/produse/?page=2 HTTP/1.1" 200 24693
+WARNING 2026-03-12 10:54:09,965 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 10:54:11,342 basehttp "GET /Magazin_de_muzica/produse/?page=3 HTTP/1.1" 200 22097
+WARNING 2026-03-12 10:54:11,367 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 10:54:14,022 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 17225
+WARNING 2026-03-12 10:54:14,042 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 10:54:14,058 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+INFO 2026-03-12 10:55:43,847 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 10:55:46,554 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 18924
+WARNING 2026-03-12 10:55:46,570 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 10:55:46,587 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+WARNING 2026-03-12 10:55:48,922 log Not Found: /produse/
+WARNING 2026-03-12 10:55:48,922 basehttp "GET /produse/?categorie=merch HTTP/1.1" 404 2553
+INFO 2026-03-12 10:55:57,832 basehttp "GET /Magazin_de_muzica/produse/ HTTP/1.1" 200 24557
+WARNING 2026-03-12 10:55:57,856 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 10:56:09,793 basehttp "GET /Magazin_de_muzica/despre/ HTTP/1.1" 200 14337
+WARNING 2026-03-12 10:56:09,821 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 10:56:12,418 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 18924
+WARNING 2026-03-12 10:56:12,439 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 10:56:12,445 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+INFO 2026-03-12 10:57:13,301 basehttp "GET /Magazin_de_muzica/categorii/Vinyl%20Pop/ HTTP/1.1" 200 837
+INFO 2026-03-12 10:57:16,559 basehttp "GET /Magazin_de_muzica/produs/14/ HTTP/1.1" 200 13917
+WARNING 2026-03-12 10:57:16,579 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 10:58:16,880 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 10:58:18,978 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 17568
+WARNING 2026-03-12 10:58:18,992 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 10:58:19,001 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+INFO 2026-03-12 10:58:24,294 basehttp "GET /Magazin_de_muzica/produse/ HTTP/1.1" 200 24557
+WARNING 2026-03-12 10:58:24,312 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 10:59:49,530 autoreload Watching for file changes with StatReloader
+ERROR 2026-03-12 10:59:52,067 log Internal Server Error: /Magazin_de_muzica/exemplu/
+Traceback (most recent call last):
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\magazin_muzica\Magazin_de_muzica\views.py", line 329, in afis_template
+    return render(request, "Magazin_de_muzica/exemplu.html", context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'Detalii_produs' with no arguments not found. 2 pattern(s) tried: ['Magazin_de_muzica/produs/(?P<pk>[0-9]+)/\\Z', 'Magazin_de_muzica/produse/(?P<produs_id>[0-9]+)/\\Z']
+ERROR 2026-03-12 10:59:52,079 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 500 164253
+INFO 2026-03-12 11:01:19,434 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2026-03-12 11:01:19,740 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4171
+INFO 2026-03-12 11:01:21,977 basehttp "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2026-03-12 11:01:22,154 basehttp "GET /admin/ HTTP/1.1" 200 15157
+INFO 2026-03-12 11:01:22,273 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2026-03-12 11:01:22,291 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2026-03-12 11:01:22,291 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2026-03-12 11:01:25,122 basehttp "GET /admin/Magazin_de_muzica/produs/ HTTP/1.1" 200 20414
+INFO 2026-03-12 11:01:25,160 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 200 6878
+INFO 2026-03-12 11:01:25,189 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2026-03-12 11:01:25,196 basehttp "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+INFO 2026-03-12 11:01:25,196 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9777
+INFO 2026-03-12 11:01:25,211 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2026-03-12 11:01:25,216 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2026-03-12 11:01:25,219 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 200 8076
+INFO 2026-03-12 11:01:25,228 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2026-03-12 11:01:25,228 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2026-03-12 11:01:25,246 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-12 11:01:25,279 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2026-03-12 11:01:25,396 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+INFO 2026-03-12 11:01:25,429 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2026-03-12 11:01:25,432 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2026-03-12 11:01:27,362 basehttp "GET /admin/Magazin_de_muzica/produs/11/change/ HTTP/1.1" 200 21773
+INFO 2026-03-12 11:01:27,396 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 200 8525
+INFO 2026-03-12 11:01:27,401 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2026-03-12 11:01:27,410 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 200 11973
+INFO 2026-03-12 11:01:27,446 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2026-03-12 11:01:27,446 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-12 11:01:27,478 basehttp "GET /static/admin/img/tooltag-arrowright.svg HTTP/1.1" 200 280
+INFO 2026-03-12 11:02:45,897 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 11:02:48,723 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 17811
+WARNING 2026-03-12 11:02:48,737 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 11:02:48,758 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+INFO 2026-03-12 11:02:50,262 basehttp "GET /Magazin_de_muzica/produse/ HTTP/1.1" 200 24773
+WARNING 2026-03-12 11:02:50,286 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 11:02:52,702 log Not Found: /Magazin_de_muzica/produs/1/
+WARNING 2026-03-12 11:02:52,702 basehttp "GET /Magazin_de_muzica/produs/1/ HTTP/1.1" 404 10644
+INFO 2026-03-12 11:03:00,353 basehttp "GET /Magazin_de_muzica/produse/ HTTP/1.1" 200 24773
+WARNING 2026-03-12 11:03:00,374 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:03:02,678 basehttp "GET /Magazin_de_muzica/produse/?page=2 HTTP/1.1" 200 24909
+WARNING 2026-03-12 11:03:02,698 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:03:04,539 basehttp "GET /Magazin_de_muzica/produse/?page=3 HTTP/1.1" 200 22313
+WARNING 2026-03-12 11:03:04,559 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:03:08,837 basehttp "GET /Magazin_de_muzica/produs/11/ HTTP/1.1" 200 14117
+WARNING 2026-03-12 11:03:08,852 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:03:20,249 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 11:03:58,799 basehttp "GET /Magazin_de_muzica/produs/11/ HTTP/1.1" 200 14117
+WARNING 2026-03-12 11:03:58,820 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:04:00,727 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 17812
+WARNING 2026-03-12 11:04:00,741 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 11:04:00,749 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+INFO 2026-03-12 11:04:02,407 basehttp "GET /Magazin_de_muzica/produs/11/ HTTP/1.1" 200 14117
+WARNING 2026-03-12 11:04:02,418 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:04:05,035 basehttp "GET /Magazin_de_muzica/produse/ HTTP/1.1" 200 24773
+WARNING 2026-03-12 11:04:05,074 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:04:09,592 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 17812
+WARNING 2026-03-12 11:04:09,616 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 11:04:09,637 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+INFO 2026-03-12 11:10:13,252 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 11:10:21,456 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 17729
+WARNING 2026-03-12 11:10:21,470 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 11:10:21,477 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+INFO 2026-03-12 11:10:25,698 basehttp "GET /Magazin_de_muzica/despre/ HTTP/1.1" 200 14470
+WARNING 2026-03-12 11:10:25,731 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:10:33,396 basehttp "GET /Magazin_de_muzica/categorii/Figurine/ HTTP/1.1" 200 631
+INFO 2026-03-12 11:11:40,995 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 11:11:45,907 basehttp "GET /Magazin_de_muzica/despre/ HTTP/1.1" 200 14470
+WARNING 2026-03-12 11:11:45,941 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:11:47,371 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 17729
+WARNING 2026-03-12 11:11:47,392 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 11:11:47,398 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+INFO 2026-03-12 11:11:48,273 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 17729
+WARNING 2026-03-12 11:11:48,298 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 11:11:48,325 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+ERROR 2026-03-12 11:11:50,583 log Internal Server Error: /Magazin_de_muzica/categorii/Figurine/
+Traceback (most recent call last):
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\magazin_muzica\Magazin_de_muzica\views.py", line 1045, in produse_dupa_categorie
+    return render(request, 'Magazin_de_muzica/produse_categorie.html', {'categorie': categorie, 'produse': produse})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\defaulttags.py", line 198, in render
+    values = list(values)
+             ^^^^^^^^^^^^
+TypeError: 'Categorie' object is not iterable
+ERROR 2026-03-12 11:11:50,586 basehttp "GET /Magazin_de_muzica/categorii/Figurine/ HTTP/1.1" 500 135212
+ERROR 2026-03-12 11:11:56,932 log Internal Server Error: /Magazin_de_muzica/categorii/Postere/
+Traceback (most recent call last):
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\magazin_muzica\Magazin_de_muzica\views.py", line 1045, in produse_dupa_categorie
+    return render(request, 'Magazin_de_muzica/produse_categorie.html', {'categorie': categorie, 'produse': produse})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\defaulttags.py", line 198, in render
+    values = list(values)
+             ^^^^^^^^^^^^
+TypeError: 'Categorie' object is not iterable
+ERROR 2026-03-12 11:11:56,944 basehttp "GET /Magazin_de_muzica/categorii/Postere/ HTTP/1.1" 500 135183
+ERROR 2026-03-12 11:12:01,418 log Internal Server Error: /Magazin_de_muzica/categorii/CD Rock/
+Traceback (most recent call last):
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\magazin_muzica\Magazin_de_muzica\views.py", line 1045, in produse_dupa_categorie
+    return render(request, 'Magazin_de_muzica/produse_categorie.html', {'categorie': categorie, 'produse': produse})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grigo\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\defaulttags.py", line 198, in render
+    values = list(values)
+             ^^^^^^^^^^^^
+TypeError: 'Categorie' object is not iterable
+ERROR 2026-03-12 11:12:01,424 basehttp "GET /Magazin_de_muzica/categorii/CD%20Rock/ HTTP/1.1" 500 135591
+INFO 2026-03-12 11:12:42,642 basehttp "GET /Magazin_de_muzica/adaugare_produs/ HTTP/1.1" 200 17700
+WARNING 2026-03-12 11:12:42,658 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:12:44,942 basehttp "GET /Magazin_de_muzica/contact/ HTTP/1.1" 200 15922
+WARNING 2026-03-12 11:12:44,976 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:12:47,239 basehttp "GET /Magazin_de_muzica/comenzi/ HTTP/1.1" 200 13167
+WARNING 2026-03-12 11:12:47,260 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:13:45,602 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 11:13:51,666 basehttp "GET /Magazin_de_muzica/comenzi/ HTTP/1.1" 200 13167
+WARNING 2026-03-12 11:13:51,689 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:13:53,109 basehttp "GET /Magazin_de_muzica/produse/ HTTP/1.1" 200 24690
+WARNING 2026-03-12 11:13:53,144 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:13:54,699 basehttp "GET /Magazin_de_muzica/categorii/Figurine/ HTTP/1.1" 200 3053
+WARNING 2026-03-12 11:13:56,429 log Not Found: /
+WARNING 2026-03-12 11:13:56,429 basehttp "GET / HTTP/1.1" 404 2495
+INFO 2026-03-12 11:14:04,776 basehttp "GET /Magazin_de_muzica/categorii/CD%20Rock/ HTTP/1.1" 200 3243
+INFO 2026-03-12 11:14:10,004 basehttp "GET /Magazin_de_muzica/categorii/CD%20Pop/ HTTP/1.1" 200 3534
+INFO 2026-03-12 11:14:11,130 basehttp "GET /Magazin_de_muzica/produs/12/ HTTP/1.1" 200 14046
+WARNING 2026-03-12 11:14:11,155 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:14:43,159 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 11:14:46,338 basehttp "GET /Magazin_de_muzica/produs/12/ HTTP/1.1" 200 14046
+WARNING 2026-03-12 11:14:46,352 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:14:47,880 basehttp "GET /Magazin_de_muzica/categorii/Vinyl%20Hip-Hop/ HTTP/1.1" 200 3093
+INFO 2026-03-12 11:14:49,148 basehttp "GET /Magazin_de_muzica/produse/ HTTP/1.1" 200 24690
+WARNING 2026-03-12 11:14:49,164 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:14:54,232 basehttp "GET /Magazin_de_muzica/despre/ HTTP/1.1" 200 14470
+WARNING 2026-03-12 11:14:54,253 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:15:02,111 basehttp "GET /Magazin_de_muzica/oferta-speciala/ HTTP/1.1" 200 13794
+WARNING 2026-03-12 11:15:02,140 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:15:03,480 basehttp "GET /Magazin_de_muzica/despre/ HTTP/1.1" 200 14470
+WARNING 2026-03-12 11:15:03,500 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:15:32,791 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 17729
+WARNING 2026-03-12 11:15:32,824 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 11:15:32,839 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+INFO 2026-03-12 11:15:47,138 basehttp "GET /Magazin_de_muzica/exemplu/ HTTP/1.1" 200 17729
+WARNING 2026-03-12 11:15:47,153 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2026-03-12 11:15:47,170 basehttp "GET /static/Magazin_de_muzica/imagini/hero-bg.jpg HTTP/1.1" 404 1925
+INFO 2026-03-12 11:16:35,126 basehttp "GET /Magazin_de_muzica/produse/ HTTP/1.1" 200 24690
+WARNING 2026-03-12 11:16:35,139 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:16:37,220 basehttp "GET /Magazin_de_muzica/product_list_view/ HTTP/1.1" 200 27917
+WARNING 2026-03-12 11:16:37,247 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:16:56,334 basehttp "GET /Magazin_de_muzica/product_list_view/?categorie=&denumire=&pret_min=&pret_max=&stoc_min=&stoc_max=&data_adaugare_min=&data_adaugare_max=&produse_per_pagina=10&categorie_id= HTTP/1.1" 200 32849
+WARNING 2026-03-12 11:16:56,357 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:17:10,883 basehttp "GET /Magazin_de_muzica/produse/ HTTP/1.1" 200 24690
+WARNING 2026-03-12 11:17:10,905 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:17:11,562 basehttp "GET /Magazin_de_muzica/oferta-speciala/ HTTP/1.1" 200 13794
+WARNING 2026-03-12 11:17:11,582 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:17:22,124 basehttp "GET /Magazin_de_muzica/cos_virtual/ HTTP/1.1" 200 13167
+WARNING 2026-03-12 11:17:22,144 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:17:23,410 basehttp "GET /Magazin_de_muzica/comenzi/ HTTP/1.1" 200 13167
+WARNING 2026-03-12 11:17:23,430 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:17:25,047 basehttp "GET /Magazin_de_muzica/contact/ HTTP/1.1" 200 17582
+WARNING 2026-03-12 11:17:25,075 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:17:34,434 basehttp "GET /Magazin_de_muzica/adaugare_produs/ HTTP/1.1" 200 17700
+WARNING 2026-03-12 11:17:34,449 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:17:43,795 basehttp "GET /Magazin_de_muzica/profil/ HTTP/1.1" 200 17409
+WARNING 2026-03-12 11:17:43,820 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:18:10,530 basehttp "GET /admin/ HTTP/1.1" 200 15157
+INFO 2026-03-12 11:18:12,666 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 23195
+INFO 2026-03-12 11:18:12,769 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-12 11:18:12,826 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+INFO 2026-03-12 11:18:12,826 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+INFO 2026-03-12 11:18:12,882 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+INFO 2026-03-12 11:18:15,658 basehttp "GET /admin/auth/user/25/change/ HTTP/1.1" 200 33116
+INFO 2026-03-12 11:18:15,713 basehttp "GET /static/admin/js/SelectBox.js HTTP/1.1" 200 4530
+INFO 2026-03-12 11:18:15,713 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 200 9141
+INFO 2026-03-12 11:18:15,713 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2026-03-12 11:18:15,713 basehttp "GET /static/admin/js/SelectFilter2.js HTTP/1.1" 200 15845
+INFO 2026-03-12 11:18:15,755 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-12 11:18:15,794 basehttp "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+INFO 2026-03-12 11:18:15,794 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2026-03-12 11:18:15,794 basehttp "GET /static/admin/img/selector-icons.svg HTTP/1.1" 200 3291
+INFO 2026-03-12 11:18:36,007 basehttp "POST /admin/auth/user/25/change/ HTTP/1.1" 302 0
+INFO 2026-03-12 11:18:36,101 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 23401
+INFO 2026-03-12 11:18:36,174 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-12 11:18:38,098 basehttp "GET /Magazin_de_muzica/profil/ HTTP/1.1" 200 17409
+WARNING 2026-03-12 11:18:38,121 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:19:54,074 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 11:19:58,599 basehttp "GET /Magazin_de_muzica/profil/ HTTP/1.1" 200 17409
+WARNING 2026-03-12 11:19:58,618 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:20:00,769 basehttp "GET /Magazin_de_muzica/despre/ HTTP/1.1" 200 17953
+WARNING 2026-03-12 11:20:00,789 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:22:10,636 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 11:22:13,197 basehttp "GET /Magazin_de_muzica/despre/ HTTP/1.1" 200 17953
+WARNING 2026-03-12 11:22:13,214 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:22:14,946 basehttp "GET /Magazin_de_muzica/adaugare_produs/ HTTP/1.1" 200 17700
+WARNING 2026-03-12 11:22:14,960 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:22:16,314 basehttp "GET /Magazin_de_muzica/profil/ HTTP/1.1" 200 17418
+WARNING 2026-03-12 11:22:16,336 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:22:39,884 autoreload Watching for file changes with StatReloader
+INFO 2026-03-12 11:22:41,425 basehttp "GET /Magazin_de_muzica/profil/ HTTP/1.1" 200 17447
+WARNING 2026-03-12 11:22:41,448 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+INFO 2026-03-12 11:22:59,427 basehttp "GET /Magazin_de_muzica/profil/ HTTP/1.1" 200 17450
+WARNING 2026-03-12 11:22:59,450 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853

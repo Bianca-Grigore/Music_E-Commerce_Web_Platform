@@ -4,10 +4,10 @@
 <div class="premium-form-container" style="max-width: 700px;">
     
     <div style="text-align: center; margin-bottom: 40px;">
-        <div style="width: 80px; height: 80px; background: #1DB954; color: black; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; margin: 0 auto 15px auto;">
+        <div style="width: 80px; height: 80px; background: #6c31c9; color: black; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; margin: 0 auto 15px auto;">
             {{ username|make_list|first|upper }}
         </div>
-        <h2 style="color: white; font-weight: 800; margin: 0;">Salut, {{ first_name|default:username }}!</h2>
+        <h2 style="color: white; font-weight: 800; margin: 0;">Salut, {{ user.first_name|default:username }}!</h2>
         <p style="color: #b3b3b3; font-size: 0.9rem; margin-top: 5px;">Acesta este panoul tău de control.</p>
     </div>
 
@@ -16,15 +16,15 @@
         <div class="profile-grid">
             <div class="profile-card">
                 <span class="label">Username</span>
-                <span class="value">{{ username }}</span>
+                <span class="value">{{ user.username }}</span>
             </div>
             <div class="profile-card">
                 <span class="label">Email</span>
-                <span class="value">{{ email }}</span>
+                <span class="value">{{ user.email }}</span>
             </div>
             <div class="profile-card" style="grid-column: 1 / -1;">
                 <span class="label">Nume Complet</span>
-                <span class="value">{{ first_name }} {{ last_name }}</span>
+                <span class="value">{{ user.first_name }} {{ user.last_name }}</span>
             </div>
         </div>
     </div>
@@ -63,7 +63,7 @@
 </div>
 
 <style>
-    /* Secțiuni despărțitoare */
+
     .profile-section {
         margin-bottom: 30px;
         padding-bottom: 20px;
@@ -79,14 +79,12 @@
         font-weight: 700;
     }
 
-    /* Grid-ul pentru informații */
     .profile-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 15px;
     }
 
-    /* Cardurile mici care țin datele */
     .profile-card {
         background: rgba(0, 0, 0, 0.3);
         border: 1px solid #333;
@@ -110,7 +108,6 @@
         font-weight: 500;
     }
 
-    /* Zona de butoane jos */
     .profile-actions {
         display: flex;
         gap: 15px;
@@ -118,7 +115,7 @@
     }
 
     .btn-action {
-        flex: 1; /* Le face să împartă spațiul 50/50 */
+        flex: 1; 
         text-align: center;
         padding: 12px;
         border-radius: 25px;
@@ -151,7 +148,7 @@
         color: #ff4b2b;
     }
 
-    /* Pe ecrane mici (telefoane), le punem una sub alta */
+
     @media (max-width: 500px) {
         .profile-grid {
             grid-template-columns: 1fr;

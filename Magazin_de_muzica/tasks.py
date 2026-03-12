@@ -9,8 +9,6 @@ from .models import Produs
 
 logger = logging.getLogger('django')
 
-#1- stergere utilizatori neconfirmati
-
 def sterge_useri_neconfirmati():
 
     timp_limita = timezone.now() - timedelta(minutes=settings.TASK_K_MINUTES)
@@ -30,7 +28,6 @@ def sterge_useri_neconfirmati():
     else:
         print("Niciun utilizator neconfirmat de sters.")
 
-#2 - newsletter
 def trimite_newsletter():
 
 
@@ -74,7 +71,7 @@ def trimite_newsletter():
     except Exception as e:
         logger.error(f"TASK AUTOMAT ERROR: Nu s-a putut trimite newsletter-ul: {e}")
 
-# 3 - verificare stoc
+
 def verificare_stocuri_scazute():
 
     produse_critice = Produs.objects.filter(stoc__lt=5)
@@ -87,7 +84,7 @@ def verificare_stocuri_scazute():
     else:
         print("Stocul este ok.")
 
-# 4
+
 def raport_saptamanal_admin():
     nr_useri = User.objects.count()
     nr_produse = Produs.objects.count()

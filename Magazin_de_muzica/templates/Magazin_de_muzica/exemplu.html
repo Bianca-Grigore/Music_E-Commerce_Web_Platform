@@ -1,33 +1,152 @@
 {% extends './baza.html' %}
 {% load static %}
 
-{% block title %}Acasă{% endblock %}
+{% block title %}Acasă | Sunet de Excepție{% endblock %}
 
 {% block content %}
-    <section id="introducere">
-        <h2>Sunet de Excepție! Noutăți și Precomenzi</h2>
-        <p>Descoperă cele mai proaspete lansări pe vinil și CD. De la rock clasic la jazz modern, găsești tot ce ai nevoie pentru colecția ta.</p>
-        <p>Suntem destinația ta principală pentru cele mai tari discuri. Răsfoiește catalogul nostru bogat!</p>
+<div class="main-container">
+    
+    <header id="introducere" class="hero-section">
+        <div class="hero-content">
+            <h1>Sunet de Excepție! <span>Noutăți și Precomenzi</span></h1>
+            <p>Descoperă cele mai proaspete lansări pe vinil și CD. De la rock clasic la jazz modern, găsești tot ce ai nevoie pentru colecția ta.</p>
+            <p>Suntem destinația ta principală pentru cele mai tari discuri. Răsfoiește catalogul nostru bogat!</p>
+            <div class="cta-buttons">
+                <a href="{% url 'lista_produse' %}" class="btn-primary">Explorează Catalogul</a>
+            </div>
+        </div>
+    </header>
+
+    <hr class="section-divider">
+
+    <section id="testimoniale" class="featured-section section-padding">
+        <div class="featured-container">
+            <div class="featured-text">
+                <h2 class="section-title left">Recomandarea Săptămânii</h2>
+                <blockquote class="quote">
+                    "Albumul 'The Life Of A Showgirl' - Taylor Swift feat. Sabrina Carpenter exclusiv pe site."
+                </blockquote>
+                <div class="cta-buttons">
+                    <a href="{% url 'Detalii_produs' 11 %}" class="btn-primary small">Vezi Detalii Produs</a>
+                </div>
+            </div>
+            <div class="featured-image">
+                <img src="{% static 'Magazin_de_muzica/imagini/TSimagine.jpg' %}" alt="imagine" class="album-cover" />
+            </div>
+        </div>
     </section>
 
-    <hr>
+</div>
 
-    <section id="produse-recomandate">
-        <h2>Explorează Cele Mai Căutate Categorii</h2>
-        <ul>
-            <li>**Viniluri** - Redescoperă sunetul analog.</li>
-            <li>**Casete** - Pentru cei care vor sa retraiasca muzica aniilor 70, 80, 90.</li>
-            <li>**Merch** - Accesorii si imbracaminte pe gustul oricarui fan, indiferent de varsta.</li>
-        </ul>
-    </section>
+<style>
+    :root {
+        --accent-color: rgb(148, 62, 245); 
+        --dark-bg: #121212;
+        --light-text: #e0e0e0;
+    }
 
-    <hr>
+    .main-container {
+        font-family: 'Segoe UI', Roboto, sans-serif;
+        color: var(--light-text);
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
 
-    <section id="testimoniale">
-        <h2>Recomandarea Săptămânii</h2>
-        <blockquote>
-            "Albumul 'The Life Of A Showgirl' - Taylor Swift feat. Sabrina Carpenter exclusiv pe site."
-        </blockquote>
-        <img src="{% static "Magazin_de_muzica/imagini/TSimagine.jpg" %}" alt="imagine" />
-    </section>
+    .hero-section {
+        background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('{% static "Magazin_de_muzica/imagini/hero-bg.jpg" %}') center/cover;
+        padding: 100px 40px;
+        border-radius: 15px;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .hero-section h1 span { color: var(--accent-color); }
+
+    .section-divider {
+        border: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, #333, transparent);
+        margin: 40px 0;
+    }
+
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+    }
+    .card-link { text-decoration: none; color: inherit; }
+    .category-card {
+        background: #1e1e1e;
+        padding: 40px 20px;
+        border-radius: 12px;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid #333;
+        height: 100%;
+    }
+    .category-card:hover { 
+        transform: translateY(-10px); 
+        border-color: var(--accent-color);
+        box-shadow: 0 10px 20px rgba(148, 62, 245, 0.15);
+    }
+    .card-icon { font-size: 3.5rem; margin-bottom: 20px; }
+
+    .featured-container {
+        display: flex;
+        align-items: center;
+        gap: 50px;
+        background: #1a1a1a;
+        padding: 60px;
+        border-radius: 20px;
+        flex-wrap: wrap;
+    }
+    .featured-text { flex: 1.5; min-width: 300px; }
+    .featured-image { flex: 1; text-align: center; }
+
+    .quote {
+        font-size: 1.4rem;
+        font-style: italic;
+        color: #fff;
+        border-left: 4px solid var(--accent-color);
+        padding-left: 20px;
+        margin: 25px 0;
+        line-height: 1.6;
+    }
+
+    .album-cover {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+        transition: transform 0.5s;
+    }
+    .album-cover:hover { transform: scale(1.03) rotate(2deg); }
+
+    .btn-primary {
+        background: var(--accent-color);
+        color: white;
+        padding: 15px 35px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-block;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+    .btn-primary:hover {
+        filter: brightness(1.2);
+        box-shadow: 0 5px 15px rgba(148, 62, 245, 0.4);
+    }
+    .btn-primary.small { padding: 10px 25px; font-size: 0.9rem; }
+
+    .section-title { text-align: center; margin-bottom: 40px; font-size: 2rem; }
+    .section-title.left { text-align: left; margin-bottom: 20px; }
+
+    @media (max-width: 768px) {
+        .featured-container { flex-direction: column; text-align: center; padding: 30px; }
+        .section-title.left { text-align: center; }
+        .quote { border-left: none; border-top: 2px solid var(--accent-color); padding: 20px 0; }
+    }
+</style>
 {% endblock %}

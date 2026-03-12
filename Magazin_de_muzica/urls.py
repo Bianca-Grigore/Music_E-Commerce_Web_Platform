@@ -4,7 +4,6 @@ from django.contrib.sitemaps.views import sitemap
 from django.contrib.sitemaps import GenericSitemap
 from .models import Campanie_Promo
 from .sitemaps import ProdusSitemap, StaticViewSitemap, CategorieSitemap, ArtistSitemap
-#laborator 9 task 2
 info_campanii = {
     'queryset': Campanie_Promo.objects.all(),
     'date_field': 'data_inceput',
@@ -48,19 +47,11 @@ urlpatterns = [
     path('revendica-oferta/', views.revendica_oferta, name='revendica_oferta'),
     path('oferta-speciala/', views.afisare_oferta, name='pagina_oferta'),
     path('logout/', views.custom_logout, name='custom_logout'),
-
-
-
     path('produs/<int:pk>/', views.vizualizare_produs, name='Detalii_produs'),
-
     path('categorii/<str:nume_categorie>/', views.produse_dupa_categorie, name='produse_dupa_categorie'),
-
     path('artist/<int:pk>/', views.detalii_artist, name='detaliu_artist'),
-    
     path('campanie/<int:pk>/', views.detalii_campanie, name='detaliu_campanie'),
-
     path('inregistrare/', views.register_view, name='register'),
     path('login/', views.custom_login_view, name='login'),
-
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]

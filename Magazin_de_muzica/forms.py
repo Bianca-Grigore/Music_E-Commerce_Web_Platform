@@ -10,7 +10,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Profil 
 from .models import Promotii
-#-------------------------------------------------------------
+
 
 class PromotiiForm(forms.ModelForm):
     categorii = forms.ModelMultipleChoiceField(
@@ -37,8 +37,8 @@ class PromotiiForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['categorii'].initial = self.fields['categorii'].queryset.all()
 
-#-------------------------------------------------------------
-#LABORATOR 6 EX 3
+
+
 class ProfilUserCreationForm(UserCreationForm):
     
     email = forms.EmailField(required=True, label='E-mail') 
@@ -103,8 +103,6 @@ class ProfilUserCreationForm(UserCreationForm):
             
         return user
 
-#-----------------------------------------------------------------------------------------------------------------------------
-#Laborator 6 exercitiul 4 formular de login si logout 
 from django.contrib.auth.forms import AuthenticationForm
 class CustomAuthenticationForm(AuthenticationForm):
     ramane_logat = forms.BooleanField(
@@ -118,7 +116,6 @@ class CustomAuthenticationForm(AuthenticationForm):
         ramane_logat = self.cleaned_data.get('ramane_logat')
         return cleaned_data
 
-#-----------------------------------------------------------------------------------------------------------------------------
 
 PAGINATION_CHOICES = [
     (5, '5 pe pagină (Implicit)'), 
@@ -222,7 +219,6 @@ class ProductFilterForm(forms.Form):
 
         return cleaned_data
 
-#-----------------------------------------------------------------------------------------------------------------------------
 
 TIP_MESAJ_CHOICES = [
     ('neselectat', '--- Neselectat ---'),
@@ -233,7 +229,7 @@ TIP_MESAJ_CHOICES = [
     ('programare', 'Programare'),
 ]
     
-#2.i)
+
 def validare_format_text(value):
     if not value:
         return 
@@ -242,7 +238,7 @@ def validare_format_text(value):
     if not re.fullmatch(r'^[A-Za-z\s-]+$', value):
         raise ValidationError('Textul poate conține doar litere, spații și cratime.', code='caractere_invalide')
     
-#2.j)
+
 def validare_caps_after_separator(value):
     
     if not value:
@@ -250,12 +246,12 @@ def validare_caps_after_separator(value):
     if re.search(r'[ -][a-z]', value):
         raise ValidationError('După spațiu sau cratimă trebuie să urmeze literă mare.', code='litera_mica_dupa_separator')
     
-#2.d)
+
 def validare_no_links(value):
     if re.search(r'https?://\S+', value, re.IGNORECASE):
         raise ValidationError('Mesajul nu trebuie să conțină link-uri.', code='contine_link')
     
-#2.f) g)
+
 def validare_cnp_format(value):
     if not value:
         return
@@ -286,7 +282,7 @@ def validare_cnp_format(value):
     except ValueError:
         raise ValidationError('Data din CNP este invalidă.', code='cnp_data_invalida')  
 
-#2.h)
+
 def validare_no_temp_email(value):
     temp_domains=['guerillamail.com', 'yopmail.com']
     try:
@@ -296,7 +292,7 @@ def validare_no_temp_email(value):
     if domain in temp_domains:
         raise ValidationError('Adresa de email nu trebuie să fie de tip temporar.', code='email_temporar')
 
-#2. b)
+
 def validate_word_count(value):
     words = re.findall(r'[A-Za-z0-9]+', value) 
     count = len(words)
@@ -304,7 +300,7 @@ def validate_word_count(value):
     if count < 5 or count > 100:
         raise ValidationError(f'Mesajul trebuie să conțină între 5 și 100 de cuvinte (curente: {count}).', code='numar_cuvinte_invalid')
 
-#2.c)
+
 def validate_word_length(value):
     words = re.findall(r'[A-Za-z0-9]+', value)
     
@@ -312,14 +308,12 @@ def validate_word_length(value):
         if len(word) > 15:
             raise ValidationError(f'Cuvântul "{word[:10]}..." depășește limita de 15 caractere.', code='lungime_cuvant_depasita')
 
-#2.a)
+
 def validate_age_over_18(value):
     today = date.today()
     age = today.year - value.year - ((today.month, today.day) < (value.month, value.day))
     if age < 18:
         raise ValidationError('Expeditorul trebuie să aibă minim 18 ani (să fie major).', code='nu_este_major')
-
-#----------------------------------------------------------------------------------------------------------------------------------------
 
 class ContactForm(forms.Form):
     nume= forms.CharField(max_length=10, label='Nume', required=True,
@@ -446,7 +440,6 @@ def clean(self):
 
         return cleaned_data
 
-#-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 def validator_fara_cifre(value):
     if value.isdigit():

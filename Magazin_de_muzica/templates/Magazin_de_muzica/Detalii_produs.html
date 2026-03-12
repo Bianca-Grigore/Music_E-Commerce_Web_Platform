@@ -12,16 +12,10 @@
     <img src="{% static 'media/default.jpg' %}" alt="Imagine lipsă">
 {% endif %}
 
-
-
-
     <p><strong>Preț:</strong> {{ produs.pret }} RON</p>
     <p><strong>Stoc disponibil:</strong> {{ produs.stoc }}</p>
     <p><strong>Artist:</strong> {{ produs_artist.artist }}</p>
     <p><strong>Categorie:</strong> {{ produs.categorie }}</p>
-
-
-
 
     {% if campanii.campanii %}
     <p><strong>Campanii:</strong></p>
@@ -34,12 +28,8 @@
     <p><strong>Campanie:</strong> Nu există campanii active pentru acest produs.</p>
 {% endif %}
 
-
-
     <p><strong>Descriere:</strong> {{ produs_artist.descriere }}</p>
     <p><strong>Data adăugării:</strong> {{ produs.data_adaugare }}</p>
-    
-
     <a href="{% url 'lista_produse' %}" class="btn">Înapoi la produse</a>
 </div>
 

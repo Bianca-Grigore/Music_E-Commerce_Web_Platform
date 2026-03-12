@@ -1,39 +1,189 @@
 {% extends './baza.html' %}
 {% load static %}
 
-{% block title %}Despre Noi{% endblock %}
+{% block title %}Despre Noi | Sunet de Excepție{% endblock %}
 
 {% block content %}
-    <h1>Fotografia lunii</h1>
-    <img src="{% static 'Magazin_de_muzica/imagini/Spooky.jpg' %}" 
-    alt="imagine" 
-    style="width: 200px; height: auto;" />
-
-    <h1>Despre Pasiunea Noastră pentru Muzică</h1>
-    <p>
-        Mai mult decât un magazin, suntem o comunitate de iubitori de muzică. Am fost înființați din dorința de a oferi
-        colecționarilor și muzicienilor acces la cele mai populare și rare înregistrări. Credem în puterea
-        sunetului de calitate.
-    </p>
-
-    <section id="istoric">
-        <h2>Scurt Istoric</h2>
-        <p>
-            Magazinul a fost înființat din pasiunea pentru muzică și dorința de a crea un spațiu unde
-            colecționarii, dar și amatorii să găsească comori muzicale. De-a lungul anilor, am crescut
-            și ne-am adaptat la schimbările din industrie, dar am rămas fideli misiunii noastre inițiale:
-            de a oferi muzică de calitate și servicii excelente clienților noștri.
+<div class="about-container">
+    
+    <header class="about-header">
+        <h1>Despre Pasiunea Noastră pentru <span>Muzică</span></h1>
+        <div class="underline"></div>
+        <p class="lead-text">
+            Mai mult decât un magazin, suntem o comunitate de iubitori de muzică. Am fost înființați din dorința de a oferi
+            colecționarilor și muzicienilor acces la cele mai populare și rare înregistrări. Credem în puterea
+            sunetului de calitate.
         </p>
+    </header>
+
+    <section class="photo-of-the-month">
+        <div class="photo-frame">
+            <span class="photo-label">Fotografia lunii</span>
+            <img src="{% static 'Magazin_de_muzica/imagini/Spooky.jpg' %}" alt="Fotografia Lunii Spooky" class="featured-img" />
+            <div class="photo-caption">O privire în culisele colecției noastre.</div>
+        </div>
     </section>
 
-    <section id="echipa">
-        <h2>Cine Suntem</h2>
-        <p>
-            Echipa noastră este formată din pasionați de muzică, fiecare aducând o experiență unică
-            în domeniu. Suntem dedicați să oferim clienților noștri cele mai bune servicii și produse.
-            Fiecare membru al echipei împărtășește aceeași pasiune pentru muzică și angajamentul de a
-            oferi o experiență de cumpărături excepțională.
-        </p>
-    </section>
+    <div class="info-grid">
+        <section id="istoric" class="info-card">
+            <div class="card-icon">📜</div>
+            <h2>Scurt Istoric</h2>
+            <p>
+                Magazinul a fost înființaț din pasiunea pentru muzică și dorința de a crea un spațiu unde
+                colecționarii, dar și amatorii să găsească comori muzicale. De-a lungul anilor, am crescut
+                și ne-am adaptat la schimbările din industrie, dar am rămas fideli misiunii noastre inițiale:
+                de a oferi muzică de calitate și servicii excelente clienților noștri.
+            </p>
+        </section>
 
+        <section id="echipa" class="info-card">
+            <div class="card-icon">👥</div>
+            <h2>Cine Suntem</h2>
+            <p>
+                Echipa noastră este formată din pasionați de muzică, fiecare aducând o experiență unică
+                în domeniu. Suntem dedicați să oferim clienților noștri cele mai bune servicii și produse.
+                Fiecare membru al echipei împărtășește aceeași pasiune pentru muzică și angajamentul de a
+                oferi o experiență de cumpărături excepțională.
+            </p>
+        </section>
+    </div>
+
+</div>
+
+<style>
+    :root {
+        --accent-color: rgb(148, 62, 245);
+        --bg-dark: #121212;
+        --card-bg: #1e1e1e;
+        --text-light: #e0e0e0;
+    }
+
+    .about-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 60px 20px;
+        color: var(--text-light);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .about-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .about-header h1 {
+        font-size: 2.8rem;
+        margin-bottom: 10px;
+    }
+
+    .about-header h1 span {
+        color: var(--accent-color);
+    }
+
+    .underline {
+        width: 80px;
+        height: 4px;
+        background: var(--accent-color);
+        margin: 0 auto 30px;
+        border-radius: 2px;
+    }
+
+    .lead-text {
+        font-size: 1.2rem;
+        line-height: 1.8;
+        max-width: 800px;
+        margin: 0 auto;
+        opacity: 0.9;
+    }
+
+    .photo-of-the-month {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 80px;
+    }
+
+    .photo-frame {
+        background: var(--card-bg);
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        transform: rotate(-2deg);
+        transition: transform 0.3s ease;
+        max-width: 450px;
+        border: 1px solid #333;
+    }
+
+    .photo-frame:hover {
+        transform: rotate(0deg) scale(1.02);
+    }
+
+    .photo-label {
+        display: block;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        color: var(--accent-color);
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .featured-img {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+        filter: grayscale(20%);
+        transition: filter 0.3s;
+    }
+
+    .photo-frame:hover .featured-img {
+        filter: grayscale(0%);
+    }
+
+    .photo-caption {
+        margin-top: 15px;
+        font-style: italic;
+        font-size: 0.9rem;
+        text-align: center;
+        opacity: 0.7;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+    }
+
+    .info-card {
+        background: var(--card-bg);
+        padding: 40px;
+        border-radius: 15px;
+        border: 1px solid #333;
+        transition: border-color 0.3s;
+    }
+
+    .info-card:hover {
+        border-color: var(--accent-color);
+    }
+
+    .card-icon {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+
+    .info-card h2 {
+        color: white;
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+    }
+
+    .info-card p {
+        line-height: 1.7;
+        opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+        .about-header h1 { font-size: 2rem; }
+        .photo-frame { transform: rotate(0deg); }
+    }
+</style>
 {% endblock %}

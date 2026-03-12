@@ -182,9 +182,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-#laborator 7 task 4 
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -202,7 +199,7 @@ LOGGING = {
 
 
     'handlers': {
-        # pt Warning, Error, Critical
+
         'console': {
             'level': 'WARNING', 
             'class': 'logging.StreamHandler',
@@ -251,8 +248,6 @@ LOGGING = {
         },
     },
 }
-
-#laborator 9 task 3 
 
 TASK_K_MINUTES = 2 
 

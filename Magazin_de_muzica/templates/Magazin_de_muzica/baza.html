@@ -80,7 +80,6 @@
             background-color: rgba(255, 255, 255, 0.08);
         }
 
-        /* Dropdown-uri */
         .dropdown, .dropdown-categorii { position: relative; }
         
         .dropdown-content, .submeniu {
@@ -114,7 +113,6 @@
             padding-left: 25px; /* Efect glisare */
         }
 
-        /* Acțiuni Meniu Dreapta */
         .user-greeting {
             color: var(--accent-color);
             font-weight: 800;
@@ -150,7 +148,6 @@
             font-weight: bold;
         }
 
-        /* --- 3. BANNER OFERTĂ --- */
         #banner-oferta {
             display: none;
             background: linear-gradient(90deg, #ff416c, #ff4b2b);
@@ -164,7 +161,6 @@
             border-bottom: none;
         }
 
-        /* --- 4. FOOTER --- */
         footer { 
             background-color: #0a0a0a; 
             color: var(--muted-text); 
@@ -175,7 +171,6 @@
         }
         footer strong { color: var(--accent-color); }
 
-        /* --- 5. STILIZARE UNIVERSALĂ FORMULARE DJANGO --- */
         .premium-form-container {
             background: #151515;
             border-radius: 16px;
@@ -252,7 +247,7 @@
                     <a href="{% url 'exemplu'|default:'#' %}">Pagina principală ▼</a>
                     <ul class="dropdown-content">
                         <li><a href="{% url 'exemplu'|default:'#' %}#introducere">Introducere</a></li>
-                        <li><a href="{% url 'exemplu'|default:'#' %}#produse-recomandate">Recomandări</a></li>
+                        
                         <li><a href="{% url 'exemplu'|default:'#' %}#testimoniale">Testimoniale</a></li>
                     </ul>
                 </li>

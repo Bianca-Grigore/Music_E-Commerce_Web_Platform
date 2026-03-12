@@ -25,7 +25,6 @@ from .models import Profil
 #laborator 8 task 4
 from django.contrib.auth.admin import UserAdmin
 
-# laborator 8 task 4
 class ProfilInline(admin.StackedInline):
     model = Profil
     can_delete = False
@@ -56,7 +55,6 @@ class CustomUserAdmin(UserAdmin):
 
             allowed_fields = ['first_name', 'last_name', 'email']
             
-            # 3. Scoatem câmpurile permise din lista de read-only
             for field in allowed_fields:
                 if field in readonly_fields:
                     readonly_fields.remove(field)
@@ -71,11 +69,6 @@ class CustomUserAdmin(UserAdmin):
             return list(readonly_fields)
 
         return super().get_readonly_fields(request, obj)
-
-
-# admin.site.unregister(User)
-# admin.site.register(User, CustomUserAdmin)
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 class ProdusAdmin(admin.ModelAdmin):
     ordering = ['pret']

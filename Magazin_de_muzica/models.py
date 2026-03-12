@@ -3,7 +3,6 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 import uuid 
 from django.urls import reverse
-#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 class Promotii(models.Model):
     nume=models.CharField(max_length=100)
@@ -16,7 +15,6 @@ class Promotii(models.Model):
     def __str__(self):
         return f"{self.nume} (-{self.procent_reducere}%)"
 
-#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 class Vizualizare(models.Model):
     utilizator = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -29,7 +27,6 @@ class Vizualizare(models.Model):
     def __str__(self):
         return f"{self.utilizator.username} a vizualizat {self.produs.denumire}"
 
-#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 class Profil(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -46,7 +43,6 @@ class Profil(models.Model):
     def __str__(self):
         return f"Profil pentru {self.user.username}"
 
-#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 class Comanda(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -121,7 +117,6 @@ class Rating(models.Model):
     def __str__(self):
         return f"{self.valoare}* - {self.produs.denumire} ({self.user.username})"
 
-#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 class Categorie(models.Model):
     nume_categorie = models.CharField(max_length=100, unique=True)  
